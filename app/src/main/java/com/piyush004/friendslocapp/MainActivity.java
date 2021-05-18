@@ -1,5 +1,6 @@
 package com.piyush004.friendslocapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
@@ -8,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.piyush004.friendslocapp.Home.HomeActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
             } else {
 
             }*/
+
+            startActivity(new Intent(MainActivity.this, HomeActivity.class));
+            finish();
+
 
         }, SPLASH_SCREEN_TIME_OUT);
 
