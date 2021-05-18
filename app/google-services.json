@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "855735048594",
+    "firebase_url": "https://friendslocator-f5893-default-rtdb.firebaseio.com",
+    "project_id": "friendslocator-f5893",
+    "storage_bucket": "friendslocator-f5893.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:855735048594:android:858048300132ac4af1c94b",
+        "android_client_info": {
+          "package_name": "com.piyush004.friendslocapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "855735048594-v83c9ieusojmmlc49ln2kvqg9i17qgmm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPagzQMpxgo3RsE_PCsLSZfNX1zozOlic"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "855735048594-v83c9ieusojmmlc49ln2kvqg9i17qgmm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
