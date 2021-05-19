@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.piyush004.friendslocapp.Auth.LoginActivity;
 import com.piyush004.friendslocapp.Home.HomeActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,14 +29,15 @@ public class MainActivity extends AppCompatActivity {
 
         new Handler().postDelayed(() -> {
 
-           /* if (firebaseAuth.getCurrentUser() != null) {
+           if (firebaseAuth.getCurrentUser() != null) {
+               startActivity(new Intent(MainActivity.this, HomeActivity.class));
+               finish();
 
-            } else {
+           } else {
+               startActivity(new Intent(MainActivity.this, LoginActivity.class));
+               finish();
+            }
 
-            }*/
-
-            startActivity(new Intent(MainActivity.this, HomeActivity.class));
-            finish();
 
 
         }, SPLASH_SCREEN_TIME_OUT);

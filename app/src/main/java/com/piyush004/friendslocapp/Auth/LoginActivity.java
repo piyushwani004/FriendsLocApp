@@ -1,5 +1,6 @@
 package com.piyush004.friendslocapp.Auth;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.hbb20.CountryCodePicker;
 import com.piyush004.friendslocapp.R;
+
+import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil;
 
 //Auth No.1 Class (Step 1)
 public class LoginActivity extends AppCompatActivity {
@@ -33,6 +36,13 @@ public class LoginActivity extends AppCompatActivity {
         NextButton = findViewById(R.id.ButtonGetOTP);
         viewAuth = findViewById(R.id.viewLogin);
 
+        viewAuth.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIUtil.hideKeyboard(LoginActivity.this);
+            }
+        });
+
         NextButton.setOnClickListener(v -> {
 
             //String Variable for Storing  User Mobile Number...
@@ -42,6 +52,21 @@ public class LoginActivity extends AppCompatActivity {
             Log.e(TAG, "mobile len" + mobile.length());
             Log.e(TAG, "mobile num" + ccp.getFullNumber());
             Log.e(TAG, "mobile for" + ccp.getFormattedFullNumber());
+
+            if (mobile.isEmpty()) {
+                editTextMobile.setError("Enter Mobile Number");
+                editTextMobile.requestFocus();
+            } else if (mobile.length() < 13) {
+                editTextMobile.setError("Enter 10-Digit Mobile Number");
+                editTextMobile.requestFocus();
+            } else if (mobile.length() > 13) {
+                editTextMobile.setError("Enter 10-Digit Mobile Number");
+                editTextMobile.requestFocus();
+            } else if (!(mobile.isEmpty() && mobile.length() != 13)) {
+                Intent intent = new Intent(LoginActivity.this, VerificationActivity.class);
+                intent.putExtra("mobile", mobile);
+                startActivity(intent);
+            }
 
 
         });
