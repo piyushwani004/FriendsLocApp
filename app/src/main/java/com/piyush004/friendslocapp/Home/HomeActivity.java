@@ -1,22 +1,33 @@
 package com.piyush004.friendslocapp.Home;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.piyush004.friendslocapp.Home.Profile.ProfileActivity;
+import com.piyush004.friendslocapp.Home.Setting.SettingActivity;
 import com.piyush004.friendslocapp.R;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
     private FloatingActionButton floatingActionButton;
+    private CircleImageView headerProfileUpdateImg;
+    private ImageView SettingImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        headerProfileUpdateImg = findViewById(R.id.HomeHeaderImg);
+        SettingImg = findViewById(R.id.SettingImg);
 
         bottomNavigationView = findViewById(R.id.BotnavViewHome);
         bottomNavigationView.setBackground(null);
@@ -24,6 +35,18 @@ public class HomeActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(v -> {
             bottomNavigationView.getMenu().getItem(2).setChecked(true);
             //pushFragment(new Home());
+        });
+
+        headerProfileUpdateImg.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        });
+
+        SettingImg.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, SettingActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
 
     }

@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FriendsLocApp">
+        <activity android:name=".Home.Setting.SettingActivity"></activity>
+        <activity android:name=".Home.Profile.ProfileActivity" />
         <activity android:name=".Auth.ProfileUpdate" />
         <activity android:name=".Auth.LoginActivity" />
         <activity android:name=".Auth.VerificationActivity" />

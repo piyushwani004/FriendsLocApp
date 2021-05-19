@@ -30,8 +30,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        editTextMobile = (EditText) findViewById(R.id.editTextMobile);
-        ccp = (CountryCodePicker) findViewById(R.id.ccp);
+        editTextMobile = findViewById(R.id.editTextMobile);
+        ccp = findViewById(R.id.ccp);
         ccp.registerCarrierNumberEditText(editTextMobile);
         NextButton = findViewById(R.id.ButtonGetOTP);
         viewAuth = findViewById(R.id.viewLogin);
