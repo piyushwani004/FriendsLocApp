@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">FriendsLocApp</string>
+
+
+    <string name="privacy_policy"><u>Privacy Policy</u></string>
+    <string name="terms_of_services"><u>Terms of services</u></string>
+
 </resources>
