@@ -39,6 +39,5 @@ public class MainActivity extends AppCompatActivity {
 
         }, SPLASH_SCREEN_TIME_OUT);
 
-
     }
 }
