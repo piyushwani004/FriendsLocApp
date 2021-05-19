@@ -14,6 +14,7 @@ import com.piyush004.friendslocapp.R;
 
 import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil;
 
+//Auth No.2 Class (Step 2)
 public class VerificationActivity extends AppCompatActivity {
 
     private static final String TAG = VerificationActivity.class.getSimpleName();

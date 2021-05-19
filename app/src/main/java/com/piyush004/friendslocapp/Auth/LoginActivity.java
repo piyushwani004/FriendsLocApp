@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.hbb20.CountryCodePicker;
 import com.piyush004.friendslocapp.R;
 
+//Auth No.1 Class (Step 1)
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
