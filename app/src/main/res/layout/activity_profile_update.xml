@@ -12,6 +12,8 @@
         android:layout_height="150dp"
         android:layout_marginTop="60dp"
         android:src="@drawable/person_placeholder"
+        app:civ_border_color="#4CAF50"
+        app:civ_border_width="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
