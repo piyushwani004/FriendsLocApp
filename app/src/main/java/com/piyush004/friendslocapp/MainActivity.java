@@ -29,15 +29,12 @@ public class MainActivity extends AppCompatActivity {
 
         new Handler().postDelayed(() -> {
 
-           if (firebaseAuth.getCurrentUser() != null) {
-               startActivity(new Intent(MainActivity.this, HomeActivity.class));
-               finish();
-
-           } else {
-               startActivity(new Intent(MainActivity.this, LoginActivity.class));
-               finish();
+            if (firebaseAuth.getCurrentUser() != null) {
+                startActivity(new Intent(MainActivity.this, HomeActivity.class));
+            } else {
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
-
+            finish();
 
 
         }, SPLASH_SCREEN_TIME_OUT);

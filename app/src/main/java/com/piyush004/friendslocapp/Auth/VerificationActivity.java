@@ -69,7 +69,7 @@ public class VerificationActivity extends AppCompatActivity {
         });
 
         LoginButton.setOnClickListener(v -> {
-          String code=editTextOtp.getText().toString().trim();
+            String code = editTextOtp.getText().toString().trim();
             if (code.isEmpty() || code.length() < 6) {
 
                 editTextOtp.setError("Enter code...");
@@ -145,7 +145,6 @@ public class VerificationActivity extends AppCompatActivity {
         super.onStart();
         initiateotp();
     }
-
 
 
     @Override

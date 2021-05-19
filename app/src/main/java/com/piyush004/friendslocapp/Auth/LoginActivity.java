@@ -36,12 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         NextButton = findViewById(R.id.ButtonGetOTP);
         viewAuth = findViewById(R.id.viewLogin);
 
-        viewAuth.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                UIUtil.hideKeyboard(LoginActivity.this);
-            }
-        });
+        viewAuth.setOnClickListener(v -> UIUtil.hideKeyboard(LoginActivity.this));
 
         NextButton.setOnClickListener(v -> {
 
