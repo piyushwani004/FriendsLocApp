@@ -33,7 +33,6 @@
                 android:textSize="24dp"
                 android:textStyle="bold" />
 
-
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/HomeHeaderImg"
                 android:layout_width="30dp"
@@ -63,7 +62,7 @@
                 android:id="@+id/fragment_container_home"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="20dp"
                 android:background="#FFFFFF" />
 
             <com.google.android.material.bottomappbar.BottomAppBar
@@ -98,6 +97,5 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </RelativeLayout>
-
 
 </androidx.drawerlayout.widget.DrawerLayout>
