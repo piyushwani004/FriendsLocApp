@@ -78,6 +78,7 @@ public class ProfileUpdate extends AppCompatActivity {
                 Name = snapshot.child("Name").getValue(String.class);
                 Mobile = snapshot.child("Mobile").getValue(String.class);
                 imgUrl = snapshot.child("ImageURL").getValue(String.class);
+                uri=Uri.parse(imgUrl);
 
                 if (Name == null) {
                     textViewName.setText("User Name");
