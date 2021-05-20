@@ -1,12 +1,12 @@
 package com.piyush004.friendslocapp.Auth;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +36,7 @@ public class VerificationActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private View viewAuth;
     private TextView textViewNumber;
-    private ProgressDialog ringProgressDialog;
+    private ProgressBar ringProgressBar;
 
     private String otp, number;
     private String phonenumber;
@@ -52,6 +52,7 @@ public class VerificationActivity extends AppCompatActivity {
         number = phonenumber;
         mAuth = FirebaseAuth.getInstance();
 
+        ringProgressBar = findViewById(R.id.ringProgressBar);
         editTextOtp = findViewById(R.id.EditTextEnterOTP);
         LoginButton = findViewById(R.id.ButtonSign);
         textViewNumber = findViewById(R.id.textViewNumber);
@@ -70,15 +71,14 @@ public class VerificationActivity extends AppCompatActivity {
         });
 
         LoginButton.setOnClickListener(v -> {
+            ringProgressBar.setVisibility(View.VISIBLE);
             String code = editTextOtp.getText().toString().trim();
             if (code.isEmpty() || code.length() < 6) {
-
                 editTextOtp.setError("Enter code...");
                 editTextOtp.requestFocus();
                 return;
             }
             verifyCode(code);
-
         });
 
     }
@@ -88,6 +88,7 @@ public class VerificationActivity extends AppCompatActivity {
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(otpid, code);
             signInWithPhoneAuthCredential(credential);
         } catch (Exception e) {
+            ringProgressBar.setVisibility(View.GONE);
             Toast toast = Toast.makeText(this, "Verification Code is wrong", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
@@ -99,7 +100,7 @@ public class VerificationActivity extends AppCompatActivity {
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-
+                        ringProgressBar.setVisibility(View.GONE);
                         DatabaseReference addMemberData = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(mAuth.getCurrentUser().getUid());
                         addMemberData.child("Mobile").setValue(phonenumber);
                         addMemberData.child("ID").setValue(mAuth.getCurrentUser().getUid()).addOnSuccessListener(aVoid -> {
@@ -109,6 +110,7 @@ public class VerificationActivity extends AppCompatActivity {
                         });
 
                     } else {
+                        ringProgressBar.setVisibility(View.GONE);
                         Toast.makeText(getApplicationContext(), "Sign-in Code Error", Toast.LENGTH_LONG).show();
                     }
                 });
@@ -141,6 +143,7 @@ public class VerificationActivity extends AppCompatActivity {
                     public void onVerificationFailed(@NonNull FirebaseException e) {
                         Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                         Log.e("Project", "Message" + e.getMessage());
+                        ringProgressBar.setVisibility(View.GONE);
                     }
 
                 });        // OnVerificationStateChangedCallbacks
@@ -158,8 +161,8 @@ public class VerificationActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (ringProgressDialog != null && ringProgressDialog.isShowing()) {
-            ringProgressDialog.dismiss();
+        if (ringProgressBar != null) {
+            ringProgressBar.setVisibility(View.GONE);
         }
     }
 }

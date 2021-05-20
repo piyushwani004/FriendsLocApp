@@ -131,7 +131,7 @@
         android:fontFamily="@font/poppins_semibold"
         android:text="Finished"
         android:textColor="@color/white"
-        android:textSize="22sp"
+        android:textSize="18sp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

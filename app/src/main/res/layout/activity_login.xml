@@ -47,7 +47,7 @@
         android:fontFamily="@font/poppins_semibold"
         android:text="Get OTP"
         android:textColor="@color/white"
-        android:textSize="20dp"
+        android:textSize="18dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,7 +107,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="15dp"
         android:padding="10dp"
         app:layout_constraintEnd_toEndOf="@+id/ButtonGetOTP"
         app:layout_constraintStart_toStartOf="@+id/ButtonGetOTP"
