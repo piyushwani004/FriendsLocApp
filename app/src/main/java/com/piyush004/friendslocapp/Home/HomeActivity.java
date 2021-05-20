@@ -2,11 +2,16 @@ package com.piyush004.friendslocapp.Home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -17,6 +22,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.piyush004.friendslocapp.Auth.LoginActivity;
+import com.piyush004.friendslocapp.Home.Fragment.ChatFragment;
+import com.piyush004.friendslocapp.Home.Fragment.ContactFragment;
+import com.piyush004.friendslocapp.Home.Fragment.FriendFragment;
+import com.piyush004.friendslocapp.Home.Fragment.MapFragment;
+import com.piyush004.friendslocapp.Home.Fragment.RequestFragment;
 import com.piyush004.friendslocapp.Home.Profile.ProfileActivity;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
@@ -49,7 +59,7 @@ public class HomeActivity extends AppCompatActivity {
         floatingActionButton = findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(v -> {
             bottomNavigationView.getMenu().getItem(2).setChecked(true);
-            //pushFragment(new Home());
+            pushFragment(new MapFragment());
         });
 
         appuser.addValueEventListener(new ValueEventListener() {
@@ -111,20 +121,17 @@ public class HomeActivity extends AppCompatActivity {
 
         });
 
+        setUpNavView();
     }
 
-   /* private void setUpNavView() {
+    private void setUpNavView() {
         if (bottomNavigationView != null) {
             Menu menu = bottomNavigationView.getMenu();
             selectFragment(menu.getItem(2));
             menu.getItem(2).setChecked(false);
-            bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                    selectFragment(item);
-                    return false;
-                }
+            bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
+                selectFragment(item);
+                return false;
             });
         }
     }
@@ -133,20 +140,20 @@ public class HomeActivity extends AppCompatActivity {
         item.setChecked(true);
         switch (item.getItemId()) {
 
-            case R.id.music:
-                pushFragment(new Music());
+            case R.id.contact:
+                pushFragment(new ContactFragment());
                 break;
 
-            case R.id.shop:
-                pushFragment(new Shop());
+            case R.id.friendList:
+                pushFragment(new FriendFragment());
                 break;
 
-            case R.id.kids:
-                pushFragment(new kids());
+            case R.id.request:
+                pushFragment(new RequestFragment());
                 break;
 
-            case R.id.news:
-                pushFragment(new News());
+            case R.id.chat:
+                pushFragment(new ChatFragment());
                 break;
 
         }
@@ -161,11 +168,11 @@ public class HomeActivity extends AppCompatActivity {
         if (fragmentManager != null) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             if (fragmentTransaction != null) {
-                fragmentTransaction.replace(R.id.fragment_container_user_home, fragment).commit();
+                fragmentTransaction.replace(R.id.fragment_container_home, fragment).commit();
             }
         }
 
-    }*/
+    }
 
 
 }
