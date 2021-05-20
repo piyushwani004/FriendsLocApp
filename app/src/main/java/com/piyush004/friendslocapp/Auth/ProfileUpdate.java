@@ -16,8 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,9 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.piyush004.friendslocapp.Home.HomeActivity;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Callback;
@@ -42,7 +38,7 @@ public class ProfileUpdate extends AppCompatActivity {
 
     private CircleImageView circleImageView;
     private ImageView imageViewEditName, imageViewUploadImage;
-    private TextView textViewName,  textViewMobile;
+    private TextView textViewName, textViewMobile;
     private FirebaseAuth mAuth;
     private Button buttonFinished;
     private Uri uri;
@@ -51,10 +47,10 @@ public class ProfileUpdate extends AppCompatActivity {
     private HashMap<String, Object> hashMap;
 
     private static int SELECT_PHOTO = 2;
-    private String Name, About, Mobile, phonenumber;
+    private String Name, Mobile, phonenumber, imgUrl;
 
     private DatabaseReference appuser = FirebaseDatabase.getInstance().getReference().child("AppUsers")
-                                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +65,7 @@ public class ProfileUpdate extends AppCompatActivity {
         textViewMobile = findViewById(R.id.UserPhoneText);
 
         imageViewEditName = findViewById(R.id.EditNameImageProfile);
-        imageViewUploadImage=findViewById(R.id.upload_image);
+        imageViewUploadImage = findViewById(R.id.upload_image);
 
         buttonFinished = findViewById(R.id.ButtonFinished);
 
@@ -81,6 +77,7 @@ public class ProfileUpdate extends AppCompatActivity {
 
                 Name = snapshot.child("Name").getValue(String.class);
                 Mobile = snapshot.child("Mobile").getValue(String.class);
+                imgUrl = snapshot.child("ImageURL").getValue(String.class);
 
                 if (Name == null) {
                     textViewName.setText("User Name");
@@ -94,60 +91,40 @@ public class ProfileUpdate extends AppCompatActivity {
                     textViewMobile.setText(Mobile);
                 }
 
+                if (imgUrl == null) {
+                    Picasso.get()
+                            .load(R.drawable.person_placeholder)
+                            .into(circleImageView);
+                } else {
+                    Picasso.get()
+                            .load(imgUrl)
+                            .placeholder(R.drawable.person_placeholder)
+                            .into(circleImageView);
+                }
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-          });
+        });
 
 
         buttonFinished.setOnClickListener(v -> {
 
             if (textViewName.getText().toString().equals("User Name")) {
                 Toast.makeText(this, "Enter User Name...", Toast.LENGTH_LONG).show();
-            }
-            else if (!(textViewName.getText().toString().equals("User Name") )) {
+            } else if (uri == null) {
+                Toast.makeText(this, "Select Profile Image...", Toast.LENGTH_LONG).show();
+            } else if (!(textViewName.getText().toString().equals("User Name") && uri == null)) {
 
-                DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("AdminAuth");
-                reference.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                        String Username = snapshot.child("Username").getValue(String.class);
-
-                        if (phonenumber.equals(Username)) {
-
-                            Intent intent = new Intent(ProfileUpdate.this, HomeActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                            finish();
-                            Toast.makeText(ProfileUpdate.this, "Welcome User ", Toast.LENGTH_LONG).show();
-
-                        } else if (!(phonenumber.equals(Username))) {
-
-                            DatabaseReference addMemberData = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(mAuth.getCurrentUser().getUid());
-                            hashMap.put("Mobile", phonenumber);
-                            hashMap.put("Name", Name);
-                            hashMap.put("ID", mAuth.getCurrentUser().getUid());
-                            addMemberData.updateChildren(hashMap).addOnSuccessListener(aVoid -> {
-                                Intent intent = new Intent(ProfileUpdate.this, HomeActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                                finish();
-                                Toast.makeText(ProfileUpdate.this, "Your Account has been created successfully!", Toast.LENGTH_SHORT).show();
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                Intent intent = new Intent(ProfileUpdate.this, HomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
+                Toast.makeText(ProfileUpdate.this, "Welcome User ", Toast.LENGTH_LONG).show();
 
             }
 
@@ -165,11 +142,12 @@ public class ProfileUpdate extends AppCompatActivity {
             builder.setPositiveButton("SAVE", (dialogInterface, i) -> {
                 String UpdateName = editTextName.getText().toString().trim();
                 appuser.child("Name").setValue(UpdateName).addOnSuccessListener(aVoid -> Toast.makeText(ProfileUpdate.this,
-                        "Data Update", Toast.LENGTH_SHORT).show())
+                        "Name Update", Toast.LENGTH_SHORT).show())
                         .addOnFailureListener(e -> Toast.makeText(ProfileUpdate.this,
-                         "Network Problem...please try again later..." + e, Toast.LENGTH_SHORT).show());
+                                "Network Problem...please try again later..." + e, Toast.LENGTH_SHORT).show());
             });
             builder.setNegativeButton("Close", (dialog, which) -> {
+
             });
 
             builder.setView(dialogLayout);
@@ -183,11 +161,10 @@ public class ProfileUpdate extends AppCompatActivity {
             photoPickerIntent.setType("image/*");
             startActivityForResult(photoPickerIntent, SELECT_PHOTO);
 
-
         });
 
 
-        }
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -214,8 +191,6 @@ public class ProfileUpdate extends AppCompatActivity {
                                 Toast.makeText(ProfileUpdate.this, "An error occurred", Toast.LENGTH_SHORT).show();
                             }
                         });
-
-
             }
 
         }
@@ -229,51 +204,28 @@ public class ProfileUpdate extends AppCompatActivity {
             progressDialog.setTitle("Uploading...");
             progressDialog.show();
 
-            final StorageReference ref = storageReference.child(Name + System.currentTimeMillis() + ".img");
+            final StorageReference ref = storageReference.child("Profile").child(mAuth.getCurrentUser().getUid()).child(Name + System.currentTimeMillis() + ".img");
             ref.putFile(uri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            progressDialog.dismiss();
+                    .addOnSuccessListener(taskSnapshot -> {
+                        progressDialog.dismiss();
 
-                            ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    String ImgURL = uri.toString();
-                                    appuser.child("ImageURL").setValue(ImgURL).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-                                            Toast.makeText(ProfileUpdate.this, "Data update", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }).addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(ProfileUpdate.this, "Network Problem...please try again later..." + e, Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            });
+                        ref.getDownloadUrl().addOnSuccessListener(uri -> {
+                            String ImgURL = uri.toString();
+                            appuser.child("ImageURL").setValue(ImgURL).addOnSuccessListener(aVoid -> Toast.makeText(ProfileUpdate.this, "Image update", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(ProfileUpdate.this, "Network Problem...please try again later..." + e, Toast.LENGTH_SHORT).show());
+                        });
 
-                        }
                     })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            progressDialog.dismiss();
-                            Toast.makeText(ProfileUpdate.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
+                    .addOnFailureListener(e -> {
+                        progressDialog.dismiss();
+                        Toast.makeText(ProfileUpdate.this, "Failed " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     })
-                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
-                                    .getTotalByteCount());
-                            progressDialog.setMessage("Uploaded " + (int) progress + "%");
-                        }
+                    .addOnProgressListener(taskSnapshot -> {
+                        double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot
+                                .getTotalByteCount());
+                        progressDialog.setMessage("Uploaded " + (int) progress + "%");
                     });
         }
     }
-
 
 
 }

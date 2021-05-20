@@ -4,13 +4,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.piyush004.friendslocapp.Auth.LoginActivity;
 import com.piyush004.friendslocapp.Home.Profile.ProfileActivity;
-import com.piyush004.friendslocapp.Home.Setting.SettingActivity;
 import com.piyush004.friendslocapp.R;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -20,12 +29,18 @@ public class HomeActivity extends AppCompatActivity {
     private FloatingActionButton floatingActionButton;
     private CircleImageView headerProfileUpdateImg;
     private ImageView SettingImg;
+    private AlertDialog.Builder alertDialogBuilder;
+    private FirebaseAuth firebaseAuth;
+    private String imgUrl;
+
+    private DatabaseReference appuser = FirebaseDatabase.getInstance().getReference().child("AppUsers")
+            .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        firebaseAuth = FirebaseAuth.getInstance();
         headerProfileUpdateImg = findViewById(R.id.HomeHeaderImg);
         SettingImg = findViewById(R.id.SettingImg);
 
@@ -37,6 +52,33 @@ public class HomeActivity extends AppCompatActivity {
             //pushFragment(new Home());
         });
 
+        appuser.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                imgUrl = snapshot.child("ImageURL").getValue(String.class);
+
+                if (imgUrl == null) {
+                    Picasso.get()
+                            .load(R.drawable.person_placeholder)
+                            .into(headerProfileUpdateImg);
+                } else {
+                    Picasso.get()
+                            .load(imgUrl)
+                            .resize(500, 500)
+                            .centerCrop().rotate(0)
+                            .placeholder(R.drawable.person_placeholder)
+                            .into(headerProfileUpdateImg);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
         headerProfileUpdateImg.setOnClickListener(v -> {
             Intent intent = new Intent(HomeActivity.this, ProfileActivity.class);
             startActivity(intent);
@@ -44,9 +86,29 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         SettingImg.setOnClickListener(v -> {
-            Intent intent = new Intent(HomeActivity.this, SettingActivity.class);
+            /*Intent intent = new Intent(HomeActivity.this, SettingActivity.class);
             startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);*/
+
+            alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+            alertDialogBuilder.setTitle("Logout...");
+            alertDialogBuilder.setMessage("Do You Want To Logout ?");
+            alertDialogBuilder.setPositiveButton("yes",
+                    (arg0, arg1) -> {
+                        firebaseAuth.signOut();
+                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                        finish();
+                    });
+
+            alertDialogBuilder.setNegativeButton("No",
+                    (dialog, which) -> {
+                        dialog.cancel();
+                        dialog.dismiss();
+                    });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+
         });
 
     }
