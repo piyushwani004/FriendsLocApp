@@ -33,7 +33,6 @@
                 android:textSize="24dp"
                 android:textStyle="bold" />
 
-
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/HomeHeaderImg"
                 android:layout_width="30dp"
@@ -98,6 +97,5 @@
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </RelativeLayout>
-
 
 </androidx.drawerlayout.widget.DrawerLayout>

@@ -126,7 +126,6 @@ public class ProfileUpdate extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
                 Toast.makeText(ProfileUpdate.this, "Welcome User ", Toast.LENGTH_LONG).show();
-
             }
 
         });
