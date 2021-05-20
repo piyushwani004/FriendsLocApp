@@ -62,7 +62,5 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:26.4.0')
     implementation 'com.google.firebase:firebase-perf'
 
-    compile 'com.github.tamir7.contacts:contacts:1.1.7'
-
 
 }

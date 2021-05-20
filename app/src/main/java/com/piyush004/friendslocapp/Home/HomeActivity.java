@@ -2,17 +2,12 @@ package com.piyush004.friendslocapp.Home;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.github.tamir7.contacts.Contact;
-import com.github.tamir7.contacts.Contacts;
-import com.github.tamir7.contacts.PhoneNumber;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,14 +16,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.piyush004.friendslocapp.Auth.LoginActivity;
 import com.piyush004.friendslocapp.Home.Profile.ProfileActivity;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -48,7 +39,6 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Contacts.initialize(this);
         setContentView(R.layout.activity_home);
         firebaseAuth = FirebaseAuth.getInstance();
         headerProfileUpdateImg = findViewById(R.id.HomeHeaderImg);
@@ -121,75 +111,7 @@ public class HomeActivity extends AppCompatActivity {
 
         });
 
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(View v) {
-
-                                                        List<String> matchNumbers=new ArrayList<>();
-
-                                                        List<String>  phoneContact= getAllPhoneContact();
-
-                                                        DatabaseReference user = FirebaseDatabase.getInstance().getReference();
-                                                        DatabaseReference userRef = user.child("AppUsers");
-
-                                                        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                            @Override
-                                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                                for (DataSnapshot ds : snapshot.getChildren()) {
-
-                                                                    String mobile = ds.child("Mobile").getValue(String.class).trim().replaceAll(" ","");
-
-                                                                    if(phoneContact.contains(mobile) ){
-                                                                        matchNumbers.add(mobile);
-                                                                    }
-
-
-
-                                                                }
-
-                                                                for(int i=0;i<matchNumbers.size();i++){
-                                                                    Log.e("Mached Numbers",matchNumbers.get(i));
-                                                                }
-
-                                                            }
-
-                                                            @Override
-                                                            public void onCancelled(@NonNull DatabaseError error) {
-
-                                                            }
-                                                        });
-
-
-                                                    }
-                                                });
-        }
-
-
-
-
-    private List<String> getAllPhoneContact() {
-        List<String> userContact=new ArrayList<>();
-
-        List<Contact> contacts = Contacts.getQuery().find();
-        for (int i = 0; i < contacts.size(); i++) {
-            Contact c = contacts.get(i);
-            List<PhoneNumber> numbers = c.getPhoneNumbers();
-            for (int j = 0; j < numbers.size(); j++) {
-                userContact.add(numbers.get(j).getNumber().trim().replaceAll(" ",""));
-            }
-        }
-
-        return userContact;
-
     }
-
-
-
-
-
-
-
-
 
    /* private void setUpNavView() {
         if (bottomNavigationView != null) {
@@ -244,7 +166,6 @@ public class HomeActivity extends AppCompatActivity {
         }
 
     }*/
-
 
 
 }
