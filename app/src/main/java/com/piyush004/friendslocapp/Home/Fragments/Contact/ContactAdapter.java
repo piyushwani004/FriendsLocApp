@@ -24,13 +24,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
     public static final String TAG = ContactAdapter.class.getSimpleName();
 
     private java.util.List<ContactModel> List;
-    private List<ContactModel> filteredData;
     private LayoutInflater inflater;
+    ArrayList<ContactModel> backup;
 
     public ContactAdapter(List<ContactModel> list, Context context) {
         List = list;
-        filteredData=list;
         this.inflater = LayoutInflater.from(context);
+        backup = new ArrayList<>(List);
     }
 
 
@@ -65,43 +65,35 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
 
     @Override
     public Filter getFilter() {
-        Filter filter = new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-
-                String filterString = constraint.toString().toLowerCase();
-
-                FilterResults results = new FilterResults();
-
-                final List<ContactModel> list = List;
-
-                int count = list.size();
-                final ArrayList<ContactModel> nlist = new ArrayList<ContactModel>(count);
-
-                ContactModel filterableContact;
-
-                for (int i = 0; i < count; i++) {
-                    filterableContact = list.get(i);
-                    if (filterableContact.getName().matches(filterString)) {
-                        nlist.add(filterableContact);
-                    }
-                }
-
-                results.values = nlist;
-                results.count = nlist.size();
-
-                return results;
-            }
-
-            @SuppressWarnings("unchecked")
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                filteredData = (ArrayList<ContactModel>) results.values;
-                notifyDataSetChanged();
-            }
-        };
         return filter;
     }
+
+    Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence keyword) {
+            ArrayList<ContactModel> filtereddata = new ArrayList<>();
+
+            if (keyword.toString().isEmpty())
+                filtereddata.addAll(backup);
+            else {
+                for (ContactModel obj : backup) {
+                    if (obj.getName().toString().toLowerCase().contains(keyword.toString().toLowerCase()))
+                        filtereddata.add(obj);
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filtereddata;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            List.clear();
+            List.addAll((ArrayList<ContactModel>) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public static class Holder extends RecyclerView.ViewHolder {
         public TextView Name, MobileNo;
@@ -116,7 +108,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
 
         }
     }
-
 
 
 }

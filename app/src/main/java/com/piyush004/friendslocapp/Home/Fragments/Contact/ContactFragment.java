@@ -11,13 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.widget.SearchView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -31,6 +30,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class ContactFragment extends Fragment {
@@ -57,7 +57,6 @@ public class ContactFragment extends Fragment {
     }
 
 
-
     public static ContactFragment newInstance(String param1, String param2) {
         ContactFragment fragment = new ContactFragment();
         Bundle args = new Bundle();
@@ -67,33 +66,6 @@ public class ContactFragment extends Fragment {
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                for(int i=0;i<newList.size();i++){
-                    if(newList.get(i).getName().matches(query))
-                        adapter.getFilter().filter(query);
-                }
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-
-    }
-
-
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -101,13 +73,12 @@ public class ContactFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_contact, container, false);
-        Contacts.initialize(getContext());
+        Contacts.initialize(Objects.requireNonNull(getContext()));
         EnableRuntimePermission();
         List<ContactModel> phoneContact = getAllPhoneContact();
 
         swipeRefreshLayout = view.findViewById(R.id.swipeContact);
         recyclerView = view.findViewById(R.id.RecycleViewContact);
-        searchView =view.findViewById(R.id.editText_searchBar);
 
         Log.e(TAG, "phoneContact : " + phoneContact.toString());
         Log.e(TAG, "phoneContact  Size : " + phoneContact.size());
@@ -115,7 +86,6 @@ public class ContactFragment extends Fragment {
         newList = (ArrayList<ContactModel>) removeDuplicateNumber(phoneContact);
         if (newList != null && newList.size() > 0) {
             updateUI();
-            Toast.makeText(getContext(), "Successfully imported Contact", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getContext(), "No Contact found", Toast.LENGTH_SHORT).show();
         }
@@ -123,7 +93,7 @@ public class ContactFragment extends Fragment {
         swipeRefreshLayout.setOnRefreshListener(() -> {
             runAnimationAgain();
             final Handler handler = new Handler();
-            handler.postDelayed((Runnable) () -> {
+            handler.postDelayed(() -> {
                 if (swipeRefreshLayout.isRefreshing()) {
                     swipeRefreshLayout.setRefreshing(false);
                 }
@@ -131,11 +101,23 @@ public class ContactFragment extends Fragment {
 
         });
 
+        searchView = view.findViewById(R.id.editText_searchBar);
+        searchView.setQueryHint("Search User...");
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapter.getFilter().filter(newText);
+                return false;
+            }
+        });
 
         return view;
     }
-
-
 
 
     public void EnableRuntimePermission() {
@@ -174,7 +156,7 @@ public class ContactFragment extends Fragment {
             Contact c = contacts.get(i);
             List<PhoneNumber> numbers = c.getPhoneNumbers();
             for (int j = 0; j < numbers.size(); j++) {
-                String number = numbers.get(j).getNumber().trim().replaceAll(" ", "");
+                String number = numbers.get(j).getNumber().trim().replaceAll(" ", "").replaceAll("-", "");
                 String name = c.getDisplayName();
                 String url = c.getPhotoUri();
 

@@ -9,12 +9,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FriendsLocApp">
-        <activity android:name=".Home.Setting.SettingActivity"></activity>
+        <activity android:name=".Home.Setting.SettingActivity" />
         <activity android:name=".Home.Profile.ProfileActivity" />
         <activity android:name=".Auth.ProfileUpdate" />
         <activity android:name=".Auth.LoginActivity" />
         <activity android:name=".Auth.VerificationActivity" />
-        <activity android:name=".Home.HomeActivity" />
+        <activity
+            android:name=".Home.HomeActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,7 +29,8 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
     </application>
-    <uses-permission android:name="android.permission.READ_CONTACTS"/>
-    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
 
 </manifest>
