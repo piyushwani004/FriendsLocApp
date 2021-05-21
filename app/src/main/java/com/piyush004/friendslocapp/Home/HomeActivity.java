@@ -25,7 +25,7 @@ import com.piyush004.friendslocapp.Auth.LoginActivity;
 import com.piyush004.friendslocapp.Home.Fragments.ChatFragment;
 import com.piyush004.friendslocapp.Home.Fragments.Contact.ContactFragment;
 import com.piyush004.friendslocapp.Home.Fragments.FriendFragment;
-import com.piyush004.friendslocapp.Home.Fragments.MapFragment;
+import com.piyush004.friendslocapp.Home.Fragments.Map.MapsFragment;
 import com.piyush004.friendslocapp.Home.Fragments.RequestFragment;
 import com.piyush004.friendslocapp.Home.Profile.ProfileActivity;
 import com.piyush004.friendslocapp.R;
@@ -59,7 +59,7 @@ public class HomeActivity extends AppCompatActivity {
         floatingActionButton = findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(v -> {
             bottomNavigationView.getMenu().getItem(2).setChecked(true);
-            pushFragment(new MapFragment());
+            pushFragment(new MapsFragment());
         });
 
         appuser.addValueEventListener(new ValueEventListener() {

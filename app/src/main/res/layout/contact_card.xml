@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -9,18 +8,19 @@
     app:cardElevation="1dp"
     app:cardUseCompatPadding="false">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/messageLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:padding="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/image"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="2dp"
             android:src="@drawable/person_placeholder"
             app:civ_border_color="@color/grey"
@@ -28,16 +28,17 @@
 
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/image"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/contactName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="@font/poppins_semibold"
@@ -49,7 +50,7 @@
                 android:id="@+id/contactNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="10dp"
                 android:fontFamily="@font/poppins"
                 android:text="Mobile Number"
                 android:textAlignment="textStart"
@@ -57,6 +58,22 @@
 
         </LinearLayout>
 
-    </LinearLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10sp">
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_width="80sp"
+                android:layout_height="40sp"
+                android:text="ADD"
+                app:backgroundTint="@color/teal_200"
+                app:cornerRadius="10sp" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
 
 </com.google.android.material.card.MaterialCardView>
