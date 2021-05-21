@@ -1,14 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Home.Fragments.Contact.ContactFragment">
 
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/editText_searchBar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/searchbar_background"
+        android:drawableStart="@drawable/ic_baseline_search_24"
+        android:drawablePadding="25dp"
+        android:elevation="2dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:paddingStart="15dp"
+        android:shadowColor="#5A5757"
+        android:theme="@style/Widget.AppCompat.Light.SearchView"
+        app:queryHint="Search Name" />
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContact"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/editText_searchBar"
+        android:layout_marginTop="10sp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/RecycleViewContact"
@@ -19,4 +42,4 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
-</FrameLayout>
+</RelativeLayout>

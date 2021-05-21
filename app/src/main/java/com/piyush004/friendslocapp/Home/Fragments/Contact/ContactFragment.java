@@ -95,7 +95,6 @@ public class ContactFragment extends Fragment {
             Toast.makeText(getContext(), "No Contact found", Toast.LENGTH_SHORT).show();
         }
 
-
         swipeRefreshLayout.setOnRefreshListener(() -> {
             runAnimationAgain();
             final Handler handler = new Handler();
@@ -171,7 +170,6 @@ public class ContactFragment extends Fragment {
         if (newList != null && newList.size() > 0) {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             adapter = new ContactAdapter(newList, getContext());
-            recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayoutManager.VERTICAL));
             recyclerView.setAdapter(adapter);
         }
     }
