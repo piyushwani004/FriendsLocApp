@@ -23,7 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.piyush004.friendslocapp.Auth.LoginActivity;
 import com.piyush004.friendslocapp.Home.Fragments.ChatFragment;
-import com.piyush004.friendslocapp.Home.Fragments.ContactFragment;
+import com.piyush004.friendslocapp.Home.Fragments.Contact.ContactFragment;
 import com.piyush004.friendslocapp.Home.Fragments.FriendFragment;
 import com.piyush004.friendslocapp.Home.Fragments.MapFragment;
 import com.piyush004.friendslocapp.Home.Fragments.RequestFragment;
