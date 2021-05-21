@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:myapp="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,7 +10,6 @@
         android:id="@+id/editText_searchBar"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginStart="15dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
@@ -24,7 +23,7 @@
         android:paddingStart="15dp"
         android:shadowColor="#5A5757"
         android:theme="@style/Widget.AppCompat.Light.SearchView"
-        app:queryHint="Search Name" />
+        myapp:queryHint="Search Name" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeContact"

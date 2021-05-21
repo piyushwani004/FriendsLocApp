@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
@@ -49,9 +50,13 @@ public class ContactFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     int animationList = R.anim.layout_animation_up_to_down;
 
+    private SearchView searchView;
+
     public ContactFragment() {
         // Required empty public constructor
     }
+
+
 
     public static ContactFragment newInstance(String param1, String param2) {
         ContactFragment fragment = new ContactFragment();
@@ -69,7 +74,26 @@ public class ContactFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                for(int i=0;i<newList.size();i++){
+                    if(newList.get(i).getName().matches(query))
+                        adapter.getFilter().filter(query);
+                }
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
     }
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -83,6 +107,7 @@ public class ContactFragment extends Fragment {
 
         swipeRefreshLayout = view.findViewById(R.id.swipeContact);
         recyclerView = view.findViewById(R.id.RecycleViewContact);
+        searchView =view.findViewById(R.id.editText_searchBar);
 
         Log.e(TAG, "phoneContact : " + phoneContact.toString());
         Log.e(TAG, "phoneContact  Size : " + phoneContact.size());
@@ -106,8 +131,12 @@ public class ContactFragment extends Fragment {
 
         });
 
+
         return view;
     }
+
+
+
 
     public void EnableRuntimePermission() {
 

@@ -122,6 +122,7 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         setUpNavView();
+
     }
 
     private void setUpNavView() {
