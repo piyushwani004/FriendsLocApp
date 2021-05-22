@@ -1,11 +1,12 @@
 package com.piyush004.friendslocapp.Home.Fragments.Contact;
 
+import android.widget.Button;
+
 public class ContactModel {
 
     private String Name;
     private String Mobile;
     private String PhotoURL;
-
     public ContactModel() {
     }
 
