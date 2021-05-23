@@ -1,7 +1,6 @@
 package com.piyush004.friendslocapp.Home.Fragments.Contact;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,8 +32,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
     private java.util.List<ContactModel> List;
     private LayoutInflater inflater;
     ArrayList<ContactModel> backup;
-    DatabaseReference user= FirebaseDatabase.getInstance().getReference();
-    DatabaseReference userRef=user.child("AppUsers");
+    DatabaseReference user = FirebaseDatabase.getInstance().getReference();
+    DatabaseReference userRef = user.child("AppUsers");
 
     public ContactAdapter(List<ContactModel> list, Context context) {
         List = list;
@@ -57,10 +56,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
                 .placeholder(R.drawable.person_placeholder)
                 .into(holder.circleImageView);
 
-
-
     }
-
 
 
     @NonNull
@@ -118,23 +114,23 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
             Name = itemView.findViewById(R.id.contactName);
             MobileNo = itemView.findViewById(R.id.contactNumber);
             circleImageView = itemView.findViewById(R.id.image);
-            inviteButton=itemView.findViewById(R.id.invite_button);
+            inviteButton = itemView.findViewById(R.id.invite_button);
 
         }
     }
 
 
-    private List<String> getUserList(){
-        List<String> appUsers=new ArrayList<>();
+    private List<String> getUserList() {
+        List<String> appUsers = new ArrayList<>();
 
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds : snapshot.getChildren()) {
-                    appUsers.add(ds.child("Mobile").getValue().toString().trim().replaceAll(" ",""
-                    .replaceAll("-","")));
+                    appUsers.add(ds.child("Mobile").getValue().toString().trim().replaceAll(" ", ""
+                            .replaceAll("-", "")));
                 }
-                }
+            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -144,8 +140,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
         return appUsers;
 
     }
-
-
 
 
 }

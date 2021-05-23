@@ -1,7 +1,5 @@
 package com.piyush004.friendslocapp.Home.Fragments.Contact;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -16,7 +14,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.SearchView;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -52,7 +49,6 @@ public class ContactFragment extends Fragment {
     private ArrayList<ContactModel> newList;
     private List<ContactModel> firebaseList;
     private List<ContactModel> finalList;
-    public static final int RequestPermissionCode = 1;
     private RecyclerView recyclerView;
     private ContactAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -94,13 +90,13 @@ public class ContactFragment extends Fragment {
         Log.e(TAG, "phoneContact  Size : " + phoneContact.size());
 
         newList = (ArrayList<ContactModel>) removeDuplicateNumber(phoneContact);
+        Log.e(TAG, "newList  Size : " + newList.size());
 
         //store firebase user in firebase list...
         readFirebaseData(list -> {
             firebaseList = list;
             Log.e(TAG, "Firebase List: " + firebaseList.toString());
         });
-
 
 
         if (newList.size() > 0) {
