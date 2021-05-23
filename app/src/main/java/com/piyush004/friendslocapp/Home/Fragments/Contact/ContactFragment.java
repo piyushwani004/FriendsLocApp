@@ -82,7 +82,6 @@ public class ContactFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_contact, container, false);
         Contacts.initialize(Objects.requireNonNull(getContext()));
-        EnableRuntimePermission();
         List<ContactModel> phoneContact = getAllPhoneContact();
 
         swipeRefreshLayout = view.findViewById(R.id.swipeContact);
@@ -137,35 +136,6 @@ public class ContactFragment extends Fragment {
         });
 
         return view;
-    }
-
-
-    public void EnableRuntimePermission() {
-
-        if (ActivityCompat.shouldShowRequestPermissionRationale(
-                getActivity(),
-                Manifest.permission.READ_CONTACTS)) {
-            Toast.makeText(getContext(), "CONTACTS permission allows us to Access CONTACTS app", Toast.LENGTH_LONG).show();
-        } else {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{
-                    Manifest.permission.READ_CONTACTS}, RequestPermissionCode);
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int RC, String per[], int[] PResult) {
-
-        switch (RC) {
-
-            case RequestPermissionCode:
-
-                if (PResult.length > 0 && PResult[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getContext(), "Permission Granted, Now your application can access CONTACTS.", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(getContext(), "Permission Canceled, Now your application cannot access CONTACTS.", Toast.LENGTH_LONG).show();
-                }
-                break;
-        }
     }
 
     private List<ContactModel> getAllPhoneContact() {
