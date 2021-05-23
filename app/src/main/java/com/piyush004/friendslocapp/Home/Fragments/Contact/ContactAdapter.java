@@ -1,9 +1,11 @@
 package com.piyush004.friendslocapp.Home.Fragments.Contact;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -11,6 +13,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
@@ -26,6 +33,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
     private java.util.List<ContactModel> List;
     private LayoutInflater inflater;
     ArrayList<ContactModel> backup;
+    DatabaseReference user= FirebaseDatabase.getInstance().getReference();
+    DatabaseReference userRef=user.child("AppUsers");
 
     public ContactAdapter(List<ContactModel> list, Context context) {
         List = list;
@@ -48,7 +57,10 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
                 .placeholder(R.drawable.person_placeholder)
                 .into(holder.circleImageView);
 
+
+
     }
+
 
 
     @NonNull
@@ -77,7 +89,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
                 filtereddata.addAll(backup);
             else {
                 for (ContactModel obj : backup) {
-                    if (obj.getName().toString().toLowerCase().contains(keyword.toString().toLowerCase()))
+                    if (obj.getName().toLowerCase().contains(keyword.toString().toLowerCase()))
                         filtereddata.add(obj);
                 }
             }
@@ -98,6 +110,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
     public static class Holder extends RecyclerView.ViewHolder {
         public TextView Name, MobileNo;
         public CircleImageView circleImageView;
+        public Button inviteButton;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -105,9 +118,34 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
             Name = itemView.findViewById(R.id.contactName);
             MobileNo = itemView.findViewById(R.id.contactNumber);
             circleImageView = itemView.findViewById(R.id.image);
+            inviteButton=itemView.findViewById(R.id.invite_button);
 
         }
     }
+
+
+    private List<String> getUserList(){
+        List<String> appUsers=new ArrayList<>();
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    appUsers.add(ds.child("Mobile").getValue().toString().trim().replaceAll(" ",""
+                    .replaceAll("-","")));
+                }
+                }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        return appUsers;
+
+    }
+
+
 
 
 }
