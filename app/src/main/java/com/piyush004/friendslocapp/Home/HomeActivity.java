@@ -149,7 +149,7 @@ public class HomeActivity extends AppCompatActivity {
                         }
 
                         if (report.isAnyPermissionPermanentlyDenied()) {
-                            showSettingsDialog();
+                           // showSettingsDialog();
                         }
                     }
 

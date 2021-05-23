@@ -30,15 +30,17 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
     public static final String TAG = ContactAdapter.class.getSimpleName();
 
     private java.util.List<ContactModel> List;
+    private java.util.List<ContactModel> CommonList;
     private LayoutInflater inflater;
     ArrayList<ContactModel> backup;
     DatabaseReference user = FirebaseDatabase.getInstance().getReference();
     DatabaseReference userRef = user.child("AppUsers");
 
-    public ContactAdapter(List<ContactModel> list, Context context) {
+    public ContactAdapter(List<ContactModel> list, Context context, List<ContactModel> commonList) {
         List = list;
         this.inflater = LayoutInflater.from(context);
         backup = new ArrayList<>(List);
+        CommonList = commonList;
     }
 
 

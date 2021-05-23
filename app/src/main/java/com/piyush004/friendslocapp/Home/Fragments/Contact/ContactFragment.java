@@ -45,7 +45,6 @@ public class ContactFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private View view;
-    private Thread thread = null;
     private ArrayList<ContactModel> newList;
     private List<ContactModel> firebaseList;
     private List<ContactModel> finalList;
@@ -90,8 +89,6 @@ public class ContactFragment extends Fragment {
         /* Log.e(TAG, "phoneContact : " + phoneContact.toString());*/
         Log.e(TAG, "phoneContact  Size : " + phoneContact.size());
 
-        Log.e(TAG, "phoneContact  Size : " + "my name is mayur");
-        System.out.println("phoneContact  Size : " + "my name is mayur");
 
         newList = (ArrayList<ContactModel>) removeDuplicateNumber(phoneContact);
         Log.e(TAG, "newList  Size : " + newList.size());
@@ -99,13 +96,17 @@ public class ContactFragment extends Fragment {
         //store firebase user in firebase list...
         readFirebaseData(list -> {
             firebaseList = list;
-            Log.e(TAG, "Firebase List: " + firebaseList.toString());
+            if (firebaseList.size() > 0) {
+                for (int i = 0; i < newList.size(); i++) {
+                    for (int j = 0; j < firebaseList.size(); j++) {
+                        if (newList.get(i).getMobile().equals(firebaseList.get(j).getMobile())) {
+                            finalList.add(newList.get(i));
+                        }
+                    }
+                }
+                Log.e(TAG, "final List Size : " + finalList.size());
+            }
         });
-
-        finalList=commonUsers(newList,finalList);
-        for(int i=0;i<finalList.size();i++)
-        Log.e("Common uses : ",finalList.get(i).getMobile());
-
 
         if (newList.size() > 0) {
             updateUI();
@@ -121,7 +122,6 @@ public class ContactFragment extends Fragment {
                     swipeRefreshLayout.setRefreshing(false);
                 }
             }, 1000);
-
         });
 
         searchView = view.findViewById(R.id.editText_searchBar);
@@ -142,21 +142,12 @@ public class ContactFragment extends Fragment {
         return view;
     }
 
-    private List<ContactModel> commonUsers(ArrayList<ContactModel> newList, List<ContactModel> finalList) {
-        List<ContactModel> commonUsers=new ArrayList<>();
-        Log.e("from Common user","gcg");
-        for(int i=0;i<newList.size();i++){
-              for(int j=0;j<firebaseList.size();j++){
-                  Log.e("from Common user",newList.get(i).toString());
-                  if(newList.get(i).getMobile()==firebaseList.get(j).getMobile()){
-                      Log.e("from Common user",newList.get(i).toString());
-                      commonUsers.add(newList.get(i));
-                      break;
-                  }
-              }
-        }
+    /*private List<ContactModel> commonUsers(ArrayList<ContactModel> newList, List<ContactModel> finalList) {
+        List<ContactModel> commonUsers = new ArrayList<>();
+        Log.e("from Common user", "gcg");
+
         return commonUsers;
-    }
+    }*/
 
     private List<ContactModel> getAllPhoneContact() {
         List<ContactModel> userContact = new ArrayList<>();
@@ -190,7 +181,7 @@ public class ContactFragment extends Fragment {
     private void updateUI() {
         if (newList != null && newList.size() > 0) {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new ContactAdapter(newList, getContext());
+            adapter = new ContactAdapter(newList, getContext(), finalList);
             recyclerView.setAdapter(adapter);
         }
     }
