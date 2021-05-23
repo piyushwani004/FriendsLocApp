@@ -1,6 +1,7 @@
 package com.piyush004.friendslocapp.Home.Fragments.Contact;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,8 +56,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
         holder.Name.setText(List.get(position).getName());
         holder.MobileNo.setText(List.get(position).getMobile());
         for(int i=0;i<CommonList.size();i++){
-            if(CommonList.get(i).getMobile()==List.get(position).getMobile())
-             holder.inviteButton.setText("Add Friend");
+            if(CommonList.get(i).getMobile()==List.get(position).getMobile()){
+                holder.inviteButton.setText("Add");
+                Log.e("matched for","List.get(position).getMobile()");
+            }
+
 
         }
 
