@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -33,6 +34,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
     private java.util.List<ContactModel> CommonList;
     private LayoutInflater inflater;
     ArrayList<ContactModel> backup;
+    private Context context;
     DatabaseReference user = FirebaseDatabase.getInstance().getReference();
     DatabaseReference userRef = user.child("AppUsers");
 
@@ -41,6 +43,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
         this.inflater = LayoutInflater.from(context);
         backup = new ArrayList<>(List);
         CommonList = commonList;
+        this.context = context;
     }
 
 
@@ -57,6 +60,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
                 .centerCrop().rotate(0)
                 .placeholder(R.drawable.person_placeholder)
                 .into(holder.circleImageView);
+
+        holder.inviteButton.setText("ADD");
+        holder.inviteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, " position" + position + 1, Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
