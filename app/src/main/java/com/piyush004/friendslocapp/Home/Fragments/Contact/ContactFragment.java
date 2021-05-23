@@ -88,10 +88,14 @@ public class ContactFragment extends Fragment {
         recyclerView = view.findViewById(R.id.RecycleViewContact);
 
         firebaseList = new ArrayList<>();
+
         finalList = new ArrayList<>();
 
         /* Log.e(TAG, "phoneContact : " + phoneContact.toString());*/
         Log.e(TAG, "phoneContact  Size : " + phoneContact.size());
+
+        Log.e(TAG, "phoneContact  Size : " + "my name is mayur");
+        System.out.println("phoneContact  Size : " + "my name is mayur");
 
         newList = (ArrayList<ContactModel>) removeDuplicateNumber(phoneContact);
 
@@ -100,6 +104,10 @@ public class ContactFragment extends Fragment {
             firebaseList = list;
             Log.e(TAG, "Firebase List: " + firebaseList.toString());
         });
+
+        finalList=commonUsers(newList,finalList);
+        for(int i=0;i<finalList.size();i++)
+        Log.e("Common uses : ",finalList.get(i).getMobile());
 
 
 
@@ -136,6 +144,22 @@ public class ContactFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private List<ContactModel> commonUsers(ArrayList<ContactModel> newList, List<ContactModel> finalList) {
+        List<ContactModel> commonUsers=new ArrayList<>();
+        Log.e("from Common user","gcg");
+        for(int i=0;i<newList.size();i++){
+              for(int j=0;j<firebaseList.size();j++){
+                  Log.e("from Common user",newList.get(i).toString());
+                  if(newList.get(i).getMobile()==firebaseList.get(j).getMobile()){
+                      Log.e("from Common user",newList.get(i).toString());
+                      commonUsers.add(newList.get(i));
+                      break;
+                  }
+              }
+        }
+        return commonUsers;
     }
 
     private List<ContactModel> getAllPhoneContact() {

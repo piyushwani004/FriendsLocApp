@@ -4,4 +4,5 @@ import java.util.List;
 
 public interface FirebaseContactCallback {
     void onResponse(List<ContactModel> list);
+
 }
