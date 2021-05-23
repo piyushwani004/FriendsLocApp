@@ -51,6 +51,12 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
 
         holder.Name.setText(List.get(position).getName());
         holder.MobileNo.setText(List.get(position).getMobile());
+        for(int i=0;i<CommonList.size();i++){
+            if(CommonList.get(i).getMobile()==List.get(position).getMobile())
+             holder.inviteButton.setText("Add Friend");
+
+        }
+
         Picasso.get()
                 .load(List.get(position).getPhotoURL())
                 .resize(500, 500)
