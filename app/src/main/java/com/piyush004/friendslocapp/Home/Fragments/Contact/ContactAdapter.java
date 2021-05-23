@@ -1,6 +1,7 @@
 package com.piyush004.friendslocapp.Home.Fragments.Contact;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,18 +32,16 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
     public static final String TAG = ContactAdapter.class.getSimpleName();
 
     private java.util.List<ContactModel> List;
-    private java.util.List<ContactModel> CommonList;
     private LayoutInflater inflater;
     ArrayList<ContactModel> backup;
     private Context context;
     DatabaseReference user = FirebaseDatabase.getInstance().getReference();
     DatabaseReference userRef = user.child("AppUsers");
 
-    public ContactAdapter(List<ContactModel> list, Context context, List<ContactModel> commonList) {
+    public ContactAdapter(List<ContactModel> list, Context context) {
         List = list;
         this.inflater = LayoutInflater.from(context);
         backup = new ArrayList<>(List);
-        CommonList = commonList;
         this.context = context;
     }
 
@@ -54,11 +53,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
 
         holder.Name.setText(List.get(position).getName());
         holder.MobileNo.setText(List.get(position).getMobile());
-        for(int i=0;i<CommonList.size();i++){
-            if(CommonList.get(i).getMobile()==List.get(position).getMobile())
-             holder.inviteButton.setText("Add Friend");
 
-        }
 
         Picasso.get()
                 .load(List.get(position).getPhotoURL())
@@ -67,7 +62,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
                 .placeholder(R.drawable.person_placeholder)
                 .into(holder.circleImageView);
 
-        holder.inviteButton.setText("ADD");
         holder.inviteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
