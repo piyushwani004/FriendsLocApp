@@ -79,11 +79,10 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
                     }
                 });
 
-                Toast.makeText(context, " position" + position + 1, Toast.LENGTH_SHORT).show();
-                Log.e("User Data :",List.get(position).toString());
             }
         });
-
+        Toast.makeText(context, " position" + position + 1, Toast.LENGTH_SHORT).show();
+        Log.e("User Data :",List.get(position).toString());
     }
 
 
