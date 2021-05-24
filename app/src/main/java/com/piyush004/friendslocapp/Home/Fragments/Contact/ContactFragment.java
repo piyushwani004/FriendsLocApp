@@ -97,7 +97,7 @@ public class ContactFragment extends Fragment {
                 for (int i = 0; i < newList.size(); i++) {
                     for (int j = 0; j < firebaseList.size(); j++) {
                         if (newList.get(i).getMobile().equals(firebaseList.get(j).getMobile())) {
-                            finalList.add(newList.get(i));
+                            finalList.add(firebaseList.get(j));
                         }
                     }
                 }
