@@ -83,12 +83,9 @@ public class ContactFragment extends Fragment {
         recyclerView = view.findViewById(R.id.RecycleViewContact);
 
         firebaseList = new ArrayList<>();
-
         finalList = new ArrayList<>();
 
-        /* Log.e(TAG, "phoneContact : " + phoneContact.toString());*/
         Log.e(TAG, "phoneContact  Size : " + phoneContact.size());
-
 
         newList = (ArrayList<ContactModel>) removeDuplicateNumber(phoneContact);
         Log.e(TAG, "newList  Size : " + newList.size());
@@ -105,14 +102,13 @@ public class ContactFragment extends Fragment {
                     }
                 }
                 Log.e(TAG, "final List Size : " + finalList.size());
+                if (finalList.size() > 0) {
+                    updateUI();
+                } else {
+                    Toast.makeText(getContext(), "No Contact found", Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
-        if (newList.size() > 0) {
-            updateUI();
-        } else {
-            Toast.makeText(getContext(), "No Contact found", Toast.LENGTH_SHORT).show();
-        }
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
             runAnimationAgain();
@@ -179,9 +175,9 @@ public class ContactFragment extends Fragment {
     }
 
     private void updateUI() {
-        if (newList != null && newList.size() > 0) {
+        if (finalList != null && finalList.size() > 0) {
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new ContactAdapter(newList, getContext(), finalList);
+            adapter = new ContactAdapter(finalList, getContext());
             recyclerView.setAdapter(adapter);
         }
     }
