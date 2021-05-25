@@ -8,6 +8,7 @@ import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -49,10 +50,11 @@ public class HomeActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private FloatingActionButton floatingActionButton;
     private CircleImageView headerProfileUpdateImg;
+    private TextView AdminHomeToolbarHeader;
     private ImageView SettingImg;
     private AlertDialog.Builder alertDialogBuilder;
     private FirebaseAuth firebaseAuth;
-    private String imgUrl;
+    private String imgUrl, name;
 
     private DatabaseReference appuser = FirebaseDatabase.getInstance().getReference().child("AppUsers")
             .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -66,6 +68,7 @@ public class HomeActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         headerProfileUpdateImg = findViewById(R.id.HomeHeaderImg);
         SettingImg = findViewById(R.id.SettingImg);
+        AdminHomeToolbarHeader = findViewById(R.id.AdminHomeToolbarHeader);
 
         bottomNavigationView = findViewById(R.id.BotnavViewHome);
         bottomNavigationView.setBackground(null);
@@ -81,6 +84,12 @@ public class HomeActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 imgUrl = snapshot.child("ImageURL").getValue(String.class);
+                name = snapshot.child("Name").getValue(String.class);
+
+                if (name != null)
+                    AdminHomeToolbarHeader.setText(name);
+                else
+                    AdminHomeToolbarHeader.setText(" ");
 
                 if (imgUrl == null) {
                     Picasso.get()
@@ -149,7 +158,7 @@ public class HomeActivity extends AppCompatActivity {
                         }
 
                         if (report.isAnyPermissionPermanentlyDenied()) {
-                           // showSettingsDialog();
+                            // showSettingsDialog();
                         }
                     }
 

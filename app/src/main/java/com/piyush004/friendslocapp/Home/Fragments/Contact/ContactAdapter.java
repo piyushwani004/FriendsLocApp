@@ -16,11 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
@@ -85,45 +82,16 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
             DatabaseReference receiver = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(List.get(position).getID()).child(firebaseAuth.getCurrentUser().getUid());
 
             SenderHashMap.put("Id", List.get(position).getID());
-            SenderHashMap.put("Name", List.get(position).getName());
-            SenderHashMap.put("ImageURL", List.get(position).getPhotoURL());
-            SenderHashMap.put("Mobile", List.get(position).getMobile());
             SenderHashMap.put("Status", "Pending");
             SenderHashMap.put("RequestType", "Sender");
             SenderHashMap.put("Date", date);
             sender.setValue(SenderHashMap).addOnSuccessListener(aVoid -> {
 
-                DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(firebaseAuth.getCurrentUser().getUid());
-                reference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String id = snapshot.child("ID").getValue(String.class);
-                        String name = snapshot.child("Name").getValue(String.class);
-                        String number = snapshot.child("Mobile").getValue(String.class);
-                        String image = snapshot.child("ImageURL").getValue(String.class);
-
-                        ReceiverHashMap.put("Id", id);
-                        ReceiverHashMap.put("Name", name);
-                        ReceiverHashMap.put("ImageURL", number);
-                        ReceiverHashMap.put("Mobile", image);
-                        ReceiverHashMap.put("Status", "Pending");
-                        ReceiverHashMap.put("RequestType", "Receiver");
-                        ReceiverHashMap.put("Date", date);
-                        receiver.setValue(ReceiverHashMap).addOnSuccessListener(aVoid1 -> Toast.makeText(context, "Request Send Successfully...", Toast.LENGTH_SHORT).show()).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
+                ReceiverHashMap.put("Id", firebaseAuth.getCurrentUser().getUid());
+                ReceiverHashMap.put("Status", "Pending");
+                ReceiverHashMap.put("RequestType", "Receiver");
+                ReceiverHashMap.put("Date", date);
+                receiver.setValue(ReceiverHashMap).addOnSuccessListener(aVoid1 -> Toast.makeText(context, "Request Send Successfully...", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show());
 
             }).addOnFailureListener(e -> {
                 Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show();
