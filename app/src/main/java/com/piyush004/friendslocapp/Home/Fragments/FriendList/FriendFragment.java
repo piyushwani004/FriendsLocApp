@@ -1,4 +1,4 @@
-package com.piyush004.friendslocapp.Home.Fragments;
+package com.piyush004.friendslocapp.Home.Fragments.FriendList;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,21 +10,21 @@ import androidx.fragment.app.Fragment;
 import com.piyush004.friendslocapp.R;
 
 
-public class RequestFragment extends Fragment {
+public class FriendFragment extends Fragment {
 
+    private View view;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private String mParam1;
     private String mParam2;
-    private View view;
 
-    public RequestFragment() {
+    public FriendFragment() {
         // Required empty public constructor
     }
 
-    public static RequestFragment newInstance(String param1, String param2) {
-        RequestFragment fragment = new RequestFragment();
+    public static FriendFragment newInstance(String param1, String param2) {
+        FriendFragment fragment = new FriendFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -44,7 +44,7 @@ public class RequestFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_request, container, false);
+        view = inflater.inflate(R.layout.fragment_friend, container, false);
         return view;
     }
 }
