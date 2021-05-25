@@ -30,7 +30,7 @@
                 android:text="User Name"
                 android:textAlignment="textStart"
                 android:textColor="@color/profileEditTextColor"
-                android:textSize="24dp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
 
