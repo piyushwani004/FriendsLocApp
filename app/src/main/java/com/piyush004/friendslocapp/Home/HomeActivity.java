@@ -160,6 +160,7 @@ public class HomeActivity extends AppCompatActivity {
                         if (report.isAnyPermissionPermanentlyDenied()) {
                             // showSettingsDialog();
                         }
+
                     }
 
                     @Override
@@ -217,6 +218,7 @@ public class HomeActivity extends AppCompatActivity {
         if (fragmentManager != null) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             if (fragmentTransaction != null) {
+                fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
                 fragmentTransaction.replace(R.id.fragment_container_home, fragment).commit();
             }
         }
