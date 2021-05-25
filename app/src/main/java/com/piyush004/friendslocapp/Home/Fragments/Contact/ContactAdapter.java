@@ -1,6 +1,7 @@
 package com.piyush004.friendslocapp.Home.Fragments.Contact;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +14,19 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
+import java.io.FilterReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,12 +37,13 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
     public static final String TAG = ContactAdapter.class.getSimpleName();
 
     private java.util.List<ContactModel> List;
+    private FirebaseStorage storage;
     private LayoutInflater inflater;
     ArrayList<ContactModel> backup;
     private Context context;
     DatabaseReference user = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference userRef = user.child("AppUsers");
-
+    DatabaseReference userRef ;
+    String currentUser =FirebaseAuth.getInstance().getCurrentUser().getUid();
     public ContactAdapter(List<ContactModel> list, Context context) {
         List = list;
         this.inflater = LayoutInflater.from(context);
@@ -63,7 +70,17 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
         holder.inviteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                DatabaseReference friendMember = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(List.get(position).getID());
+                friendMember.child("PendingRequest").push().setValue(currentUser).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                     Log.e("From OnComplete","Request Send successfully");
+                    }
+                });
+
                 Toast.makeText(context, " position" + position + 1, Toast.LENGTH_SHORT).show();
+                Log.e("User Data :",List.get(position).toString());
             }
         });
 
