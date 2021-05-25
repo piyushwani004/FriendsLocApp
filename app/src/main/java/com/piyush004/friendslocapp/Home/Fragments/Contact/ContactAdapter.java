@@ -14,21 +14,18 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
-import java.io.FilterReader;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -37,13 +34,15 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
     public static final String TAG = ContactAdapter.class.getSimpleName();
 
     private java.util.List<ContactModel> List;
-    private FirebaseStorage storage;
     private LayoutInflater inflater;
     ArrayList<ContactModel> backup;
     private Context context;
-    DatabaseReference user = FirebaseDatabase.getInstance().getReference();
-    DatabaseReference userRef ;
-    String currentUser =FirebaseAuth.getInstance().getCurrentUser().getUid();
+    private FirebaseAuth firebaseAuth;
+    private SimpleDateFormat simpleDateFormat;
+    HashMap<String, Object> SenderHashMap;
+    HashMap<String, Object> ReceiverHashMap;
+    private String date;
+
     public ContactAdapter(List<ContactModel> list, Context context) {
         List = list;
         this.inflater = LayoutInflater.from(context);
@@ -67,22 +66,39 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
                 .placeholder(R.drawable.person_placeholder)
                 .into(holder.circleImageView);
 
-        holder.inviteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.inviteButton.setOnClickListener(v -> {
 
-                DatabaseReference friendMember = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(List.get(position).getID());
-                friendMember.child("PendingRequest").push().setValue(currentUser).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                     Log.e("From OnComplete","Request Send successfully");
-                    }
-                });
+            firebaseAuth = FirebaseAuth.getInstance();
+            Log.e(TAG, "onBindViewHolder: " + firebaseAuth.getCurrentUser().getUid());
 
-            }
+            final java.util.Date data = new Date();
+            SenderHashMap = new HashMap<>();
+            ReceiverHashMap = new HashMap<>();
+
+            simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+            date = simpleDateFormat.format(data);
+
+            DatabaseReference sender = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid()).child(List.get(position).getID());
+            DatabaseReference receiver = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(List.get(position).getID()).child(firebaseAuth.getCurrentUser().getUid());
+
+            SenderHashMap.put("Id", List.get(position).getID());
+            SenderHashMap.put("Status", "Pending");
+            SenderHashMap.put("RequestType", "Sender");
+            SenderHashMap.put("Date", date);
+            sender.setValue(SenderHashMap).addOnSuccessListener(aVoid -> {
+
+                ReceiverHashMap.put("Id", firebaseAuth.getCurrentUser().getUid());
+                ReceiverHashMap.put("Status", "Pending");
+                ReceiverHashMap.put("RequestType", "Receiver");
+                ReceiverHashMap.put("Date", date);
+                receiver.setValue(ReceiverHashMap).addOnSuccessListener(aVoid1 -> Toast.makeText(context, "Request Send Successfully...", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show());
+
+            }).addOnFailureListener(e -> Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show());
+
+
         });
         Toast.makeText(context, " position" + position + 1, Toast.LENGTH_SHORT).show();
-        Log.e("User Data :",List.get(position).toString());
+        Log.e("User Data :", List.get(position).toString());
     }
 
 
@@ -145,29 +161,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
 
         }
     }
-
-
-    private List<String> getUserList() {
-        List<String> appUsers = new ArrayList<>();
-
-        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot ds : snapshot.getChildren()) {
-                    appUsers.add(ds.child("Mobile").getValue().toString().trim().replaceAll(" ", ""
-                            .replaceAll("-", "")));
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        return appUsers;
-
-    }
-
 
 }
 
