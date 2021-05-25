@@ -1,5 +1,6 @@
 package com.piyush004.friendslocapp.Home.Fragments.Contact;
 
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -52,7 +53,7 @@ public class ContactFragment extends Fragment {
     private ContactAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     int animationList = R.anim.layout_animation_up_to_down;
-
+    private Context context;
     private SearchView searchView;
 
     public ContactFragment() {
@@ -76,6 +77,9 @@ public class ContactFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_contact, container, false);
+
+        context = view.getContext();
+
         Contacts.initialize(Objects.requireNonNull(getContext()));
         List<ContactModel> phoneContact = getAllPhoneContact();
 
@@ -138,12 +142,6 @@ public class ContactFragment extends Fragment {
         return view;
     }
 
-    /*private List<ContactModel> commonUsers(ArrayList<ContactModel> newList, List<ContactModel> finalList) {
-        List<ContactModel> commonUsers = new ArrayList<>();
-        Log.e("from Common user", "gcg");
-
-        return commonUsers;
-    }*/
 
     private List<ContactModel> getAllPhoneContact() {
         List<ContactModel> userContact = new ArrayList<>();
@@ -175,9 +173,9 @@ public class ContactFragment extends Fragment {
     }
 
     private void updateUI() {
-        if (finalList != null && finalList.size() > 0) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            adapter = new ContactAdapter(finalList, getContext());
+        if (finalList != null && finalList.size() > 0 && context != null) {
+            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+            adapter = new ContactAdapter(finalList, context);
             recyclerView.setAdapter(adapter);
         }
     }
