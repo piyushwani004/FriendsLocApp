@@ -15,7 +15,7 @@
         android:padding="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/image"
+            android:id="@+id/friendImage"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_alignParentStart="true"
@@ -32,11 +32,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/image"
+            android:layout_toEndOf="@+id/friendImage"
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/contactName"
+                android:id="@+id/friendName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -47,7 +47,7 @@
                 android:textColor="#000000" />
 
             <TextView
-                android:id="@+id/contactNumber"
+                android:id="@+id/friendNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
