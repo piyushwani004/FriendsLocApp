@@ -111,6 +111,7 @@ public class RequestFragment extends Fragment {
             @Override
             protected void onBindViewHolder(@NonNull final RequestHolder holder, int position, @NonNull final RequestModel model) {
 
+
                 if (!Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid().equals(model.getID())) {
 
                     holder.Name.setText(model.getName());
@@ -152,6 +153,7 @@ public class RequestFragment extends Fragment {
 
         return view;
     }
+
 
     private void runAnimationAgain() {
         final LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), animationList);

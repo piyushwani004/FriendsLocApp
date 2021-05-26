@@ -99,6 +99,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
     }
 
 
+
+
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
