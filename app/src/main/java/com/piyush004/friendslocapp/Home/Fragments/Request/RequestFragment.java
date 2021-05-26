@@ -24,6 +24,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.Objects;
+
 
 public class RequestFragment extends Fragment {
 
@@ -109,15 +111,20 @@ public class RequestFragment extends Fragment {
             @Override
             protected void onBindViewHolder(@NonNull final RequestHolder holder, int position, @NonNull final RequestModel model) {
 
-                holder.Name.setText(model.getName());
-                holder.MobileNo.setText(model.getMobile());
+                if (!Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid().equals(model.getID())) {
 
-                Picasso.get()
-                        .load(model.getPhotoURL())
-                        .resize(500, 500)
-                        .centerCrop().rotate(0)
-                        .placeholder(R.drawable.person_placeholder)
-                        .into(holder.circleImageView);
+                    holder.Name.setText(model.getName());
+                    holder.MobileNo.setText(model.getMobile());
+
+                    Picasso.get()
+                            .load(model.getPhotoURL())
+                            .resize(500, 500)
+                            .centerCrop().rotate(0)
+                            .placeholder(R.drawable.person_placeholder)
+                            .into(holder.circleImageView);
+                } else {
+                    holder.itemView.setVisibility(View.GONE);
+                }
 
             }
 

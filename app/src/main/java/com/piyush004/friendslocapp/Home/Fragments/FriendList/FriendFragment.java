@@ -134,6 +134,16 @@ public class FriendFragment extends Fragment {
                                 .placeholder(R.drawable.person_placeholder)
                                 .into(holder.circleImageView);
 
+                        if (model.getReqType().equals("Sender")) {
+                            holder.ButtonLayout.setVisibility(View.GONE);
+                            holder.StatusButton.setVisibility(View.VISIBLE);
+                            holder.StatusButton.setText(model.getStatus());
+                        } else if (model.getReqType().equals("Receiver")) {
+                            holder.ButtonLayout.setVisibility(View.VISIBLE);
+                            holder.StatusButton.setVisibility(View.GONE);
+                        }
+
+
                     }
 
                     @Override

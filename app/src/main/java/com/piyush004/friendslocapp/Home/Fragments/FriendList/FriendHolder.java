@@ -1,21 +1,24 @@
 package com.piyush004.friendslocapp.Home.Fragments.FriendList;
 
 import android.view.View;
-import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.button.MaterialButton;
 import com.piyush004.friendslocapp.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class FriendHolder extends RecyclerView.ViewHolder{
+public class FriendHolder extends RecyclerView.ViewHolder {
 
     public TextView Name, MobileNo;
     public CircleImageView circleImageView;
-    public Button AcceptButton, DeleteButton;
+    public MaterialButton AcceptButton, DeleteButton;
+    public MaterialButton StatusButton;
+    public RelativeLayout ButtonLayout;
 
     public FriendHolder(@NonNull View itemView) {
         super(itemView);
@@ -25,6 +28,9 @@ public class FriendHolder extends RecyclerView.ViewHolder{
         circleImageView = itemView.findViewById(R.id.friendImage);
         AcceptButton = itemView.findViewById(R.id.accept_button);
         DeleteButton = itemView.findViewById(R.id.delete_button);
+
+        StatusButton = itemView.findViewById(R.id.StatusButton);
+        ButtonLayout = itemView.findViewById(R.id.buttonsLayout);
 
     }
 
