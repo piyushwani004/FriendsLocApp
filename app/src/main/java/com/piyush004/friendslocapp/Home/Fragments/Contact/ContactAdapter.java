@@ -67,7 +67,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
 
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     String fId = dataSnapshot.child("Id").getValue(String.class);
-                    if (fId != null) {
+                    if (fId != null && List.size() >= 1 && List != null) {
                         if (fId.equals(List.get(position).getID())) {
                             holder.inviteButton.setVisibility(View.GONE);
                         }
