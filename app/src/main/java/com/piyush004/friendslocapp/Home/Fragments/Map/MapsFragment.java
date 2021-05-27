@@ -7,12 +7,14 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -31,7 +33,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.piyush004.friendslocapp.R;
 
 public class MapsFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback {
+        GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback, GoogleMap.OnMarkerDragListener,
+        GoogleMap.OnMapLongClickListener,
+        GoogleMap.OnMarkerClickListener {
+
+    private static final String TAG = MapsFragment.class.getSimpleName();
 
     private GoogleMap GoogleMap;
     private GoogleApiClient mGoogleApiClient;
@@ -39,6 +45,8 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
     private Marker mCurrLocationMarker;
     private LocationRequest mLocationRequest;
     private Context context;
+
+    private Double latitude, longitude;
 
     @Nullable
     @Override
@@ -63,7 +71,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
+        getCurrentLocation();
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(1000);
@@ -114,6 +122,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         GoogleMap = googleMap;
+        GoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(context,
@@ -135,6 +144,63 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API).build();
         mGoogleApiClient.connect();
+    }
+
+
+    private void getCurrentLocation() {
+        GoogleMap.clear();
+        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+        Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (location != null) {
+            longitude = location.getLongitude();
+            latitude = location.getLatitude();
+            moveMap();
+
+            Log.e(TAG, "getCurrentLocation longitude : " + longitude);
+            Log.e(TAG, "getCurrentLocation  latitude : " + latitude);
+        }
+    }
+
+    private void moveMap() {
+
+        LatLng latLng = new LatLng(latitude, longitude);
+        GoogleMap.addMarker(new MarkerOptions()
+                .position(latLng)
+                .draggable(true));
+
+        GoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        GoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        GoogleMap.getUiSettings().setZoomControlsEnabled(true);
+
+    }
+
+    @Override
+    public void onMapLongClick(@NonNull LatLng latLng) {
+        GoogleMap.addMarker(new MarkerOptions().position(latLng).draggable(true));
+    }
+
+    @Override
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        return false;
+    }
+
+    @Override
+    public void onMarkerDragStart(@NonNull Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDrag(@NonNull Marker marker) {
+
+    }
+
+    @Override
+    public void onMarkerDragEnd(@NonNull Marker marker) {
+        latitude = marker.getPosition().latitude;
+        longitude = marker.getPosition().longitude;
+        moveMap();
     }
 
 
