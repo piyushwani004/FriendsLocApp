@@ -60,7 +60,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
 
         final ContactModel temp = List.get(position);
 
-
         DatabaseReference check = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(firebaseAuth.getCurrentUser().getUid());
         check.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
