@@ -1,16 +1,16 @@
-package com.piyush004.friendslocapp.Home.Fragments.FriendList;
+package com.piyush004.friendslocapp.Home.Fragments.Request;
 
-public class FriendModel {
+public class FriendRequestModel {
 
     private String Id;
     private String Date;
     private String ReqType;
     private String Status;
 
-    public FriendModel() {
+    public FriendRequestModel() {
     }
 
-    public FriendModel(String id, String date, String reqType, String status) {
+    public FriendRequestModel(String id, String date, String reqType, String status) {
         Id = id;
         Date = date;
         ReqType = reqType;

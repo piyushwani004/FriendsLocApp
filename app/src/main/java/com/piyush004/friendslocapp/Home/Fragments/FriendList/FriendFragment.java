@@ -25,6 +25,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.piyush004.friendslocapp.Home.Fragments.Request.FriendRequestHolder;
+import com.piyush004.friendslocapp.Home.Fragments.Request.FriendRequestModel;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
@@ -43,8 +45,8 @@ public class FriendFragment extends Fragment {
     private RecyclerView recyclerView;
     private FirebaseAuth firebaseAuth;
     private SearchView editTextSearch;
-    private FirebaseRecyclerOptions<FriendModel> options;
-    private FirebaseRecyclerAdapter<FriendModel, FriendHolder> adapter;
+    private FirebaseRecyclerOptions<FriendRequestModel> options;
+    private FirebaseRecyclerAdapter<FriendRequestModel, FriendRequestHolder> adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     int animationList = R.anim.layout_animation_up_to_down;
     private Context context;
@@ -76,7 +78,7 @@ public class FriendFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_friend, container, false);
 
-        context = view.getContext();
+       /* context = view.getContext();
 
         swipeRefreshLayout = view.findViewById(R.id.swipeFriend);
         recyclerView = (RecyclerView) view.findViewById(R.id.RecycleViewFriend);
@@ -103,7 +105,7 @@ public class FriendFragment extends Fragment {
         });
 
         final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(firebaseAuth.getCurrentUser().getUid());
-        options = new FirebaseRecyclerOptions.Builder<FriendModel>().setQuery(df, snapshot -> new FriendModel(
+        options = new FirebaseRecyclerOptions.Builder<FriendRequestModel>().setQuery(df, snapshot -> new FriendRequestModel(
 
                 snapshot.child("Id").getValue(String.class),
                 snapshot.child("Date").getValue(String.class),
@@ -112,10 +114,10 @@ public class FriendFragment extends Fragment {
 
         )).build();
 
-        adapter = new FirebaseRecyclerAdapter<FriendModel, FriendHolder>(options) {
+        adapter = new FirebaseRecyclerAdapter<FriendRequestModel, FriendRequestHolder>(options) {
 
             @Override
-            protected void onBindViewHolder(@NonNull final FriendHolder holder, int position, @NonNull final FriendModel model) {
+            protected void onBindViewHolder(@NonNull final FriendRequestHolder holder, int position, @NonNull final FriendRequestModel model) {
 
                 Log.e(TAG, "onBindViewHolder: " + model.getId());
 
@@ -157,9 +159,9 @@ public class FriendFragment extends Fragment {
 
             @NonNull
             @Override
-            public FriendHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.friend_list_card, parent, false);
-                return new FriendHolder(view);
+            public FriendRequestHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.friend_request_card, parent, false);
+                return new FriendRequestHolder(view);
             }
         };
 
@@ -175,7 +177,7 @@ public class FriendFragment extends Fragment {
                 }
             }, 1000);
 
-        });
+        });*/
 
         return view;
     }

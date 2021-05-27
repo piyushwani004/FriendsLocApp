@@ -1,4 +1,4 @@
-package com.piyush004.friendslocapp.Home.Fragments.FriendList;
+package com.piyush004.friendslocapp.Home.Fragments.Request;
 
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -12,7 +12,7 @@ import com.piyush004.friendslocapp.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class FriendHolder extends RecyclerView.ViewHolder {
+public class FriendRequestHolder extends RecyclerView.ViewHolder {
 
     public TextView Name, MobileNo;
     public CircleImageView circleImageView;
@@ -20,7 +20,7 @@ public class FriendHolder extends RecyclerView.ViewHolder {
     public MaterialButton StatusButton;
     public RelativeLayout ButtonLayout;
 
-    public FriendHolder(@NonNull View itemView) {
+    public FriendRequestHolder(@NonNull View itemView) {
         super(itemView);
 
         Name = itemView.findViewById(R.id.friendName);
