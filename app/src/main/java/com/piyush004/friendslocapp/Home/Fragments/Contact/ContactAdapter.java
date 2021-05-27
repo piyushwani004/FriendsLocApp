@@ -15,8 +15,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
@@ -48,6 +51,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
         this.inflater = LayoutInflater.from(context);
         backup = new ArrayList<>(List);
         this.context = context;
+        firebaseAuth = FirebaseAuth.getInstance();
     }
 
 
@@ -55,6 +59,30 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
     public void onBindViewHolder(@NonNull Holder holder, int position) {
 
         final ContactModel temp = List.get(position);
+
+
+        DatabaseReference check = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(firebaseAuth.getCurrentUser().getUid());
+        check.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String fId = dataSnapshot.child("Id").getValue(String.class);
+                    if (fId != null) {
+                        if (fId.equals(List.get(position).getID())) {
+                            holder.inviteButton.setVisibility(View.GONE);
+                        }
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
         holder.Name.setText(List.get(position).getName());
         holder.MobileNo.setText(List.get(position).getMobile());
@@ -97,8 +125,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
 
         });
     }
-
-
 
 
     @NonNull
