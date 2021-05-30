@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".Home.Setting.SettingActivity">
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="250sp"
@@ -25,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20sp"
-            android:layout_marginTop="20sp"
+            android:layout_marginTop="15sp"
             android:fontFamily="@font/poppins"
             android:text="Settings"
             android:textColor="@color/white"
@@ -38,10 +37,10 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/SettingProfileImg"
-                android:layout_width="60sp"
-                android:layout_height="60sp"
+                android:layout_width="50sp"
+                android:layout_height="50sp"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="20sp"
+                android:layout_marginStart="30sp"
                 android:src="@drawable/person_placeholder" />
 
             <TextView
@@ -49,11 +48,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="10dp"
                 android:layout_toEndOf="@+id/SettingProfileImg"
-                android:text="User Name"
+                android:fontFamily="@font/poppins"
+                android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="18sp" />
+                android:textSize="20sp" />
 
         </RelativeLayout>
 
@@ -80,6 +80,7 @@
 
 
             <RelativeLayout
+                android:id="@+id/firstRow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10sp">
@@ -97,28 +98,115 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/secondRow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/firstRow"
                 android:padding="10sp">
+
+                <ImageView
+                    android:id="@+id/EditProImg"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginEnd="10sp"
+                    android:src="@drawable/edit_profile_icon" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="20sp"
+                    android:layout_marginStart="0sp"
+                    android:layout_toEndOf="@+id/EditProImg"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Edit Profile"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/EditProBtn"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10sp"
+                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/thirdRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/secondRow"
+                android:padding="10sp">
+
+                <ImageView
+                    android:id="@+id/locShareImg"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginEnd="10sp"
+                    android:src="@drawable/share_location" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="0sp"
+                    android:layout_toEndOf="@+id/locShareImg"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Location Sharing"
+                    android:textSize="20sp" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switch1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/lastRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:padding="10sp">
+
+                <ImageView
+                    android:id="@+id/exitImg"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginEnd="10sp"
+                    android:src="@drawable/logout_icon" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10sp"
+                    android:layout_toEndOf="@+id/exitImg"
                     android:fontFamily="@font/poppins_semibold"
                     android:text="Log out"
                     android:textSize="20sp" />
 
                 <ImageView
                     android:id="@+id/logoutBtn"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="10sp"
-                    android:src="@drawable/ic_baseline_arrow_forward_ios_24" />
+                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
 
             </RelativeLayout>
 
