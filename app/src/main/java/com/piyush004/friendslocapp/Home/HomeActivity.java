@@ -52,8 +52,6 @@ public class HomeActivity extends AppCompatActivity {
     private CircleImageView headerProfileUpdateImg;
     private TextView AdminHomeToolbarHeader;
     private ImageView SettingImg;
-    private AlertDialog.Builder alertDialogBuilder;
-    private FirebaseAuth firebaseAuth;
     private String imgUrl, name;
 
     private DatabaseReference appuser = FirebaseDatabase.getInstance().getReference().child("AppUsers")
@@ -65,7 +63,6 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         requestStoragePermission();
-        firebaseAuth = FirebaseAuth.getInstance();
         headerProfileUpdateImg = findViewById(R.id.HomeHeaderImg);
         SettingImg = findViewById(R.id.SettingImg);
         AdminHomeToolbarHeader = findViewById(R.id.AdminHomeToolbarHeader);
@@ -123,25 +120,6 @@ public class HomeActivity extends AppCompatActivity {
             Intent intent = new Intent(HomeActivity.this, SettingActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-
-            /*alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
-            alertDialogBuilder.setTitle("Logout...");
-            alertDialogBuilder.setMessage("Do You Want To Logout ?");
-            alertDialogBuilder.setPositiveButton("yes",
-                    (arg0, arg1) -> {
-                        firebaseAuth.signOut();
-                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-                        finish();
-                    });
-
-            alertDialogBuilder.setNegativeButton("No",
-                    (dialog, which) -> {
-                        dialog.cancel();
-                        dialog.dismiss();
-                    });
-
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();*/
 
         });
 

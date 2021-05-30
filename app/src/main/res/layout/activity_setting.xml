@@ -37,7 +37,7 @@
             android:layout_below="@+id/SettingText">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profileSettingImg"
+                android:id="@+id/SettingProfileImg"
                 android:layout_width="60sp"
                 android:layout_height="60sp"
                 android:layout_centerVertical="true"
@@ -45,15 +45,15 @@
                 android:src="@drawable/person_placeholder" />
 
             <TextView
-                android:id="@+id/NameText"
+                android:id="@+id/SettingNameText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginStart="20dp"
-                android:layout_toEndOf="@+id/profileSettingImg"
+                android:layout_toEndOf="@+id/SettingProfileImg"
                 android:text="User Name"
                 android:textColor="@color/white"
-                android:textSize="18dp" />
+                android:textSize="18sp" />
 
         </RelativeLayout>
 
@@ -72,17 +72,58 @@
         app:cardElevation="8sp"
         app:cardUseCompatPadding="true">
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/messageLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:padding="5sp">
+            android:layout_height="match_parent"
+            android:padding="10sp">
 
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10sp">
 
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/poppins"
+                    android:text="Account Settings"
+                    android:textColor="@color/grey"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:padding="10sp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20sp"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Log out"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/logoutBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10sp"
+                    android:src="@drawable/ic_baseline_arrow_forward_ios_24" />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
