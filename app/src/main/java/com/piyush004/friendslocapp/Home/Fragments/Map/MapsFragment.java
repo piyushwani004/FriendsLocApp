@@ -85,9 +85,6 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
                 @Override
                 public void onLocationChanged(@NonNull Location location) {
                     mLastLocation = location;
-
-                    Log.e(TAG, "onLocationChanged: getLatitude " + mLastLocation.getLatitude());
-                    Log.e(TAG, "onLocationChanged: getLongitude " + mLastLocation.getLongitude());
                     if (mCurrLocationMarker != null) {
                         mCurrLocationMarker.remove();
                     }

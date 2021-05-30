@@ -70,6 +70,8 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
                     if (fId != null && List.size() >= 1 && List != null) {
                         if (fId.equals(List.get(position).getID())) {
                             holder.inviteButton.setVisibility(View.GONE);
+                        } else {
+                            holder.inviteButton.setVisibility(View.VISIBLE);
                         }
                     }
                 }

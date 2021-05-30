@@ -31,13 +31,13 @@ import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-import com.piyush004.friendslocapp.Auth.LoginActivity;
 import com.piyush004.friendslocapp.Home.Fragments.Chat.ChatFragment;
 import com.piyush004.friendslocapp.Home.Fragments.Contact.ContactFragment;
 import com.piyush004.friendslocapp.Home.Fragments.FriendList.FriendFragment;
 import com.piyush004.friendslocapp.Home.Fragments.Map.MapsFragment;
 import com.piyush004.friendslocapp.Home.Fragments.Request.RequestFragment;
 import com.piyush004.friendslocapp.Home.Profile.ProfileActivity;
+import com.piyush004.friendslocapp.Home.Setting.SettingActivity;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
@@ -119,7 +119,12 @@ public class HomeActivity extends AppCompatActivity {
         });
 
         SettingImg.setOnClickListener(v -> {
-            alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
+
+            Intent intent = new Intent(HomeActivity.this, SettingActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+            /*alertDialogBuilder = new AlertDialog.Builder(HomeActivity.this);
             alertDialogBuilder.setTitle("Logout...");
             alertDialogBuilder.setMessage("Do You Want To Logout ?");
             alertDialogBuilder.setPositiveButton("yes",
@@ -136,7 +141,7 @@ public class HomeActivity extends AppCompatActivity {
                     });
 
             AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.show();
+            alertDialog.show();*/
 
         });
 
