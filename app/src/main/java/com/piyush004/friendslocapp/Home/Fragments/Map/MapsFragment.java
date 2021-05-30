@@ -30,6 +30,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.piyush004.friendslocapp.R;
 
 public class MapsFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
@@ -45,7 +48,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
     private Marker mCurrLocationMarker;
     private LocationRequest mLocationRequest;
     private Context context;
-
+    private FirebaseAuth firebaseAuth;
     private Double latitude, longitude;
 
     @Nullable
@@ -59,8 +62,8 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        context = getContext();
-
+        context = view.getContext();
+        firebaseAuth = FirebaseAuth.getInstance();
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
@@ -71,18 +74,20 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        getCurrentLocation();
         mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(1000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-        if (ContextCompat.checkSelfPermission(context,
-                Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
+            getCurrentLocation();
             LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, new com.google.android.gms.location.LocationListener() {
                 @Override
                 public void onLocationChanged(@NonNull Location location) {
                     mLastLocation = location;
+
+                    Log.e(TAG, "onLocationChanged: getLatitude " + mLastLocation.getLatitude());
+                    Log.e(TAG, "onLocationChanged: getLongitude " + mLastLocation.getLongitude());
                     if (mCurrLocationMarker != null) {
                         mCurrLocationMarker.remove();
                     }
@@ -122,11 +127,10 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         GoogleMap = googleMap;
-        GoogleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        GoogleMap.setMapType(com.google.android.gms.maps.GoogleMap.MAP_TYPE_HYBRID);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(context,
-                    Manifest.permission.ACCESS_FINE_LOCATION)
+            if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 buildGoogleApiClient();
                 GoogleMap.setMyLocationEnabled(true);
@@ -149,7 +153,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
     private void getCurrentLocation() {
         GoogleMap.clear();
-        if (ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         Location location = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
@@ -157,19 +161,12 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
             longitude = location.getLongitude();
             latitude = location.getLatitude();
             moveMap();
-
-            Log.e(TAG, "getCurrentLocation longitude : " + longitude);
-            Log.e(TAG, "getCurrentLocation  latitude : " + latitude);
         }
     }
 
     private void moveMap() {
 
         LatLng latLng = new LatLng(latitude, longitude);
-        GoogleMap.addMarker(new MarkerOptions()
-                .position(latLng)
-                .draggable(true));
-
         GoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         GoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
         GoogleMap.getUiSettings().setZoomControlsEnabled(true);
@@ -178,7 +175,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
     @Override
     public void onMapLongClick(@NonNull LatLng latLng) {
-        GoogleMap.addMarker(new MarkerOptions().position(latLng).draggable(true));
+        //GoogleMap.addMarker(new MarkerOptions().position(latLng).draggable(true));
     }
 
     @Override
