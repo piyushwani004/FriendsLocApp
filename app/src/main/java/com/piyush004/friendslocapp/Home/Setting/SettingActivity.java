@@ -59,6 +59,13 @@ public class SettingActivity extends AppCompatActivity {
 
         switchMaterial = findViewById(R.id.settingSwitch);
 
+        SharedPreferences sh = getSharedPreferences("Settings", MODE_PRIVATE);
+        String status = sh.getString("LocationStatus", "");
+        if (status != null)
+            switchMaterial.setChecked(Boolean.parseBoolean(status));
+        else
+            switchMaterial.setChecked(true);
+
         AppUser.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -102,7 +109,6 @@ public class SettingActivity extends AppCompatActivity {
             Log.e(TAG, "setOnCheckedChangeListener : " + isChecked);
 
         });
-
 
         editProfileBtn.setOnClickListener(v -> {
 
@@ -152,7 +158,9 @@ public class SettingActivity extends AppCompatActivity {
 
         SharedPreferences sh = getSharedPreferences("Settings", MODE_PRIVATE);
         String status = sh.getString("LocationStatus", "");
-        switchMaterial.setChecked(Boolean.parseBoolean(status));
+        if (status != null)
+            switchMaterial.setChecked(Boolean.parseBoolean(status));
+
 
         Log.e(TAG, "onStart: " + status);
 
@@ -166,7 +174,6 @@ public class SettingActivity extends AppCompatActivity {
         SharedPreferences.Editor myEdit = sharedPreferences.edit();
         myEdit.putString("LocationStatus", String.valueOf(switchMaterial.isChecked()));
         myEdit.apply();
-
         Log.e(TAG, "onStop: " + switchMaterial.isChecked());
 
     }
