@@ -1,7 +1,9 @@
 package com.piyush004.friendslocapp.Home.Setting;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -9,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,14 +27,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SettingActivity extends AppCompatActivity {
 
+    private static final String TAG = SettingActivity.class.getSimpleName();
     private CircleImageView circleImageView;
     private TextView textViewName;
     private ImageView logoutBtn, editProfileBtn, termConditionBtn, privacyBtn;
     private AlertDialog.Builder alertDialogBuilder;
     private FirebaseAuth firebaseAuth;
+    private SwitchMaterial switchMaterial;
 
 
-    private String imgUrl, name;
+    private String imgUrl;
+    private String name;
 
     private DatabaseReference AppUser = FirebaseDatabase.getInstance().getReference().child("AppUsers")
             .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -49,8 +55,9 @@ public class SettingActivity extends AppCompatActivity {
         editProfileBtn = findViewById(R.id.EditProBtn);
         termConditionBtn = findViewById(R.id.termOfServiceBtn);
         privacyBtn = findViewById(R.id.PrivacyPolicyBtn);
-
         logoutBtn = findViewById(R.id.logoutBtn);
+
+        switchMaterial = findViewById(R.id.settingSwitch);
 
         AppUser.addValueEventListener(new ValueEventListener() {
             @Override
@@ -84,6 +91,18 @@ public class SettingActivity extends AppCompatActivity {
 
             }
         });
+
+        switchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+            SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
+            SharedPreferences.Editor myEdit = sharedPreferences.edit();
+            myEdit.putString("LocationStatus", String.valueOf(isChecked));
+            myEdit.apply();
+
+            Log.e(TAG, "setOnCheckedChangeListener : " + isChecked);
+
+        });
+
 
         editProfileBtn.setOnClickListener(v -> {
 
@@ -124,6 +143,31 @@ public class SettingActivity extends AppCompatActivity {
 
         });
 
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        SharedPreferences sh = getSharedPreferences("Settings", MODE_PRIVATE);
+        String status = sh.getString("LocationStatus", "");
+        switchMaterial.setChecked(Boolean.parseBoolean(status));
+
+        Log.e(TAG, "onStart: " + status);
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
+        SharedPreferences.Editor myEdit = sharedPreferences.edit();
+        myEdit.putString("LocationStatus", String.valueOf(switchMaterial.isChecked()));
+        myEdit.apply();
+
+        Log.e(TAG, "onStop: " + switchMaterial.isChecked());
 
     }
 }

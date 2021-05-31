@@ -2,6 +2,7 @@ package com.piyush004.friendslocapp.Home;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -228,5 +229,14 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
 
+        SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
+        SharedPreferences.Editor myEdit = sharedPreferences.edit();
+        myEdit.putString("LocationStatus", "true");
+        myEdit.apply();
+
+    }
 }
