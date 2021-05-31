@@ -78,7 +78,6 @@
             android:layout_height="match_parent"
             android:padding="10sp">
 
-
             <RelativeLayout
                 android:id="@+id/firstRow"
                 android:layout_width="match_parent"
@@ -90,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:fontFamily="@font/poppins"
-                    android:text="Account Settings"
+                    android:text="Account settings"
                     android:textColor="@color/grey"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -110,15 +109,14 @@
                     android:layout_height="30sp"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10sp"
-                    android:layout_marginEnd="10sp"
+                    android:layout_marginStart="5sp"
+                    android:layout_marginEnd="5sp"
                     android:src="@drawable/edit_profile_icon" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="0sp"
                     android:layout_toEndOf="@+id/EditProImg"
                     android:fontFamily="@font/poppins_semibold"
                     android:text="Edit Profile"
@@ -130,11 +128,9 @@
                     android:layout_height="30sp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="10sp"
                     android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
 
             </RelativeLayout>
-
 
             <RelativeLayout
                 android:id="@+id/thirdRow"
@@ -149,15 +145,14 @@
                     android:layout_height="30sp"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10sp"
-                    android:layout_marginEnd="10sp"
+                    android:layout_marginStart="5sp"
+                    android:layout_marginEnd="5sp"
                     android:src="@drawable/share_location" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="0sp"
                     android:layout_toEndOf="@+id/locShareImg"
                     android:fontFamily="@font/poppins_semibold"
                     android:text="Location Sharing"
@@ -171,12 +166,103 @@
 
             </RelativeLayout>
 
+            <RelativeLayout
+                android:id="@+id/fourthRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/thirdRow"
+                android:layout_marginTop="20sp"
+                android:padding="10sp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="@font/poppins"
+                    android:text="Other settings"
+                    android:textColor="@color/grey"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/fifthRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fourthRow"
+                android:padding="10sp">
+
+                <ImageView
+                    android:id="@+id/termOfServiceText"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="5sp"
+                    android:layout_marginEnd="5sp"
+                    android:src="@drawable/terms_and_conditions" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/termOfServiceText"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Terms and Condition"
+                    android:textSize="18sp" />
+
+                <ImageView
+                    android:id="@+id/termOfServiceBtn"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/sixthRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/fifthRow"
+                android:padding="10sp">
+
+                <ImageView
+                    android:id="@+id/PrivacyPolicyText"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="5sp"
+                    android:layout_marginEnd="5sp"
+                    android:src="@drawable/privacy_policy" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/PrivacyPolicyText"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:text="Privacy policy"
+                    android:textSize="20sp" />
+
+                <ImageView
+                    android:id="@+id/PrivacyPolicyBtn"
+                    android:layout_width="30sp"
+                    android:layout_height="30sp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
+
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/lastRow"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/sixthRow"
                 android:padding="10sp">
 
                 <ImageView
@@ -185,15 +271,14 @@
                     android:layout_height="30sp"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10sp"
-                    android:layout_marginEnd="10sp"
+                    android:layout_marginStart="5sp"
+                    android:layout_marginEnd="5sp"
                     android:src="@drawable/logout_icon" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="10sp"
                     android:layout_toEndOf="@+id/exitImg"
                     android:fontFamily="@font/poppins_semibold"
                     android:text="Log out"
@@ -205,11 +290,9 @@
                     android:layout_height="30sp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="10sp"
                     android:src="@drawable/ic_baseline_keyboard_arrow_right_24" />
 
             </RelativeLayout>
-
 
         </RelativeLayout>
 

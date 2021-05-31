@@ -16,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.piyush004.friendslocapp.Auth.LoginActivity;
+import com.piyush004.friendslocapp.Home.Profile.ProfileActivity;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
@@ -25,7 +26,7 @@ public class SettingActivity extends AppCompatActivity {
 
     private CircleImageView circleImageView;
     private TextView textViewName;
-    private ImageView logoutBtn;
+    private ImageView logoutBtn, editProfileBtn, termConditionBtn, privacyBtn;
     private AlertDialog.Builder alertDialogBuilder;
     private FirebaseAuth firebaseAuth;
 
@@ -44,6 +45,10 @@ public class SettingActivity extends AppCompatActivity {
 
         circleImageView = findViewById(R.id.SettingProfileImg);
         textViewName = findViewById(R.id.SettingNameText);
+
+        editProfileBtn = findViewById(R.id.EditProBtn);
+        termConditionBtn = findViewById(R.id.termOfServiceBtn);
+        privacyBtn = findViewById(R.id.PrivacyPolicyBtn);
 
         logoutBtn = findViewById(R.id.logoutBtn);
 
@@ -80,6 +85,21 @@ public class SettingActivity extends AppCompatActivity {
             }
         });
 
+        editProfileBtn.setOnClickListener(v -> {
+
+            Intent intent = new Intent(SettingActivity.this, ProfileActivity.class);
+            startActivity(intent);
+            finish();
+
+        });
+
+        termConditionBtn.setOnClickListener(v -> {
+
+        });
+
+        privacyBtn.setOnClickListener(v -> {
+
+        });
 
         logoutBtn.setOnClickListener(v -> {
 
