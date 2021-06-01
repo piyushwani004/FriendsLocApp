@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,8 +30,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.piyush004.friendslocapp.R;
 
 public class MapsFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
@@ -92,9 +89,12 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
                     MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.position(latLng);
-                    markerOptions.title("Current Position");
+                    markerOptions.title("UserName");
                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
                     mCurrLocationMarker = GoogleMap.addMarker(markerOptions);
+
+                    CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(getActivity());
+                    GoogleMap.setInfoWindowAdapter(adapter);
 
                     //move map camera
                     GoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
