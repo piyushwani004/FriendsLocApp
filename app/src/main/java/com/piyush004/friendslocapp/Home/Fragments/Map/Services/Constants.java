@@ -2,8 +2,8 @@ package com.piyush004.friendslocapp.Home.Fragments.Map.Services;
 
 public class Constants {
 
-    static final int LOCATION_SERVICE_ID = 175;
-    static final String ACTION_START_LOCATION_SERVICE = "startLocationService";
-    static final String ACTION_STOP_LOCATION_SERVICE = "stopLocationService";
+    public static final int LOCATION_SERVICE_ID = 175;
+    public static final String ACTION_START_LOCATION_SERVICE = "startLocationService";
+    public static final String ACTION_STOP_LOCATION_SERVICE = "stopLocationService";
 
 }

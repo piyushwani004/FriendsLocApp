@@ -1,11 +1,15 @@
 package com.piyush004.friendslocapp.Home;
 
 import android.Manifest;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -15,6 +19,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -36,6 +42,8 @@ import com.piyush004.friendslocapp.Home.Fragments.Chat.ChatFragment;
 import com.piyush004.friendslocapp.Home.Fragments.Contact.ContactFragment;
 import com.piyush004.friendslocapp.Home.Fragments.FriendList.FriendFragment;
 import com.piyush004.friendslocapp.Home.Fragments.Map.MapsFragment;
+import com.piyush004.friendslocapp.Home.Fragments.Map.Services.Constants;
+import com.piyush004.friendslocapp.Home.Fragments.Map.Services.LocationService;
 import com.piyush004.friendslocapp.Home.Fragments.Request.RequestFragment;
 import com.piyush004.friendslocapp.Home.Profile.ProfileActivity;
 import com.piyush004.friendslocapp.Home.Setting.SettingActivity;
@@ -48,12 +56,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeActivity extends AppCompatActivity {
 
+    private static final String TAG = HomeActivity.class.getSimpleName();
     private BottomNavigationView bottomNavigationView;
     private FloatingActionButton floatingActionButton;
     private CircleImageView headerProfileUpdateImg;
     private TextView AdminHomeToolbarHeader;
     private ImageView SettingImg;
     private String imgUrl, name;
+    private FirebaseAuth firebaseAuth;
 
     private DatabaseReference appuser = FirebaseDatabase.getInstance().getReference().child("AppUsers")
             .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -63,6 +73,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        firebaseAuth = FirebaseAuth.getInstance();
         requestStoragePermission();
         headerProfileUpdateImg = findViewById(R.id.HomeHeaderImg);
         SettingImg = findViewById(R.id.SettingImg);
@@ -227,10 +238,5 @@ public class HomeActivity extends AppCompatActivity {
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
         builder.show();
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 }

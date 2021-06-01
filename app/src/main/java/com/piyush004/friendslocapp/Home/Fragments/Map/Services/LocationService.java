@@ -21,7 +21,12 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.piyush004.friendslocapp.R;
+
+import java.util.HashMap;
 
 public class LocationService extends Service {
 
@@ -39,6 +44,13 @@ public class LocationService extends Service {
                 longitude = locationResult.getLastLocation().getLongitude();
                 Log.e(TAG, "onLocationService : latitude  :: " + latitude);
                 Log.e(TAG, "onLocationService : longitude :: " + longitude);
+
+                final DatabaseReference location = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                final HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put("latitude", latitude);
+                hashMap.put("longitude", longitude);
+                location.child("Location").updateChildren(hashMap);
+
             }
 
         }
