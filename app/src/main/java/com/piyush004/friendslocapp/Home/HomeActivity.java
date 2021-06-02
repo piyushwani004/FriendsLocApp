@@ -1,11 +1,8 @@
 package com.piyush004.friendslocapp.Home;
 
 import android.Manifest;
-import android.app.ActivityManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -19,8 +16,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -42,8 +37,6 @@ import com.piyush004.friendslocapp.Home.Fragments.Chat.ChatFragment;
 import com.piyush004.friendslocapp.Home.Fragments.Contact.ContactFragment;
 import com.piyush004.friendslocapp.Home.Fragments.FriendList.FriendFragment;
 import com.piyush004.friendslocapp.Home.Fragments.Map.MapsFragment;
-import com.piyush004.friendslocapp.Home.Fragments.Map.Services.Constants;
-import com.piyush004.friendslocapp.Home.Fragments.Map.Services.LocationService;
 import com.piyush004.friendslocapp.Home.Fragments.Request.RequestFragment;
 import com.piyush004.friendslocapp.Home.Profile.ProfileActivity;
 import com.piyush004.friendslocapp.Home.Setting.SettingActivity;
@@ -237,6 +230,25 @@ public class HomeActivity extends AppCompatActivity {
         });
         builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
         builder.show();
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        /*if (VerifyAllSteps.step_one && VerifyAllSteps.step_two && VerifyAllSteps.step_three) {
+        } else {
+
+            if (firebaseAuth != null)
+                firebaseAuth.signOut();
+
+            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            VerifyAllSteps.step_one = false;
+            VerifyAllSteps.step_two = false;
+            VerifyAllSteps.step_three = false;
+        }*/
     }
 }

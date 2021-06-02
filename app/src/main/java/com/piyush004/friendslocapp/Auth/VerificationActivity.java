@@ -1,6 +1,7 @@
 package com.piyush004.friendslocapp.Auth;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
@@ -58,7 +60,9 @@ public class VerificationActivity extends AppCompatActivity {
         textViewNumber = findViewById(R.id.textViewNumber);
 
         Log.e(TAG, "length" + number.length());
-        textViewNumber.setText(number.substring(0, 3) + " " + number.substring(3, 13));
+
+        String concat = number.substring(0, 3) + " " + number.substring(3, 13);
+        textViewNumber.setText(concat);
 
         viewAuth = findViewById(R.id.ViewVerification);
 
@@ -93,7 +97,6 @@ public class VerificationActivity extends AppCompatActivity {
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         }
-
     }
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
@@ -110,8 +113,13 @@ public class VerificationActivity extends AppCompatActivity {
                         });
 
                     } else {
+
+                        if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                            Toast.makeText(VerificationActivity.this, "Incorrect OTP entered", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(VerificationActivity.this, "Unable to verify please retry later", Toast.LENGTH_LONG).show();
+                        }
                         ringProgressBar.setVisibility(View.GONE);
-                        Toast.makeText(getApplicationContext(), "Sign-in Code Error", Toast.LENGTH_LONG).show();
                     }
                 });
     }

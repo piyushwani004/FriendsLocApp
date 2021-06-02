@@ -26,8 +26,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.piyush004.friendslocapp.Auth.LoginActivity;
+import com.piyush004.friendslocapp.Auth.ProfileUpdate;
 import com.piyush004.friendslocapp.Home.Fragments.Map.Services.Constants;
 import com.piyush004.friendslocapp.Home.Fragments.Map.Services.LocationService;
+import com.piyush004.friendslocapp.Home.HomeActivity;
 import com.piyush004.friendslocapp.Home.Profile.ProfileActivity;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
@@ -158,7 +160,10 @@ public class SettingActivity extends AppCompatActivity {
             alertDialogBuilder.setPositiveButton("yes",
                     (arg0, arg1) -> {
                         firebaseAuth.signOut();
-                        startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+                        Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         finish();
                     });
 

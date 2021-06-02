@@ -2,6 +2,7 @@ package com.piyush004.friendslocapp.Auth;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -78,7 +79,9 @@ public class ProfileUpdate extends AppCompatActivity {
                 Name = snapshot.child("Name").getValue(String.class);
                 Mobile = snapshot.child("Mobile").getValue(String.class);
                 imgUrl = snapshot.child("ImageURL").getValue(String.class);
-                uri=Uri.parse(imgUrl);
+
+                if (imgUrl != null)
+                    uri = Uri.parse(imgUrl);
 
                 if (Name == null) {
                     textViewName.setText("User Name");
