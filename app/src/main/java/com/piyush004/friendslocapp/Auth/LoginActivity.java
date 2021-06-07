@@ -62,6 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(LoginActivity.this, VerificationActivity.class);
                 intent.putExtra("mobile", mobile);
                 startActivity(intent);
+
             }
 
 
