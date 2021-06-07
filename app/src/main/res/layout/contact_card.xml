@@ -63,7 +63,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="10sp">
+            android:layout_marginEnd="10sp"
+            android:visibility="gone">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/invite_button"

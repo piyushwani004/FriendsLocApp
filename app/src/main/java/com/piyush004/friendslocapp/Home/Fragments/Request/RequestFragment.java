@@ -125,7 +125,6 @@ public class RequestFragment extends Fragment {
                             holder.StatusButton.setVisibility(View.GONE);
                         }
 
-
                     }
 
                     @Override
@@ -133,6 +132,27 @@ public class RequestFragment extends Fragment {
 
                     }
                 });
+
+
+                holder.AcceptButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+
+                    }
+                });
+
+
+                holder.ButtonLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+
+
+                    }
+                });
+
 
             }
 
