@@ -3,7 +3,6 @@ package com.piyush004.friendslocapp.Home.Fragments.Request;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +17,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,19 +32,16 @@ public class RequestFragment extends Fragment {
     private static final String TAG = RequestFragment.class.getSimpleName();
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    int animationList = R.anim.layout_animation_up_to_down;
     private String mParam1;
     private String mParam2;
     private View view;
-
     private RecyclerView recyclerView;
     private FirebaseAuth firebaseAuth;
     private FirebaseRecyclerOptions<FriendRequestModel> options;
     private FirebaseRecyclerAdapter<FriendRequestModel, FriendRequestHolder> adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
-    int animationList = R.anim.layout_animation_up_to_down;
     private Context context;
-
 
 
     public RequestFragment() {
@@ -134,23 +128,15 @@ public class RequestFragment extends Fragment {
                 });
 
 
-                holder.AcceptButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                holder.AcceptButton.setOnClickListener(v -> {
 
 
-
-                    }
                 });
 
 
-                holder.ButtonLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                holder.ButtonLayout.setOnClickListener(v -> {
 
 
-
-                    }
                 });
 
 
@@ -188,7 +174,6 @@ public class RequestFragment extends Fragment {
         adapter.notifyDataSetChanged();
         recyclerView.scheduleLayoutAnimation();
     }
-
 
 
 }
