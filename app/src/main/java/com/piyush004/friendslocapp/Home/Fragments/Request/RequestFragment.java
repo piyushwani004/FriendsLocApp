@@ -8,8 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +27,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Objects;
 
 
 public class RequestFragment extends Fragment {
@@ -42,7 +47,8 @@ public class RequestFragment extends Fragment {
     private FirebaseRecyclerAdapter<FriendRequestModel, FriendRequestHolder> adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private Context context;
-
+    private AlertDialog.Builder alertDialogBuilder;
+    HashMap<String, Object> hashMap;
 
     public RequestFragment() {
         // Required empty public constructor
@@ -72,6 +78,7 @@ public class RequestFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_request, container, false);
 
         context = view.getContext();
+        hashMap = new HashMap<>();
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRequest);
         recyclerView = (RecyclerView) view.findViewById(R.id.RecycleViewRequest);
@@ -131,11 +138,65 @@ public class RequestFragment extends Fragment {
                 holder.AcceptButton.setOnClickListener(v -> {
 
 
+                    alertDialogBuilder = new AlertDialog.Builder(context);
+                    alertDialogBuilder.setTitle("Friend Request");
+                    alertDialogBuilder.setMessage("Do You Want To Accept Request ?");
+                    alertDialogBuilder.setPositiveButton("yes",
+                            (arg0, arg1) -> {
+
+                                DatabaseReference sender = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid()).child(model.getId());
+                                DatabaseReference receiver = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(model.getId()).child(firebaseAuth.getCurrentUser().getUid());
+
+                                hashMap.put("Status", "Accept");
+                                sender.updateChildren(hashMap).addOnSuccessListener(aVoid -> {
+
+                                    receiver.updateChildren(hashMap).addOnSuccessListener(aVoid1 -> {
+
+                                        DatabaseReference friendDR = FirebaseDatabase.getInstance().getReference().child("Friends");
+                                        friendDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).child("id").setValue(model.getId()).addOnSuccessListener(aVoid2 -> {
+
+                                            sender.removeValue().addOnSuccessListener(aVoid3 -> receiver.removeValue().addOnSuccessListener(aVoid31 -> {
+                                                Toast.makeText(context, "Friend Request Accepted...", Toast.LENGTH_SHORT).show();
+                                            }));
+
+                                        }).addOnFailureListener(e -> Toast.makeText(context, " " + e.getMessage(), Toast.LENGTH_SHORT).show());
+
+                                    }).addOnFailureListener(e -> Toast.makeText(context, " " + e.getMessage(), Toast.LENGTH_SHORT).show());
+
+                                }).addOnFailureListener(e -> Toast.makeText(context, " " + e.getMessage(), Toast.LENGTH_SHORT).show());
+
+                            });
+
+                    alertDialogBuilder.setNegativeButton("No",
+                            (dialog, which) -> {
+                                dialog.cancel();
+                                dialog.dismiss();
+                            });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+
                 });
 
 
-                holder.ButtonLayout.setOnClickListener(v -> {
+                holder.DeleteButton.setOnClickListener(v -> {
 
+                    alertDialogBuilder = new AlertDialog.Builder(context);
+                    alertDialogBuilder.setTitle("Friend Request");
+                    alertDialogBuilder.setMessage("Do You Want To Delete Request ?");
+                    alertDialogBuilder.setPositiveButton("yes",
+                            (arg0, arg1) -> {
+
+                            });
+
+                    alertDialogBuilder.setNegativeButton("No",
+                            (dialog, which) -> {
+                                dialog.cancel();
+                                dialog.dismiss();
+                            });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
 
                 });
 
