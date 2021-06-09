@@ -39,32 +39,6 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
     HashMap<String, Object> SenderHashMap;
     HashMap<String, Object> ReceiverHashMap;
     private java.util.List<ContactModel> List;
-    Filter filter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence keyword) {
-            ArrayList<ContactModel> filtereddata = new ArrayList<>();
-
-            if (keyword.toString().isEmpty())
-                filtereddata.addAll(backup);
-            else {
-                for (ContactModel obj : backup) {
-                    if (obj.getName().toLowerCase().contains(keyword.toString().toLowerCase()))
-                        filtereddata.add(obj);
-                }
-            }
-
-            FilterResults results = new FilterResults();
-            results.values = filtereddata;
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            List.clear();
-            List.addAll((ArrayList<ContactModel>) results.values);
-            notifyDataSetChanged();
-        }
-    };
     private LayoutInflater inflater;
     private Context context;
     private FirebaseAuth firebaseAuth;
@@ -168,6 +142,34 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
     public Filter getFilter() {
         return filter;
     }
+
+    Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence keyword) {
+            ArrayList<ContactModel> filtereddata = new ArrayList<>();
+
+            if (keyword.toString().isEmpty())
+                filtereddata.addAll(backup);
+            else {
+                for (ContactModel obj : backup) {
+                    if (obj.getName().toLowerCase().contains(keyword.toString().toLowerCase()))
+                        filtereddata.add(obj);
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filtereddata;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            List.clear();
+            List.addAll((ArrayList<ContactModel>) results.values);
+            notifyDataSetChanged();
+        }
+    };
+
 
     public static class Holder extends RecyclerView.ViewHolder {
         public TextView Name, MobileNo;

@@ -54,6 +54,7 @@ public class ContactFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private Context context;
     private SearchView searchView;
+    Handler myHandler = new Handler();
 
     public ContactFragment() {
         // Required empty public constructor
@@ -93,7 +94,7 @@ public class ContactFragment extends Fragment {
         newList = (ArrayList<ContactModel>) removeDuplicateNumber(phoneContact);
         Log.e(TAG, "newList  Size : " + newList.size());
 
-        //store firebase user in firebase list...
+
         readFirebaseData(list -> {
             firebaseList = list;
             if (firebaseList.size() > 0) {
@@ -110,6 +111,8 @@ public class ContactFragment extends Fragment {
                 } else {
                     Toast.makeText(getContext(), "No Contact found", Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                Toast.makeText(getContext(), "No Data found", Toast.LENGTH_SHORT).show();
             }
         });
 
