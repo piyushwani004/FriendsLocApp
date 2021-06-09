@@ -26,10 +26,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.piyush004.friendslocapp.Auth.LoginActivity;
-import com.piyush004.friendslocapp.Auth.ProfileUpdate;
 import com.piyush004.friendslocapp.Home.Fragments.Map.Services.Constants;
 import com.piyush004.friendslocapp.Home.Fragments.Map.Services.LocationService;
-import com.piyush004.friendslocapp.Home.HomeActivity;
 import com.piyush004.friendslocapp.Home.Profile.ProfileActivity;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
@@ -230,8 +228,7 @@ public class SettingActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), LocationService.class);
             intent.setAction(Constants.ACTION_START_LOCATION_SERVICE);
             startService(intent);
-        }
-        else {
+        } else {
             Log.e(TAG, "startLocationService: else");
         }
     }
@@ -242,7 +239,7 @@ public class SettingActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), LocationService.class);
             intent.setAction(Constants.ACTION_STOP_LOCATION_SERVICE);
             startService(intent);
-        }else {
+        } else {
             Log.e(TAG, "startLocationService: else");
         }
 

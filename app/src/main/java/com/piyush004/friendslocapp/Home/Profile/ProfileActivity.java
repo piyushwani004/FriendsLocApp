@@ -32,6 +32,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    private static int SELECT_PHOTO = 1;
     private CircleImageView circleImageView;
     private ImageView imageViewProfile, imageViewEditName;
     private TextView textViewName, textViewMobile;
@@ -40,7 +41,6 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private Uri uri;
     private Toolbar toolbar;
-    private static int SELECT_PHOTO = 1;
     private String Name;
 
     private DatabaseReference appuser = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(FirebaseAuth.getInstance().getCurrentUser().getUid());

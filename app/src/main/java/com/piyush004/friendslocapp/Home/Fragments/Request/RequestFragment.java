@@ -3,15 +3,15 @@ package com.piyush004.friendslocapp.Home.Fragments.Request;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,7 +19,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,26 +28,27 @@ import com.google.firebase.database.ValueEventListener;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+import java.util.Objects;
+
 
 public class RequestFragment extends Fragment {
 
     private static final String TAG = RequestFragment.class.getSimpleName();
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    int animationList = R.anim.layout_animation_up_to_down;
     private String mParam1;
     private String mParam2;
     private View view;
-
     private RecyclerView recyclerView;
     private FirebaseAuth firebaseAuth;
     private FirebaseRecyclerOptions<FriendRequestModel> options;
     private FirebaseRecyclerAdapter<FriendRequestModel, FriendRequestHolder> adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
-    int animationList = R.anim.layout_animation_up_to_down;
     private Context context;
-
-
+    private AlertDialog.Builder alertDialogBuilder;
+    HashMap<String, Object> hashMap;
 
     public RequestFragment() {
         // Required empty public constructor
@@ -78,6 +78,7 @@ public class RequestFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_request, container, false);
 
         context = view.getContext();
+        hashMap = new HashMap<>();
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRequest);
         recyclerView = (RecyclerView) view.findViewById(R.id.RecycleViewRequest);
@@ -125,7 +126,6 @@ public class RequestFragment extends Fragment {
                             holder.StatusButton.setVisibility(View.GONE);
                         }
 
-
                     }
 
                     @Override
@@ -133,6 +133,73 @@ public class RequestFragment extends Fragment {
 
                     }
                 });
+
+
+                holder.AcceptButton.setOnClickListener(v -> {
+
+
+                    alertDialogBuilder = new AlertDialog.Builder(context);
+                    alertDialogBuilder.setTitle("Friend Request");
+                    alertDialogBuilder.setMessage("Do You Want To Accept Request ?");
+                    alertDialogBuilder.setPositiveButton("yes",
+                            (arg0, arg1) -> {
+
+                                DatabaseReference sender = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid()).child(model.getId());
+                                DatabaseReference receiver = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(model.getId()).child(firebaseAuth.getCurrentUser().getUid());
+
+                                hashMap.put("Status", "Accept");
+                                sender.updateChildren(hashMap).addOnSuccessListener(aVoid -> {
+
+                                    receiver.updateChildren(hashMap).addOnSuccessListener(aVoid1 -> {
+
+                                        DatabaseReference friendDR = FirebaseDatabase.getInstance().getReference().child("Friends");
+                                        friendDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).child("id").setValue(model.getId()).addOnSuccessListener(aVoid2 -> {
+
+                                            sender.removeValue().addOnSuccessListener(aVoid3 -> receiver.removeValue().addOnSuccessListener(aVoid31 -> {
+                                                Toast.makeText(context, "Friend Request Accepted...", Toast.LENGTH_SHORT).show();
+                                            }));
+
+                                        }).addOnFailureListener(e -> Toast.makeText(context, " " + e.getMessage(), Toast.LENGTH_SHORT).show());
+
+                                    }).addOnFailureListener(e -> Toast.makeText(context, " " + e.getMessage(), Toast.LENGTH_SHORT).show());
+
+                                }).addOnFailureListener(e -> Toast.makeText(context, " " + e.getMessage(), Toast.LENGTH_SHORT).show());
+
+                            });
+
+                    alertDialogBuilder.setNegativeButton("No",
+                            (dialog, which) -> {
+                                dialog.cancel();
+                                dialog.dismiss();
+                            });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+
+                });
+
+
+                holder.DeleteButton.setOnClickListener(v -> {
+
+                    alertDialogBuilder = new AlertDialog.Builder(context);
+                    alertDialogBuilder.setTitle("Friend Request");
+                    alertDialogBuilder.setMessage("Do You Want To Delete Request ?");
+                    alertDialogBuilder.setPositiveButton("yes",
+                            (arg0, arg1) -> {
+
+                            });
+
+                    alertDialogBuilder.setNegativeButton("No",
+                            (dialog, which) -> {
+                                dialog.cancel();
+                                dialog.dismiss();
+                            });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+
+                });
+
 
             }
 
@@ -168,7 +235,6 @@ public class RequestFragment extends Fragment {
         adapter.notifyDataSetChanged();
         recyclerView.scheduleLayoutAnimation();
     }
-
 
 
 }

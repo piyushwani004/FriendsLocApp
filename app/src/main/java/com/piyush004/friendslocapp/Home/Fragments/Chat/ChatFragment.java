@@ -1,22 +1,20 @@
 package com.piyush004.friendslocapp.Home.Fragments.Chat;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
 
 import com.piyush004.friendslocapp.R;
 
 
 public class ChatFragment extends Fragment {
 
-    private View view;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private View view;
     private String mParam1;
     private String mParam2;
 

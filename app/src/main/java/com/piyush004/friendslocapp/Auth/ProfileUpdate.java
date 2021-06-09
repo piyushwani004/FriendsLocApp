@@ -2,7 +2,6 @@ package com.piyush004.friendslocapp.Auth;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -37,6 +36,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 //Auth No.3 Class (Step 3)
 public class ProfileUpdate extends AppCompatActivity {
 
+    private static int SELECT_PHOTO = 2;
     private CircleImageView circleImageView;
     private ImageView imageViewEditName, imageViewUploadImage;
     private TextView textViewName, textViewMobile;
@@ -46,8 +46,6 @@ public class ProfileUpdate extends AppCompatActivity {
     private StorageReference storageReference;
     private FirebaseStorage storage;
     private HashMap<String, Object> hashMap;
-
-    private static int SELECT_PHOTO = 2;
     private String Name, Mobile, phonenumber, imgUrl;
 
     private DatabaseReference appuser = FirebaseDatabase.getInstance().getReference().child("AppUsers")
@@ -129,7 +127,6 @@ public class ProfileUpdate extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
                 Toast.makeText(ProfileUpdate.this, "Welcome User ", Toast.LENGTH_LONG).show();
-
             }
 
         });
