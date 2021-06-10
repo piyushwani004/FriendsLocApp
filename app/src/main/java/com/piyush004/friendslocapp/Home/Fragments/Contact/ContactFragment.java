@@ -94,7 +94,6 @@ public class ContactFragment extends Fragment {
         newList = (ArrayList<ContactModel>) removeDuplicateNumber(phoneContact);
         Log.e(TAG, "newList  Size : " + newList.size());
 
-
         readFirebaseData(list -> {
             firebaseList = list;
             if (firebaseList.size() > 0) {
