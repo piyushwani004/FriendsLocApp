@@ -14,9 +14,13 @@ import androidx.annotation.NonNull;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import androidx.appcompat.widget.SearchView;
 =======
 >>>>>>> parent of 213f606 (Accept Request Code Temp Completed ....)
+=======
+import androidx.appcompat.widget.SearchView;
+>>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
 =======
 import androidx.appcompat.widget.SearchView;
 >>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
@@ -63,6 +67,7 @@ public class RequestFragment extends Fragment {
 
 =======
 >>>>>>> parent of 213f606 (Accept Request Code Temp Completed ....)
+
 
 
 
@@ -163,6 +168,13 @@ public class RequestFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
+<<<<<<< HEAD
+>>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
+=======
+                holder.AcceptButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
 >>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
 
 
@@ -174,9 +186,15 @@ public class RequestFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 
+=======
+
+
+
+>>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
 =======
 
 
