@@ -3,7 +3,6 @@ package com.piyush004.friendslocapp.Home.Fragments.Request;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,22 +10,6 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 
 import androidx.annotation.NonNull;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-import androidx.appcompat.widget.SearchView;
-=======
->>>>>>> parent of 213f606 (Accept Request Code Temp Completed ....)
-=======
-import androidx.appcompat.widget.SearchView;
->>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
-=======
-import androidx.appcompat.widget.SearchView;
->>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
-=======
-import androidx.appcompat.widget.SearchView;
->>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,7 +17,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -62,13 +44,6 @@ public class RequestFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     int animationList = R.anim.layout_animation_up_to_down;
     private Context context;
-
-<<<<<<< HEAD
-
-=======
->>>>>>> parent of 213f606 (Accept Request Code Temp Completed ....)
-
-
 
 
     public RequestFragment() {
@@ -154,57 +129,6 @@ public class RequestFragment extends Fragment {
 
                     }
                 });
-
-<<<<<<< HEAD
-=======
-
-                holder.AcceptButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-<<<<<<< HEAD
-=======
-                holder.AcceptButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-<<<<<<< HEAD
->>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
-=======
-                holder.AcceptButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
->>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
-
-
-                    }
-                });
-
-
-                holder.ButtonLayout.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-
-
-=======
-
-
-
->>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
-=======
-
-
-
->>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
-                    }
-                });
-
-
->>>>>>> parent of 213f606 (Accept Request Code Temp Completed ....)
             }
 
             @NonNull
@@ -239,7 +163,6 @@ public class RequestFragment extends Fragment {
         adapter.notifyDataSetChanged();
         recyclerView.scheduleLayoutAnimation();
     }
-
 
 
 }
