@@ -32,8 +32,7 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class
-ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> implements Filterable {
+public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> implements Filterable {
 
     public static final String TAG = ContactAdapter.class.getSimpleName();
     ArrayList<ContactModel> backup;
