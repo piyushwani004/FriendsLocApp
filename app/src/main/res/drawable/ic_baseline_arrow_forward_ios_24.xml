@@ -1,21 +1,10 @@
-<!--
-  ~ /*******************************************************
-  ~  * Copyright (C) 2021-2031 {Piyush Wani and  Mayur Sapkale} <{piyushwani04@gmail.com}>
-  ~  *
-  ~  * This file is part of {FriendLocatorApp}.
-  ~  *
-  ~  * {FriendLocatorApp} can not be copied and/or distributed without the express
-  ~  * permission of {Piyush Wani and  Mayur Sapkale}
-  ~  *******************************************************/
-  -->
-
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp"
     android:height="24dp"
-    android:tint="?attr/colorControlNormal"
     android:viewportWidth="24"
-    android:viewportHeight="24">
-    <path
-        android:fillColor="@android:color/white"
-        android:pathData="M5.88,4.12L13.76,12l-7.88,7.88L8,22l10,-10L8,2z" />
+    android:viewportHeight="24"
+    android:tint="?attr/colorControlNormal">
+  <path
+      android:fillColor="@android:color/white"
+      android:pathData="M5.88,4.12L13.76,12l-7.88,7.88L8,22l10,-10L8,2z"/>
 </vector>

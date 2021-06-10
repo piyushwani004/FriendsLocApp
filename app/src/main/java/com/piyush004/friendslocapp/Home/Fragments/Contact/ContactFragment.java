@@ -42,7 +42,7 @@ public class ContactFragment extends Fragment {
     private static final String TAG = ContactFragment.class.getSimpleName();
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    int animationList = R.anim.layout_animation_up_to_down;
+
     private String mParam1;
     private String mParam2;
     private View view;
@@ -52,6 +52,7 @@ public class ContactFragment extends Fragment {
     private RecyclerView recyclerView;
     private ContactAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
+    int animationList = R.anim.layout_animation_up_to_down;
     private Context context;
     private SearchView searchView;
 

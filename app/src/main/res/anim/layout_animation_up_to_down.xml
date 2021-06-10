@@ -1,15 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ /*******************************************************
-  ~  * Copyright (C) 2021-2031 {Piyush Wani and  Mayur Sapkale} <{piyushwani04@gmail.com}>
-  ~  *
-  ~  * This file is part of {FriendLocatorApp}.
-  ~  *
-  ~  * {FriendLocatorApp} can not be copied and/or distributed without the express
-  ~  * permission of {Piyush Wani and  Mayur Sapkale}
-  ~  *******************************************************/
-  -->
-
 <layoutAnimation xmlns:android="http://schemas.android.com/apk/res/android"
     android:animation="@anim/up_to_down_recy"
     android:animationOrder="normal"

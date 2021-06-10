@@ -35,42 +35,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> implements Filterable {
 
     public static final String TAG = ContactAdapter.class.getSimpleName();
-    ArrayList<ContactModel> backup;
-    HashMap<String, Object> SenderHashMap;
-    HashMap<String, Object> ReceiverHashMap;
+
     private java.util.List<ContactModel> List;
-    Filter filter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence keyword) {
-            ArrayList<ContactModel> filtereddata = new ArrayList<>();
-
-            if (keyword.toString().isEmpty())
-                filtereddata.addAll(backup);
-            else {
-                for (ContactModel obj : backup) {
-                    if (obj.getName().toLowerCase().contains(keyword.toString().toLowerCase()))
-                        filtereddata.add(obj);
-                }
-            }
-
-            FilterResults results = new FilterResults();
-            results.values = filtereddata;
-            return results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            List.clear();
-            List.addAll((ArrayList<ContactModel>) results.values);
-            notifyDataSetChanged();
-        }
-    };
     private LayoutInflater inflater;
+    ArrayList<ContactModel> backup;
     private Context context;
     private FirebaseAuth firebaseAuth;
     private SimpleDateFormat simpleDateFormat;
+    HashMap<String, Object> SenderHashMap;
+    HashMap<String, Object> ReceiverHashMap;
     private String date;
-
 
     public ContactAdapter(List<ContactModel> list, Context context) {
         List = list;
@@ -79,6 +53,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
         this.context = context;
         firebaseAuth = FirebaseAuth.getInstance();
     }
+
 
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
@@ -152,6 +127,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
         });
     }
 
+
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -168,6 +144,33 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
     public Filter getFilter() {
         return filter;
     }
+
+    Filter filter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence keyword) {
+            ArrayList<ContactModel> filtereddata = new ArrayList<>();
+
+            if (keyword.toString().isEmpty())
+                filtereddata.addAll(backup);
+            else {
+                for (ContactModel obj : backup) {
+                    if (obj.getName().toLowerCase().contains(keyword.toString().toLowerCase()))
+                        filtereddata.add(obj);
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filtereddata;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            List.clear();
+            List.addAll((ArrayList<ContactModel>) results.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public static class Holder extends RecyclerView.ViewHolder {
         public TextView Name, MobileNo;

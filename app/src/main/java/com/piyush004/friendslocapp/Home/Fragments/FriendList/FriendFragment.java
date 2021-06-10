@@ -2,40 +2,53 @@ package com.piyush004.friendslocapp.Home.Fragments.FriendList;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.piyush004.friendslocapp.Home.Fragments.Request.FriendRequestHolder;
 import com.piyush004.friendslocapp.Home.Fragments.Request.FriendRequestModel;
 import com.piyush004.friendslocapp.R;
+import com.squareup.picasso.Picasso;
 
 
 public class FriendFragment extends Fragment {
 
     private static final String TAG = FriendFragment.class.getSimpleName();
+    private View view;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    int animationList = R.anim.layout_animation_up_to_down;
-    private View view;
+
     private String mParam1;
+
     private String mParam2;
+
     private RecyclerView recyclerView;
     private FirebaseAuth firebaseAuth;
     private SearchView editTextSearch;
     private FirebaseRecyclerOptions<FriendRequestModel> options;
     private FirebaseRecyclerAdapter<FriendRequestModel, FriendRequestHolder> adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
+    int animationList = R.anim.layout_animation_up_to_down;
     private Context context;
 
     public FriendFragment() {

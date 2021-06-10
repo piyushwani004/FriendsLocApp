@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ /*******************************************************
-  ~  * Copyright (C) 2021-2031 {Piyush Wani and  Mayur Sapkale} <{piyushwani04@gmail.com}>
-  ~  *
-  ~  * This file is part of {FriendLocatorApp}.
-  ~  *
-  ~  * {FriendLocatorApp} can not be copied and/or distributed without the express
-  ~  * permission of {Piyush Wani and  Mayur Sapkale}
-  ~  *******************************************************/
-  -->
-
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="25dp" />
-            <gradient android:angle="315" android:centerColor="#00afd3" android:endColor="#00cfd0" android:startColor="#0088d7" android:type="linear" />
+            <gradient
+                android:type="linear"
+                android:angle="315"
+                android:startColor="#0088d7"
+                android:centerColor="#00afd3"
+                android:endColor="#00cfd0"/>
         </shape>
     </item>
 </selector>
