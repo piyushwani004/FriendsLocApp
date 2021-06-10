@@ -62,12 +62,12 @@ public class RequestFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     int animationList = R.anim.layout_animation_up_to_down;
     private Context context;
-    private HashMap<String, Object> hashMap;
+    private final HashMap<String, Object> hashMap;
     private AlertDialog.Builder alertDialogBuilder;
-
+    public static final String Accept_Request = "Accept";
 
     public RequestFragment() {
-        // Required empty public constructor
+        hashMap = new HashMap<>();
     }
 
     public static RequestFragment newInstance(String param1, String param2) {
@@ -161,7 +161,7 @@ public class RequestFragment extends Fragment {
                                 DatabaseReference sender = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid()).child(model.getId());
                                 DatabaseReference receiver = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(model.getId()).child(firebaseAuth.getCurrentUser().getUid());
 
-                                hashMap.put("Status", "Accept");
+                                hashMap.put("Status", Accept_Request);
                                 sender.updateChildren(hashMap).addOnSuccessListener(aVoid -> {
 
                                     receiver.updateChildren(hashMap).addOnSuccessListener(aVoid1 -> {
