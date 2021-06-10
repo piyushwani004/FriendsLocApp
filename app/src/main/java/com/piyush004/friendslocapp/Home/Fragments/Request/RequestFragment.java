@@ -12,9 +12,13 @@ import android.view.animation.LayoutAnimationController;
 
 import androidx.annotation.NonNull;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import androidx.appcompat.widget.SearchView;
 =======
 >>>>>>> parent of 213f606 (Accept Request Code Temp Completed ....)
+=======
+import androidx.appcompat.widget.SearchView;
+>>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,6 +59,7 @@ public class RequestFragment extends Fragment {
 
 =======
 >>>>>>> parent of 213f606 (Accept Request Code Temp Completed ....)
+
 
     public RequestFragment() {
         // Required empty public constructor
@@ -143,15 +148,23 @@ public class RequestFragment extends Fragment {
 <<<<<<< HEAD
 =======
 
-                holder.AcceptButton.setOnClickListener(v -> {
+                holder.AcceptButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
 
+
+                    }
                 });
 
 
-                holder.ButtonLayout.setOnClickListener(v -> {
+                holder.ButtonLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
 
+
+                    }
                 });
 
 

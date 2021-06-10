@@ -3,9 +3,13 @@ package com.piyush004.friendslocapp.Home;
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+<<<<<<< HEAD
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+=======
+import android.os.Bundle;
+>>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
