@@ -13,9 +13,13 @@ import android.view.animation.LayoutAnimationController;
 import androidx.annotation.NonNull;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import androidx.appcompat.widget.SearchView;
 =======
 >>>>>>> parent of 213f606 (Accept Request Code Temp Completed ....)
+=======
+import androidx.appcompat.widget.SearchView;
+>>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
 =======
 import androidx.appcompat.widget.SearchView;
 >>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
@@ -59,6 +63,7 @@ public class RequestFragment extends Fragment {
 
 =======
 >>>>>>> parent of 213f606 (Accept Request Code Temp Completed ....)
+
 
 
     public RequestFragment() {
@@ -152,6 +157,13 @@ public class RequestFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
 
+<<<<<<< HEAD
+=======
+                holder.AcceptButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+>>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
 
 
                     }
@@ -161,9 +173,15 @@ public class RequestFragment extends Fragment {
                 holder.ButtonLayout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+<<<<<<< HEAD
 
 
 
+=======
+
+
+
+>>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
                     }
                 });
 

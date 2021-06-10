@@ -4,9 +4,13 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+=======
+import android.os.Bundle;
+>>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
 =======
 import android.os.Bundle;
 >>>>>>> parent of d73ac65 (Update Copyrights to Whole Project...)
