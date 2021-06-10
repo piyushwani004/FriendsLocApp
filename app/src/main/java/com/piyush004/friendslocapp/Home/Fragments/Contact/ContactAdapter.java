@@ -97,6 +97,30 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
             }
         });
 
+        DatabaseReference Friends = FirebaseDatabase.getInstance().getReference().child("Friends").child(firebaseAuth.getCurrentUser().getUid());
+        Friends.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    String fId = dataSnapshot.child("id").getValue(String.class);
+                    if (fId != null && List.size() >= 1 && List != null) {
+                        if (fId.equals(List.get(position).getID())) {
+                            holder.inviteButton.setVisibility(View.GONE);
+                        } else {
+                            holder.inviteButton.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
 
         holder.Name.setText(List.get(position).getName());
         holder.MobileNo.setText(List.get(position).getMobile());
