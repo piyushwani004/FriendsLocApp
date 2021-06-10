@@ -11,7 +11,10 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 
 import androidx.annotation.NonNull;
+<<<<<<< HEAD
 import androidx.appcompat.widget.SearchView;
+=======
+>>>>>>> parent of 213f606 (Accept Request Code Temp Completed ....)
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -48,7 +51,10 @@ public class RequestFragment extends Fragment {
     int animationList = R.anim.layout_animation_up_to_down;
     private Context context;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 213f606 (Accept Request Code Temp Completed ....)
 
     public RequestFragment() {
         // Required empty public constructor
@@ -134,6 +140,22 @@ public class RequestFragment extends Fragment {
                     }
                 });
 
+<<<<<<< HEAD
+=======
+
+                holder.AcceptButton.setOnClickListener(v -> {
+
+
+                });
+
+
+                holder.ButtonLayout.setOnClickListener(v -> {
+
+
+                });
+
+
+>>>>>>> parent of 213f606 (Accept Request Code Temp Completed ....)
             }
 
             @NonNull
