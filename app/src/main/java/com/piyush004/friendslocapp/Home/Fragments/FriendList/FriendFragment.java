@@ -189,7 +189,7 @@ public class FriendFragment extends Fragment {
 
         FirebaseRecyclerOptions<FriendModel> options =
                 new FirebaseRecyclerOptions.Builder<FriendModel>()
-                        .setQuery(FirebaseDatabase.getInstance().getReference().child("Friends").orderByChild("Mobile").startAt(s.toLowerCase()).endAt(s.toUpperCase() + "\uf8ff"), snapshot -> new FriendModel(
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("Friends").child(firebaseAuth.getCurrentUser().getUid()).orderByChild("Mobile").startAt(s.toUpperCase()).endAt(s.toLowerCase() + "\uf8ff"), snapshot -> new FriendModel(
                                 snapshot.child("id").getValue(String.class)
                         ))
                         .build();
