@@ -86,8 +86,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
                         } else {
                             holder.inviteButton.setVisibility(View.VISIBLE);
                         }
-                    }
-                    else {
+                    } else {
                         holder.inviteButton.setVisibility(View.VISIBLE);
                     }
                 }
@@ -113,7 +112,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
                         } else {
                             holder.inviteButton.setVisibility(View.VISIBLE);
                         }
-                    }else {
+                    } else {
                         holder.inviteButton.setVisibility(View.VISIBLE);
                     }
                 }
@@ -155,12 +154,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
             SenderHashMap.put("Id", List.get(position).getID());
             SenderHashMap.put("Status", "Pending");
             SenderHashMap.put("RequestType", "Sender");
+            SenderHashMap.put("Mobile", List.get(position).getMobile());
             SenderHashMap.put("Date", date);
             sender.setValue(SenderHashMap).addOnSuccessListener(aVoid -> {
 
                 ReceiverHashMap.put("Id", firebaseAuth.getCurrentUser().getUid());
                 ReceiverHashMap.put("Status", "Pending");
                 ReceiverHashMap.put("RequestType", "Receiver");
+                ReceiverHashMap.put("Mobile", List.get(position).getMobile());
                 ReceiverHashMap.put("Date", date);
                 receiver.setValue(ReceiverHashMap).addOnSuccessListener(aVoid1 -> Toast.makeText(context, "Request Send Successfully...", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show());
 

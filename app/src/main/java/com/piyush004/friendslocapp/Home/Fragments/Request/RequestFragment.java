@@ -65,6 +65,7 @@ public class RequestFragment extends Fragment {
     private final HashMap<String, Object> hashMap;
     private AlertDialog.Builder alertDialogBuilder;
     public static final String Accept_Request = "Accept";
+    private String phoneN , SendPhoneN;
 
     public RequestFragment() {
         hashMap = new HashMap<>();
@@ -105,6 +106,7 @@ public class RequestFragment extends Fragment {
         options = new FirebaseRecyclerOptions.Builder<FriendRequestModel>().setQuery(df, snapshot -> new FriendRequestModel(
 
                 snapshot.child("Id").getValue(String.class),
+                snapshot.child("Mobile").getValue(String.class),
                 snapshot.child("Date").getValue(String.class),
                 snapshot.child("RequestType").getValue(String.class),
                 snapshot.child("Status").getValue(String.class)
@@ -167,12 +169,26 @@ public class RequestFragment extends Fragment {
                                     receiver.updateChildren(hashMap).addOnSuccessListener(aVoid1 -> {
 
                                         DatabaseReference friendDR = FirebaseDatabase.getInstance().getReference().child("Friends");
-                                        friendDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).child("Mobile").setValue(firebaseAuth.getCurrentUser().getPhoneNumber());
+
+                                        String num = firebaseAuth.getCurrentUser().getPhoneNumber();
+                                        String senderNumber = model.getMobile();
+                                        assert num != null;
+                                        phoneN = num.substring(3);
+
+                                        assert senderNumber != null;
+                                        SendPhoneN = senderNumber.substring(3);
+
+                                        friendDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).child("Mobile").setValue(phoneN);
                                         friendDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).child("id").setValue(model.getId()).addOnSuccessListener(aVoid2 -> {
 
-                                            sender.removeValue().addOnSuccessListener(aVoid3 -> receiver.removeValue().addOnSuccessListener(aVoid31 -> {
-                                                Toast.makeText(context, "Friend Request Accepted...", Toast.LENGTH_SHORT).show();
-                                            }));
+                                            friendDR.child(model.getId()).child(firebaseAuth.getCurrentUser().getUid()).child("Mobile").setValue(SendPhoneN);
+                                            friendDR.child(model.getId()).child(firebaseAuth.getCurrentUser().getUid()).child("id").setValue(model.getId()).addOnSuccessListener(aVoid3 -> {
+
+                                                sender.removeValue().addOnSuccessListener(aVoid4 -> receiver.removeValue().addOnSuccessListener(aVoid31 -> {
+                                                    Toast.makeText(context, "Friend Request Accepted...", Toast.LENGTH_SHORT).show();
+                                                }));
+
+                                            });
 
                                         }).addOnFailureListener(e -> Toast.makeText(context, " " + e.getMessage(), Toast.LENGTH_SHORT).show());
 
