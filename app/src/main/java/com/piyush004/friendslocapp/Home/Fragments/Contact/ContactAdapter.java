@@ -80,12 +80,15 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
 
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     String fId = dataSnapshot.child("Id").getValue(String.class);
-                    if (fId != null && List.size() >= 1 && List != null) {
+                    if (fId != null && List.size() >= 1) {
                         if (fId.equals(List.get(position).getID())) {
                             holder.inviteButton.setVisibility(View.GONE);
                         } else {
                             holder.inviteButton.setVisibility(View.VISIBLE);
                         }
+                    }
+                    else {
+                        holder.inviteButton.setVisibility(View.VISIBLE);
                     }
                 }
 
@@ -104,12 +107,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
 
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     String fId = dataSnapshot.child("id").getValue(String.class);
-                    if (fId != null && List.size() >= 1 && List != null) {
+                    if (fId != null && List.size() >= 1) {
                         if (fId.equals(List.get(position).getID())) {
                             holder.inviteButton.setVisibility(View.GONE);
                         } else {
                             holder.inviteButton.setVisibility(View.VISIBLE);
                         }
+                    }else {
+                        holder.inviteButton.setVisibility(View.VISIBLE);
                     }
                 }
 
