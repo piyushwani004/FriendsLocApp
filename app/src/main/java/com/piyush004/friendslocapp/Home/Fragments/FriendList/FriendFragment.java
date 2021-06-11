@@ -38,8 +38,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.piyush004.friendslocapp.Home.Fragments.Request.FriendRequestHolder;
-import com.piyush004.friendslocapp.Home.Fragments.Request.FriendRequestModel;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
@@ -58,8 +56,8 @@ public class FriendFragment extends Fragment {
     private RecyclerView recyclerView;
     private FirebaseAuth firebaseAuth;
     private SearchView editTextSearch;
-    private FirebaseRecyclerOptions<FriendRequestModel> options;
-    private FirebaseRecyclerAdapter<FriendRequestModel, FriendRequestHolder> adapter;
+    private FirebaseRecyclerOptions<FriendModel> options;
+    private FirebaseRecyclerAdapter<FriendModel, FriendHolder> adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     int animationList = R.anim.layout_animation_up_to_down;
     private Context context;
@@ -91,7 +89,7 @@ public class FriendFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_friend, container, false);
 
-       /* context = view.getContext();
+        context = view.getContext();
 
         swipeRefreshLayout = view.findViewById(R.id.swipeFriend);
         recyclerView = (RecyclerView) view.findViewById(R.id.RecycleViewFriend);
@@ -100,37 +98,34 @@ public class FriendFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        editTextSearch.setQueryHint("Search User...");
+        editTextSearch.setQueryHint("Search User by mobile number");
         editTextSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.e("Project", "" + query);
-                // onProcessSearch(query);
+                onProcessSearch(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
                 Log.e("Project", "" + newText);
-                //onProcessSearch(newText);
+                onProcessSearch(newText);
                 return false;
             }
         });
 
-        final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(firebaseAuth.getCurrentUser().getUid());
-        options = new FirebaseRecyclerOptions.Builder<FriendRequestModel>().setQuery(df, snapshot -> new FriendRequestModel(
+        final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("Friends").child(firebaseAuth.getCurrentUser().getUid());
+        options = new FirebaseRecyclerOptions.Builder<FriendModel>().setQuery(df, snapshot -> new FriendModel(
 
-                snapshot.child("Id").getValue(String.class),
-                snapshot.child("Date").getValue(String.class),
-                snapshot.child("RequestType").getValue(String.class),
-                snapshot.child("Status").getValue(String.class)
+                snapshot.child("id").getValue(String.class)
 
         )).build();
 
-        adapter = new FirebaseRecyclerAdapter<FriendRequestModel, FriendRequestHolder>(options) {
+        adapter = new FirebaseRecyclerAdapter<FriendModel, FriendHolder>(options) {
 
             @Override
-            protected void onBindViewHolder(@NonNull final FriendRequestHolder holder, int position, @NonNull final FriendRequestModel model) {
+            protected void onBindViewHolder(@NonNull final FriendHolder holder, int position, @NonNull final FriendModel model) {
 
                 Log.e(TAG, "onBindViewHolder: " + model.getId());
 
@@ -140,25 +135,20 @@ public class FriendFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        holder.Name.setText(snapshot.child("Name").getValue(String.class));
-                        holder.MobileNo.setText(snapshot.child("Mobile").getValue(String.class));
+                        String Name = snapshot.child("Name").getValue(String.class);
+                        if (Name != null)
+                            holder.FriendName.setText(Name);
+                        else
+                            holder.FriendName.setText("Name Not Found");
 
-                        Picasso.get()
-                                .load(snapshot.child("ImageURL").getValue(String.class))
+                        holder.FriendMobileNo.setText(snapshot.child("Mobile").getValue(String.class));
+
+                        Picasso.get().load(snapshot.child("ImageURL").getValue(String.class))
                                 .resize(500, 500)
-                                .centerCrop().rotate(0)
+                                .centerCrop()
+                                .rotate(0)
                                 .placeholder(R.drawable.person_placeholder)
-                                .into(holder.circleImageView);
-
-                        if (model.getReqType().equals("Sender")) {
-                            holder.ButtonLayout.setVisibility(View.GONE);
-                            holder.StatusButton.setVisibility(View.VISIBLE);
-                            holder.StatusButton.setText(model.getStatus());
-                        } else if (model.getReqType().equals("Receiver")) {
-                            holder.ButtonLayout.setVisibility(View.VISIBLE);
-                            holder.StatusButton.setVisibility(View.GONE);
-                        }
-
+                                .into(holder.FriendImageView);
 
                     }
 
@@ -172,9 +162,9 @@ public class FriendFragment extends Fragment {
 
             @NonNull
             @Override
-            public FriendRequestHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.friend_request_card, parent, false);
-                return new FriendRequestHolder(view);
+            public FriendHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.friend_list_card, parent, false);
+                return new FriendHolder(view);
             }
         };
 
@@ -190,9 +180,69 @@ public class FriendFragment extends Fragment {
                 }
             }, 1000);
 
-        });*/
+        });
 
         return view;
+    }
+
+    private void onProcessSearch(String s) {
+
+        FirebaseRecyclerOptions<FriendModel> options =
+                new FirebaseRecyclerOptions.Builder<FriendModel>()
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("Friends").orderByChild("Mobile").startAt(s.toLowerCase()).endAt(s.toUpperCase() + "\uf8ff"), snapshot -> new FriendModel(
+                                snapshot.child("id").getValue(String.class)
+                        ))
+                        .build();
+
+        adapter = new FirebaseRecyclerAdapter<FriendModel, FriendHolder>(options) {
+
+            @Override
+            protected void onBindViewHolder(@NonNull final FriendHolder holder, int position, @NonNull final FriendModel model) {
+
+                Log.e(TAG, "onBindViewHolder: " + model.getId());
+
+                DatabaseReference user = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(model.getId());
+
+                user.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        String Name = snapshot.child("Name").getValue(String.class);
+                        if (Name != null)
+                            holder.FriendName.setText(Name);
+                        else
+                            holder.FriendName.setText("Name Not Found");
+
+                        holder.FriendMobileNo.setText(snapshot.child("Mobile").getValue(String.class));
+
+                        Picasso.get().load(snapshot.child("ImageURL").getValue(String.class))
+                                .resize(500, 500)
+                                .centerCrop()
+                                .rotate(0)
+                                .placeholder(R.drawable.person_placeholder)
+                                .into(holder.FriendImageView);
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+            }
+
+            @NonNull
+            @Override
+            public FriendHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.friend_list_card, parent, false);
+                return new FriendHolder(view);
+            }
+        };
+
+        adapter.startListening();
+        recyclerView.setAdapter(adapter);
+
     }
 
     private void runAnimationAgain() {
