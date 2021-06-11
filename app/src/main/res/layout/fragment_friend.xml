@@ -50,7 +50,7 @@
             android:id="@+id/RecycleViewFriend"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/friend_request_card" />
+            tools:listitem="@layout/friend_list_card" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
