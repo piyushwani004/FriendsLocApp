@@ -167,6 +167,7 @@ public class RequestFragment extends Fragment {
                                     receiver.updateChildren(hashMap).addOnSuccessListener(aVoid1 -> {
 
                                         DatabaseReference friendDR = FirebaseDatabase.getInstance().getReference().child("Friends");
+                                        friendDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).child("Mobile").setValue(firebaseAuth.getCurrentUser().getPhoneNumber());
                                         friendDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).child("id").setValue(model.getId()).addOnSuccessListener(aVoid2 -> {
 
                                             sender.removeValue().addOnSuccessListener(aVoid3 -> receiver.removeValue().addOnSuccessListener(aVoid31 -> {
