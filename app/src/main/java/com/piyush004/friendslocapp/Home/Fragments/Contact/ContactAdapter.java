@@ -141,7 +141,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
             firebaseAuth = FirebaseAuth.getInstance();
             Log.e(TAG, "onBindViewHolder: " + firebaseAuth.getCurrentUser().getUid());
 
-            final java.util.Date data = new Date();
+            final Date data = new Date();
             SenderHashMap = new HashMap<>();
             ReceiverHashMap = new HashMap<>();
 
