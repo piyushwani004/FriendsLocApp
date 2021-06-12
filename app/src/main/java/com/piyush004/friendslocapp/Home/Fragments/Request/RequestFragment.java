@@ -178,11 +178,11 @@ public class RequestFragment extends Fragment {
                                         assert senderNumber != null;
                                         SendPhoneN = senderNumber.substring(3);
 
-                                        friendDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).child("Mobile").setValue(phoneN);
+                                        friendDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).child("Mobile").setValue(SendPhoneN);
                                         friendDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).child("id").setValue(model.getId()).addOnSuccessListener(aVoid2 -> {
 
-                                            friendDR.child(model.getId()).child(firebaseAuth.getCurrentUser().getUid()).child("Mobile").setValue(SendPhoneN);
-                                            friendDR.child(model.getId()).child(firebaseAuth.getCurrentUser().getUid()).child("id").setValue(model.getId()).addOnSuccessListener(aVoid3 -> {
+                                            friendDR.child(model.getId()).child(firebaseAuth.getCurrentUser().getUid()).child("Mobile").setValue(phoneN);
+                                            friendDR.child(model.getId()).child(firebaseAuth.getCurrentUser().getUid()).child("id").setValue(firebaseAuth.getCurrentUser().getUid()).addOnSuccessListener(aVoid3 -> {
 
                                                 sender.removeValue().addOnSuccessListener(aVoid4 -> receiver.removeValue().addOnSuccessListener(aVoid31 -> {
                                                     Toast.makeText(context, "Friend Request Accepted...", Toast.LENGTH_SHORT).show();
