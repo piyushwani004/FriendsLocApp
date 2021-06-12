@@ -230,6 +230,11 @@ public class FriendFragment extends Fragment {
                     }
                 });
 
+                holder.RequestDelete.setOnClickListener(v -> {
+
+                });
+
+
             }
 
             @NonNull
