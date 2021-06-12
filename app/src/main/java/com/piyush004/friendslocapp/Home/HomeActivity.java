@@ -54,6 +54,7 @@ import com.piyush004.friendslocapp.Home.Setting.SettingActivity;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -243,23 +244,33 @@ public class HomeActivity extends AppCompatActivity {
         builder.show();
     }
 
+    private void status(String s) {
+        DatabaseReference status = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(firebaseAuth.getCurrentUser().getUid());
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("Status", s);
+        status.updateChildren(hashMap);
+    }
+
+
     @Override
-    protected void onStart() {
+    public void onStart() {
         super.onStart();
+        if (firebaseAuth.getCurrentUser() != null) {
+            status("Online");
+        }
+    }
 
-        /*if (VerifyAllSteps.step_one && VerifyAllSteps.step_two && VerifyAllSteps.step_three) {
-        } else {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (firebaseAuth.getCurrentUser() != null) {
+            status("Offline");
+        }
+    }
 
-            if (firebaseAuth != null)
-                firebaseAuth.signOut();
-
-            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-            VerifyAllSteps.step_one = false;
-            VerifyAllSteps.step_two = false;
-            VerifyAllSteps.step_three = false;
-        }*/
+    @Override
+    protected void onStop() {
+        super.onStop();
+        status("Offline");
     }
 }
