@@ -1,0 +1,24 @@
+<!--
+  ~
+  ~   ~ /*******************************************************
+  ~   ~  * Copyright (C) 2021-2031 {Piyush Wani and  Mayur Sapkale} <{piyushwani04@gmail.com}>
+  ~   ~  *
+  ~   ~  * This file is part of {FriendLocatorApp}.
+  ~   ~  *
+  ~   ~  * {FriendLocatorApp} can not be copied and/or distributed without the express
+  ~   ~  * permission of {Piyush Wani and  Mayur Sapkale}
+  ~   ~  *******************************************************/
+  ~
+  -->
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:innerRadius="0dp"
+    android:shape="ring"
+    android:thicknessRatio="2.0"
+    android:useLevel="false" >
+    <solid android:color="#BFFF00" />
+
+    <stroke
+        android:width="5dp"
+        android:color="#8BC34A" />
+</shape>

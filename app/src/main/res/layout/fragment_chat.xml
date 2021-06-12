@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
   ~
   ~   ~ /*******************************************************
   ~   ~  * Copyright (C) 2021-2031 {Piyush Wani and  Mayur Sapkale} <{piyushwani04@gmail.com}>
@@ -48,7 +49,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/RecycleViewChat"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            tools:listitem="@layout/chat_card" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

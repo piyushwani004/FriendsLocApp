@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~
+  ~   ~ /*******************************************************
+  ~   ~  * Copyright (C) 2021-2031 {Piyush Wani and  Mayur Sapkale} <{piyushwani04@gmail.com}>
+  ~   ~  *
+  ~   ~  * This file is part of {FriendLocatorApp}.
+  ~   ~  *
+  ~   ~  * {FriendLocatorApp} can not be copied and/or distributed without the express
+  ~   ~  * permission of {Piyush Wani and  Mayur Sapkale}
+  ~   ~  *******************************************************/
+  ~
+  -->
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardViewRoomCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="1dp"
+    app:cardUseCompatPadding="false">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/imageViewadminChat"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/person_placeholder" />
+
+        <TextView
+            android:id="@+id/title_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@id/imageViewadminChat"
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Name"
+            android:textAlignment="textStart"
+            android:textColor="#6E6D6D"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/new_message_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/title_card"
+            android:layout_marginStart="20dp"
+            android:layout_toEndOf="@id/imageViewadminChat"
+            android:fontFamily="@font/poppins"
+            android:text="Latest Message"
+            android:textAlignment="textStart"
+            android:textColor="#6E6D6D"
+            android:textSize="16sp"
+            android:textStyle="normal" />
+
+        <ImageView
+            android:id="@+id/status"
+            android:layout_width="10dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/title_card"
+            android:layout_marginStart="40dp"
+            android:src="@drawable/status_green"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/new_message_noti"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/circle_image_view"
+            android:visibility="visible" />
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>
