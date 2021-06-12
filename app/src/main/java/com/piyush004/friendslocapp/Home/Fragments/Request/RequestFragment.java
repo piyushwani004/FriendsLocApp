@@ -32,6 +32,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -65,7 +66,7 @@ public class RequestFragment extends Fragment {
     private final HashMap<String, Object> hashMap;
     private AlertDialog.Builder alertDialogBuilder;
     public static final String Accept_Request = "Accept";
-    private String phoneN , SendPhoneN;
+    private String phoneN, SendPhoneN;
 
     public RequestFragment() {
         hashMap = new HashMap<>();
@@ -217,6 +218,20 @@ public class RequestFragment extends Fragment {
                     alertDialogBuilder.setMessage("Do You Want To Delete Request ?");
                     alertDialogBuilder.setPositiveButton("yes",
                             (arg0, arg1) -> {
+
+                                DatabaseReference deleteReqDR = FirebaseDatabase.getInstance().getReference().child("FriendRequest");
+                                deleteReqDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        deleteReqDR.child(model.getId()).child(firebaseAuth.getCurrentUser().getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(context, "Friend Request Deleted...", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                });
+
 
                             });
 
