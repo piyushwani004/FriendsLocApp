@@ -70,7 +70,7 @@ public class HomeActivity extends AppCompatActivity {
     private String imgUrl, name;
     private FirebaseAuth firebaseAuth;
 
-    private DatabaseReference appuser = FirebaseDatabase.getInstance().getReference().child("AppUsers")
+    private final DatabaseReference appuser = FirebaseDatabase.getInstance().getReference().child("AppUsers")
             .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
     @Override
