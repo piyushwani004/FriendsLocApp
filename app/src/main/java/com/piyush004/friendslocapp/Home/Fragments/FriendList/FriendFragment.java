@@ -22,8 +22,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,6 +34,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -60,6 +63,7 @@ public class FriendFragment extends Fragment {
     private FirebaseRecyclerAdapter<FriendModel, FriendHolder> adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     int animationList = R.anim.layout_animation_up_to_down;
+    private AlertDialog.Builder alertDialogBuilder;
     private Context context;
 
     public FriendFragment() {
@@ -231,6 +235,37 @@ public class FriendFragment extends Fragment {
                 });
 
                 holder.RequestDelete.setOnClickListener(v -> {
+                    alertDialogBuilder = new AlertDialog.Builder(context);
+                    alertDialogBuilder.setTitle("Delete");
+                    alertDialogBuilder.setMessage("Do You Want To Delete this Friend ?");
+                    alertDialogBuilder.setPositiveButton("yes",
+                            (arg0, arg1) -> {
+
+                                DatabaseReference deleteFriend = FirebaseDatabase.getInstance().getReference().child("Friends");
+                                deleteFriend.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        deleteFriend.child(model.getId()).child(firebaseAuth.getCurrentUser().getUid()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(context, "Friend  Deleted...", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                });
+
+
+                            });
+
+                    alertDialogBuilder.setNegativeButton("No",
+                            (dialog, which) -> {
+                                dialog.cancel();
+                                dialog.dismiss();
+                            });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+
 
                 });
 
