@@ -14,4 +14,23 @@
 package com.piyush004.friendslocapp.Home.Fragments.Chat;
 
 public class ChatModel {
+
+    private String ChatId;
+
+    public ChatModel() {
+    }
+
+    public ChatModel(String chatId) {
+        ChatId = chatId;
+    }
+
+    public String getChatId() {
+        return ChatId;
+    }
+
+    public void setChatId(String chatId) {
+        ChatId = chatId;
+    }
+
+
 }
