@@ -43,7 +43,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.piyush004.friendslocapp.R;
+
+import java.util.HashMap;
 
 public class MapsFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback, GoogleMap.OnMarkerDragListener,
@@ -98,6 +102,13 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
                     if (mCurrLocationMarker != null) {
                         mCurrLocationMarker.remove();
                     }
+
+                    final DatabaseReference locationDf = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    final HashMap<String, Object> hashMap = new HashMap<>();
+                    hashMap.put("latitude", location.getLatitude());
+                    hashMap.put("longitude", location.getLongitude());
+                    locationDf.child("Location").updateChildren(hashMap);
+
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
                     MarkerOptions markerOptions = new MarkerOptions();
