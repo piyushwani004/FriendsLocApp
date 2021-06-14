@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="200sp"
         android:layout_alignParentTop="true"
-        android:background="@drawable/send_design">
+        android:background="@drawable/design1">
 
         <TextView
             android:id="@+id/SettingText"
