@@ -16,12 +16,32 @@ package com.piyush004.friendslocapp.Home.Fragments.Chat;
 public class ChatModel {
 
     private String ChatId;
+    private String MessageCount;
+    private Long TimeStamp;
 
     public ChatModel() {
     }
 
-    public ChatModel(String chatId) {
+    public ChatModel(String chatId, String messageCount, Long timeStamp) {
         ChatId = chatId;
+        MessageCount = messageCount;
+        TimeStamp = timeStamp;
+    }
+
+    public String getMessageCount() {
+        return MessageCount;
+    }
+
+    public void setMessageCount(String messageCount) {
+        MessageCount = messageCount;
+    }
+
+    public Long getTimeStamp() {
+        return TimeStamp;
+    }
+
+    public void setTimeStamp(Long timeStamp) {
+        TimeStamp = timeStamp;
     }
 
     public String getChatId() {

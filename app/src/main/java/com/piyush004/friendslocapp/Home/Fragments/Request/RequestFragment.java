@@ -183,12 +183,12 @@ public class RequestFragment extends Fragment {
 
                                         friendDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).child("Mobile").setValue(SendPhoneN);
                                         friendDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).child("timeStamp").setValue(data.getTime());
-                                        friendDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).child("MessageCount").setValue(0);
+                                        friendDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).child("MessageCount").setValue("0");
                                         friendDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).child("id").setValue(model.getId()).addOnSuccessListener(aVoid2 -> {
 
                                             friendDR.child(model.getId()).child(firebaseAuth.getCurrentUser().getUid()).child("Mobile").setValue(phoneN);
                                             friendDR.child(model.getId()).child(firebaseAuth.getCurrentUser().getUid()).child("timeStamp").setValue(data.getTime());
-                                            friendDR.child(model.getId()).child(firebaseAuth.getCurrentUser().getUid()).child("MessageCount").setValue(0);
+                                            friendDR.child(model.getId()).child(firebaseAuth.getCurrentUser().getUid()).child("MessageCount").setValue("0");
                                             friendDR.child(model.getId()).child(firebaseAuth.getCurrentUser().getUid()).child("id").setValue(firebaseAuth.getCurrentUser().getUid()).addOnSuccessListener(aVoid3 -> {
 
                                                 sender.removeValue().addOnSuccessListener(aVoid4 -> receiver.removeValue().addOnSuccessListener(aVoid31 -> {

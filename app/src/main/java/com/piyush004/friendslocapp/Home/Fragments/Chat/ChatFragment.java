@@ -119,7 +119,9 @@ public class ChatFragment extends Fragment {
         final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("Friends").child(firebaseAuth.getCurrentUser().getUid());
         options = new FirebaseRecyclerOptions.Builder<ChatModel>().setQuery(df, snapshot -> new ChatModel(
 
-                snapshot.child("id").getValue(String.class)
+                snapshot.child("id").getValue(String.class),
+                snapshot.child("MessageCount").getValue(String.class),
+                snapshot.child("TimeStamp").getValue(Long.class)
 
         )).build();
 
@@ -163,6 +165,8 @@ public class ChatFragment extends Fragment {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+
 
                     }
                 });
