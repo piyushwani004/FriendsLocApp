@@ -42,6 +42,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -96,6 +97,7 @@ public class RequestFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_request, container, false);
 
         context = view.getContext();
+        final java.util.Date data = new Date();
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRequest);
         recyclerView = (RecyclerView) view.findViewById(R.id.RecycleViewRequest);
@@ -180,9 +182,13 @@ public class RequestFragment extends Fragment {
                                         SendPhoneN = senderNumber.substring(3);
 
                                         friendDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).child("Mobile").setValue(SendPhoneN);
+                                        friendDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).child("timeStamp").setValue(data.getTime());
+                                        friendDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).child("MessageCount").setValue(0);
                                         friendDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).child("id").setValue(model.getId()).addOnSuccessListener(aVoid2 -> {
 
                                             friendDR.child(model.getId()).child(firebaseAuth.getCurrentUser().getUid()).child("Mobile").setValue(phoneN);
+                                            friendDR.child(model.getId()).child(firebaseAuth.getCurrentUser().getUid()).child("timeStamp").setValue(data.getTime());
+                                            friendDR.child(model.getId()).child(firebaseAuth.getCurrentUser().getUid()).child("MessageCount").setValue(0);
                                             friendDR.child(model.getId()).child(firebaseAuth.getCurrentUser().getUid()).child("id").setValue(firebaseAuth.getCurrentUser().getUid()).addOnSuccessListener(aVoid3 -> {
 
                                                 sender.removeValue().addOnSuccessListener(aVoid4 -> receiver.removeValue().addOnSuccessListener(aVoid31 -> {
