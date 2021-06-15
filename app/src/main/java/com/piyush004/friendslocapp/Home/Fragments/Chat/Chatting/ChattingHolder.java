@@ -11,7 +11,7 @@
  *   -->
  */
 
-package com.piyush004.friendslocapp.Home.Fragments.Chat;
+package com.piyush004.friendslocapp.Home.Fragments.Chat.Chatting;
 
 import android.view.View;
 import android.widget.ImageView;
@@ -22,24 +22,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.piyush004.friendslocapp.R;
 
-import de.hdodenhof.circleimageview.CircleImageView;
+public class ChattingHolder extends RecyclerView.ViewHolder {
 
-public class ChatHolder extends RecyclerView.ViewHolder {
+    public TextView chatMessage, chatTime;
+    public ImageView seen;
 
-    public CircleImageView imageVieChat;
-    public TextView title_card, new_message_card;
-    public ImageView status, new_message_noti;
-
-    public ChatHolder(@NonNull View itemView) {
+    public ChattingHolder(@NonNull View itemView) {
         super(itemView);
 
-        imageVieChat = itemView.findViewById(R.id.imageVieChat);
+        this.chatMessage = itemView.findViewById(R.id.contactName);
+        this.chatTime = itemView.findViewById(R.id.contactNumber);
 
-        title_card = itemView.findViewById(R.id.title_card);
-        new_message_card = itemView.findViewById(R.id.new_message_text);
+        this.seen = itemView.findViewById(R.id.seen);
 
-        status = itemView.findViewById(R.id.status);
-        new_message_noti = itemView.findViewById(R.id.new_message_noti);
 
     }
 }

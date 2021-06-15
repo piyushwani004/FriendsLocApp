@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -57,6 +58,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
     private SimpleDateFormat simpleDateFormat;
     HashMap<String, Object> SenderHashMap;
     HashMap<String, Object> ReceiverHashMap;
+    private AlertDialog.Builder alertDialogBuilder;
     private String date;
 
     public ContactAdapter(List<ContactModel> list, Context context) {
@@ -139,33 +141,52 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.Holder> 
         holder.inviteButton.setOnClickListener(v -> {
 
             firebaseAuth = FirebaseAuth.getInstance();
-            Log.e(TAG, "onBindViewHolder: " + firebaseAuth.getCurrentUser().getUid());
 
-            final Date data = new Date();
-            SenderHashMap = new HashMap<>();
-            ReceiverHashMap = new HashMap<>();
+            alertDialogBuilder = new AlertDialog.Builder(context);
+            alertDialogBuilder.setTitle("FriendRequest...");
+            alertDialogBuilder.setMessage("Do You Want To send Request ?");
+            alertDialogBuilder.setPositiveButton("yes",
+                    (arg0, arg1) -> {
 
-            simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
-            date = simpleDateFormat.format(data);
 
-            DatabaseReference sender = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid()).child(List.get(position).getID());
-            DatabaseReference receiver = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(List.get(position).getID()).child(firebaseAuth.getCurrentUser().getUid());
+                        Log.e(TAG, "onBindViewHolder: " + firebaseAuth.getCurrentUser().getUid());
 
-            SenderHashMap.put("Id", List.get(position).getID());
-            SenderHashMap.put("Status", "Pending");
-            SenderHashMap.put("RequestType", "Sender");
-            SenderHashMap.put("Mobile", List.get(position).getMobile());
-            SenderHashMap.put("Date", date);
-            sender.setValue(SenderHashMap).addOnSuccessListener(aVoid -> {
+                        final Date data = new Date();
+                        SenderHashMap = new HashMap<>();
+                        ReceiverHashMap = new HashMap<>();
 
-                ReceiverHashMap.put("Id", firebaseAuth.getCurrentUser().getUid());
-                ReceiverHashMap.put("Status", "Pending");
-                ReceiverHashMap.put("RequestType", "Receiver");
-                ReceiverHashMap.put("Mobile", List.get(position).getMobile());
-                ReceiverHashMap.put("Date", date);
-                receiver.setValue(ReceiverHashMap).addOnSuccessListener(aVoid1 -> Toast.makeText(context, "Request Send Successfully...", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show());
+                        simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+                        date = simpleDateFormat.format(data);
 
-            }).addOnFailureListener(e -> Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show());
+                        DatabaseReference sender = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid()).child(List.get(position).getID());
+                        DatabaseReference receiver = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(List.get(position).getID()).child(firebaseAuth.getCurrentUser().getUid());
+
+                        SenderHashMap.put("Id", List.get(position).getID());
+                        SenderHashMap.put("Status", "Pending");
+                        SenderHashMap.put("RequestType", "Sender");
+                        SenderHashMap.put("Mobile", List.get(position).getMobile());
+                        SenderHashMap.put("Date", date);
+                        sender.setValue(SenderHashMap).addOnSuccessListener(aVoid -> {
+
+                            ReceiverHashMap.put("Id", firebaseAuth.getCurrentUser().getUid());
+                            ReceiverHashMap.put("Status", "Pending");
+                            ReceiverHashMap.put("RequestType", "Receiver");
+                            ReceiverHashMap.put("Mobile", List.get(position).getMobile());
+                            ReceiverHashMap.put("Date", date);
+                            receiver.setValue(ReceiverHashMap).addOnSuccessListener(aVoid1 -> Toast.makeText(context, "FriendRequest Send Successfully...", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show());
+
+                        }).addOnFailureListener(e -> Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show());
+
+                    });
+
+            alertDialogBuilder.setNegativeButton("No",
+                    (dialog, which) -> {
+                        dialog.cancel();
+                        dialog.dismiss();
+                    });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
 
         });
     }
