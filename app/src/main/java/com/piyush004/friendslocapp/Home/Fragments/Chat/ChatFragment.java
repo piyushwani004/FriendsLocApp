@@ -42,7 +42,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.piyush004.friendslocapp.Home.Fragments.Chat.Chatting.ChattingActivity;
+import com.piyush004.friendslocapp.Home.Fragments.Chat.Notification.Token;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
@@ -383,6 +385,19 @@ public class ChatFragment extends Fragment {
         adapter.startListening();
         recyclerView.setAdapter(adapter);
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateToken();
+    }
+
+    private void updateToken() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Token");
+        String refreshToken = FirebaseInstanceId.getInstance().getToken();
+        Token token = new Token(refreshToken);
+        databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
     }
 
 
