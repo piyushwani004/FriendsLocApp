@@ -200,6 +200,28 @@ public class ChatFragment extends Fragment {
                     holder.new_message_noti.setVisibility(View.GONE);
                 }
 
+                FirebaseDatabase.getInstance().getReference().child("chat")
+                        .child(CurrentUserId + model.getChatId())
+                        .orderByChild("timeStamp")
+                        .limitToLast(1)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.hasChildren()) {
+                                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                                        holder.new_message_card.setText(snapshot1.child("Message").getValue(String.class));
+                                    }
+                                } else {
+                                    holder.new_message_card.setText(" ");
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
 
                 holder.itemView.setOnClickListener(v -> {
 
@@ -209,7 +231,7 @@ public class ChatFragment extends Fragment {
                     newMessage.child("Friends").child(CurrentUserId).child(model.getChatId()).updateChildren(MessageCount).addOnSuccessListener(aVoid -> newMessage.child("Friends").child(model.getChatId()).child(CurrentUserId).updateChildren(MessageCount).addOnSuccessListener(aVoid1 -> {
 
                         Intent intent = new Intent(getContext(), ChattingActivity.class);
-                        intent.putExtra("UserID", model.getChatId());
+                        intent.putExtra("OtherUserID", model.getChatId());
                         startActivity(intent);
 
                     }).addOnFailureListener(e -> Toast.makeText(context, " " + e.getMessage(), Toast.LENGTH_SHORT).show())).addOnFailureListener(e -> Toast.makeText(context, " " + e.getMessage(), Toast.LENGTH_SHORT).show());
