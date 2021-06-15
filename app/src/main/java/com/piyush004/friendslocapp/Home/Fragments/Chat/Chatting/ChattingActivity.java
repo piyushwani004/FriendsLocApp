@@ -35,12 +35,20 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.piyush004.friendslocapp.Home.Fragments.Chat.Notification.APIService;
+import com.piyush004.friendslocapp.Home.Fragments.Chat.Notification.Client;
+import com.piyush004.friendslocapp.Home.Fragments.Chat.Notification.Data;
+import com.piyush004.friendslocapp.Home.Fragments.Chat.Notification.MyResponse;
+import com.piyush004.friendslocapp.Home.Fragments.Chat.Notification.NotificationSender;
+import com.piyush004.friendslocapp.Home.Fragments.Chat.Notification.Token;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
@@ -54,6 +62,9 @@ import java.util.Objects;
 import de.hdodenhof.circleimageview.CircleImageView;
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ChattingActivity extends AppCompatActivity {
 
@@ -75,6 +86,8 @@ public class ChattingActivity extends AppCompatActivity {
     int animationList = R.anim.layout_animation_up_to_down;
     public static final int MSG_TYPE_LEFT = 0;
     public static final int MSG_TYPE_RIGHT = 1;
+    private APIService apiService;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +101,9 @@ public class ChattingActivity extends AppCompatActivity {
         if (OtherUserId == null) {
             finish();
         }
+
+        updateToken();
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
 
         imageViewBack = findViewById(R.id.chatbackImgview);
         view = findViewById(R.id.rootView);
@@ -257,7 +273,25 @@ public class ChattingActivity extends AppCompatActivity {
                         timestamp.child("Friends").child(OtherUserId).child(CurrentUserId).updateChildren(MessageCount).addOnSuccessListener(aVoid2 -> {
 
                             timestamp.child("Friends").child(OtherUserId).child(CurrentUserId).child("timeStamp").setValue(data.getTime());
-                            timestamp.child("Friends").child(CurrentUserId).child(OtherUserId).child("timeStamp").setValue(data.getTime());
+                            timestamp.child("Friends").child(CurrentUserId).child(OtherUserId).child("timeStamp").setValue(data.getTime()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+
+                                    timestamp.child("Token").child(OtherUserId).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            String usertoken = snapshot.child("token").getValue(String.class);
+                                            sendNotifications(usertoken, "New Message :" + firebaseAuth.getCurrentUser().getPhoneNumber(), message);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+
+                                }
+                            });
 
                         }).addOnFailureListener(e -> Toast.makeText(ChattingActivity.this, " " + e.getMessage(), Toast.LENGTH_SHORT).show());
 
@@ -347,6 +381,7 @@ public class ChattingActivity extends AppCompatActivity {
         CurrentUserId = firebaseAuth.getCurrentUser().getUid();
         adapter.startListening();
         recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
+        updateToken();
     }
 
     @Override
@@ -354,5 +389,34 @@ public class ChattingActivity extends AppCompatActivity {
         super.onStop();
         adapter.stopListening();
     }
+
+    private void updateToken() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Token");
+        String refreshToken = FirebaseInstanceId.getInstance().getToken();
+        Token token = new Token(refreshToken);
+        databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
+    }
+
+    public void sendNotifications(String usertoken, String title, String message) {
+        Data data = new Data(title, message);
+        NotificationSender sender = new NotificationSender(data, usertoken);
+        apiService.sendNotifcation(sender).enqueue(new Callback<MyResponse>() {
+            @Override
+            public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                if (response.code() == 200) {
+                    if (response.body().success != 1) {
+                        Toast.makeText(ChattingActivity.this, "Failed ", Toast.LENGTH_LONG);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<MyResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
 
 }
