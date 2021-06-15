@@ -162,6 +162,30 @@ public class FriendFragment extends Fragment {
                     }
                 });
 
+                holder.RequestDelete.setOnClickListener(v -> {
+
+                    alertDialogBuilder = new AlertDialog.Builder(context);
+                    alertDialogBuilder.setTitle("Delete Request");
+                    alertDialogBuilder.setMessage("Do You Want To Remove Friend ?");
+                    alertDialogBuilder.setPositiveButton("yes",
+                            (arg0, arg1) -> {
+
+                                DatabaseReference deleteReqDR = FirebaseDatabase.getInstance().getReference().child("Friends");
+                                deleteReqDR.child(firebaseAuth.getCurrentUser().getUid()).child(model.getId()).removeValue().addOnSuccessListener(aVoid -> deleteReqDR.child(model.getId()).child(firebaseAuth.getCurrentUser().getUid()).removeValue().addOnSuccessListener(aVoid1 -> Toast.makeText(context, "Friend Deleted Successfully...", Toast.LENGTH_SHORT).show()));
+
+                            });
+
+                    alertDialogBuilder.setNegativeButton("No",
+                            (dialog, which) -> {
+                                dialog.cancel();
+                                dialog.dismiss();
+                            });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+
+                });
+
             }
 
             @NonNull
