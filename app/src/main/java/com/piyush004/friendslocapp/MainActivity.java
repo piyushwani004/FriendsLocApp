@@ -20,6 +20,7 @@ import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cunoraz.gifview.library.GifView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.piyush004.friendslocapp.Auth.LoginActivity;
@@ -35,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        GifView splash_gif = (GifView) findViewById(R.id.spalsh_gif);
+        splash_gif.setGifResource(R.drawable.splash);
+        splash_gif.play();
 
         firebaseAuth = FirebaseAuth.getInstance();
 

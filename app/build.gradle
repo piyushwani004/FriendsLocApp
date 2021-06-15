@@ -83,5 +83,5 @@ dependencies {
     implementation 'com.github.tamir7.contacts:contacts:1.1.7'
     implementation 'com.google.android.gms:play-services-basement:17.6.0'
     implementation 'com.google.android.gms:play-services-location:18.0.0'
-
+    implementation 'com.github.Cutta:GifView:1.4'
 }
