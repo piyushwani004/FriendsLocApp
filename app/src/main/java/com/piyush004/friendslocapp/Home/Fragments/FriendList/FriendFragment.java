@@ -102,7 +102,7 @@ public class FriendFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        editTextSearch.setQueryHint("Search User by mobile number");
+        editTextSearch.setQueryHint("Search by mobile number");
         editTextSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {

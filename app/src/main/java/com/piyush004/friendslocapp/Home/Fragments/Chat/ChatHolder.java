@@ -36,7 +36,7 @@ public class ChatHolder extends RecyclerView.ViewHolder {
         imageVieChat = itemView.findViewById(R.id.imageVieChat);
 
         title_card = itemView.findViewById(R.id.title_card);
-        new_message_card = itemView.findViewById(R.id.new_message_card);
+        new_message_card = itemView.findViewById(R.id.new_message_text);
 
         status = itemView.findViewById(R.id.status);
         new_message_noti = itemView.findViewById(R.id.new_message_noti);
