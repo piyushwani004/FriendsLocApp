@@ -23,6 +23,7 @@
     <com.cunoraz.gifview.library.GifView
         android:id="@+id/spalsh_gif"
         android:layout_width="match_parent"
+        app:gif="@drawable/splash"
         android:layout_height="match_parent"
         />
 
