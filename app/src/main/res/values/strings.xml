@@ -19,5 +19,6 @@
     <string name="terms_of_services"><u>Terms of services</u></string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_location">Search Location</string>
 
 </resources>

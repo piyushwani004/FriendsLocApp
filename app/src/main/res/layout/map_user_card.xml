@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~
+  ~   ~ /*******************************************************
+  ~   ~  * Copyright (C) 2021-2031 {Piyush Wani and  Mayur Sapkale} <{piyushwani04@gmail.com}>
+  ~   ~  *
+  ~   ~  * This file is part of {FriendLocatorApp}.
+  ~   ~  *
+  ~   ~  * {FriendLocatorApp} can not be copied and/or distributed without the express
+  ~   ~  * permission of {Piyush Wani and  Mayur Sapkale}
+  ~   ~  *******************************************************/
+  ~
+  -->
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp"
+    android:background="@color/transparent"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="1dp"
+    app:cardUseCompatPadding="false">
+
+    <RelativeLayout
+        android:id="@+id/mapLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/transparent"
+        android:padding="10dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/mapImage"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/person_placeholder" />
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -20,6 +20,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,11 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -43,9 +48,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.piyush004.friendslocapp.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 
@@ -64,18 +73,26 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
     private Context context;
     private FirebaseAuth firebaseAuth;
     private Double latitude, longitude;
+    private View view;
+    private RecyclerView recyclerView;
+    private FirebaseRecyclerOptions<MapUserModel> options;
+    private FirebaseRecyclerAdapter<MapUserModel, MapUserHolder> adapter;
+
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_maps, container, false);
+        view = inflater.inflate(R.layout.fragment_maps, container, false);
+        Log.e(TAG, "onCreateView: ");
+        return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.e(TAG, "onViewCreated: ");
         context = view.getContext();
         firebaseAuth = FirebaseAuth.getInstance();
         SupportMapFragment mapFragment =
@@ -83,6 +100,59 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
+
+        /*recyclerView = view.findViewById(R.id.mapRecycleView);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+
+        final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("Friends").child(firebaseAuth.getCurrentUser().getUid());
+        options = new FirebaseRecyclerOptions.Builder<MapUserModel>().setQuery(df, snapshot -> new MapUserModel(
+
+                snapshot.child("id").getValue(String.class)
+
+        )).build();
+        adapter = new FirebaseRecyclerAdapter<MapUserModel, MapUserHolder>(options) {
+
+            @Override
+            protected void onBindViewHolder(@NonNull final MapUserHolder holder, int position, @NonNull final MapUserModel model) {
+
+                DatabaseReference user = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(model.getMUId());
+
+                user.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        Picasso.get().load(snapshot.child("ImageURL").getValue(String.class))
+                                .resize(500, 500)
+                                .centerCrop()
+                                .rotate(0)
+                                .placeholder(R.drawable.person_placeholder)
+                                .into(holder.circleImageView);
+
+                        Log.e(TAG, "onDataChange: " + snapshot.child("ImageURL").getValue(String.class));
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+            }
+
+            @NonNull
+            @Override
+            public MapUserHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.map_user_card, parent, false);
+                return new MapUserHolder(view);
+            }
+        };
+
+        adapter.startListening();
+        recyclerView.setAdapter(adapter);*/
+
 
     }
 
@@ -122,7 +192,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
                     //move map camera
                     GoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                    GoogleMap.animateCamera(CameraUpdateFactory.zoomTo(11));
+                    GoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
                     //stop location updates
                     if (mGoogleApiClient != null) {
@@ -189,7 +259,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
         LatLng latLng = new LatLng(latitude, longitude);
         GoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        GoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        GoogleMap.animateCamera(CameraUpdateFactory.zoomTo(20));
         GoogleMap.getUiSettings().setZoomControlsEnabled(true);
 
     }
