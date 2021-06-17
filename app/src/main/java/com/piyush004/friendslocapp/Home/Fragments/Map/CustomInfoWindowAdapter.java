@@ -56,8 +56,9 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         name.setText(marker.getTitle());
         Picasso.get().load(marker.getSnippet())
                 .placeholder(R.drawable.person_placeholder)
-                .resize(50, 50)
+                .resize(500, 500)
                 .centerCrop()
+                .rotate(0)
                 .transform(new CropCircleTransformation())
                 .into(circleImageView);
 

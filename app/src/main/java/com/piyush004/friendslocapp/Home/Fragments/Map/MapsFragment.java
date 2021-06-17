@@ -129,7 +129,11 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
                                 .placeholder(R.drawable.person_placeholder)
                                 .into(holder.circleImageView);
 
-                        Log.e(TAG, "onDataChange: " + snapshot.child("ImageURL").getValue(String.class));
+                        Double Lat = snapshot.child("Location").child("latitude").getValue(Double.class);
+                        Double Lon = snapshot.child("Location").child("longitude").getValue(Double.class);
+
+                        Log.e(TAG, "Click Location : latitude :- " + Lat);
+                        Log.e(TAG, "Click Location : longitude :- " + Lon);
 
                     }
 
@@ -137,6 +141,29 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
                     public void onCancelled(@NonNull DatabaseError error) {
 
                     }
+                });
+
+                holder.itemView.setOnClickListener(v -> {
+
+                    DatabaseReference user1 = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(model.getMUId());
+
+                    user1.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                            Double Lat = snapshot.child("Location").child("latitude").getValue(Double.class);
+                            Double Lon = snapshot.child("Location").child("longitude").getValue(Double.class);
+
+                            moveMap(Lat, Lon, model.getMUId());
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
                 });
 
 
@@ -269,11 +296,40 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
     }
 
     private void moveMap() {
-
         LatLng latLng = new LatLng(latitude, longitude);
         GoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         GoogleMap.animateCamera(CameraUpdateFactory.zoomTo(20));
         GoogleMap.getUiSettings().setZoomControlsEnabled(true);
+    }
+
+    private void moveMap(Double lat, Double lon, String id) {
+        LatLng latLng = new LatLng(lat, lon);
+        DatabaseReference user = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(id);
+        user.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                String ImgUrl = snapshot.child("ImageURL").getValue(String.class);
+                String Name = snapshot.child("Name").getValue(String.class);
+
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
+                markerOptions.title(Name);
+                markerOptions.snippet(ImgUrl);
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
+                mCurrLocationMarker = GoogleMap.addMarker(markerOptions);
+                CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(getActivity());
+                GoogleMap.setInfoWindowAdapter(adapter);
+                GoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                GoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
 
