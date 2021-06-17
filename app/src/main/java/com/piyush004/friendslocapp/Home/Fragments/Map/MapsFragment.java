@@ -181,20 +181,33 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(latLng);
-                    markerOptions.title("UserName");
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                    mCurrLocationMarker = GoogleMap.addMarker(markerOptions);
+                    DatabaseReference user = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(firebaseAuth.getCurrentUser().getUid());
+                    user.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                    CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(getActivity());
-                    GoogleMap.setInfoWindowAdapter(adapter);
+                            String ImgUrl = snapshot.child("ImageURL").getValue(String.class);
+                            String Name = snapshot.child("Name").getValue(String.class);
 
-                    //move map camera
-                    GoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                    GoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                            MarkerOptions markerOptions = new MarkerOptions();
+                            markerOptions.position(latLng);
+                            markerOptions.title(Name);
+                            markerOptions.snippet(ImgUrl);
+                            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                            mCurrLocationMarker = GoogleMap.addMarker(markerOptions);
+                            CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(getActivity());
+                            GoogleMap.setInfoWindowAdapter(adapter);
+                            GoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+                            GoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
 
-                    //stop location updates
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
                     if (mGoogleApiClient != null) {
                         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
                     }

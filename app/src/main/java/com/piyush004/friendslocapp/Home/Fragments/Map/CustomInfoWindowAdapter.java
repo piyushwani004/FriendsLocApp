@@ -24,8 +24,10 @@ import androidx.annotation.Nullable;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
 import com.piyush004.friendslocapp.R;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
 
@@ -52,6 +54,12 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         TextView name = view.findViewById(R.id.map_userName);
 
         name.setText(marker.getTitle());
+        Picasso.get().load(marker.getSnippet())
+                .placeholder(R.drawable.person_placeholder)
+                .resize(50, 50)
+                .centerCrop()
+                .transform(new CropCircleTransformation())
+                .into(circleImageView);
 
         Log.e(TAG, "getInfoContents: " + marker.getId());
 
