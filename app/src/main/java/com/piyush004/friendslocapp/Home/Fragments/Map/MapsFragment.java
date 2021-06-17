@@ -101,7 +101,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
             mapFragment.getMapAsync(this);
         }
 
-        /*recyclerView = view.findViewById(R.id.mapRecycleView);
+        recyclerView = view.findViewById(R.id.mapRecycleView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
@@ -151,7 +151,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         };
 
         adapter.startListening();
-        recyclerView.setAdapter(adapter);*/
+        recyclerView.setAdapter(adapter);
 
 
     }
