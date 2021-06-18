@@ -152,7 +152,6 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
                     }
                 });
 
-
                 holder.itemView.setOnClickListener(v -> {
 
                     DatabaseReference user1 = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(model.getMUId());
