@@ -17,6 +17,11 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,6 +48,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -57,6 +63,8 @@ import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 public class MapsFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback, GoogleMap.OnMarkerDragListener,
@@ -122,18 +130,19 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        Picasso.get().load(snapshot.child("ImageURL").getValue(String.class))
+                        String imgUrl = snapshot.child("ImageURL").getValue(String.class);
+                        String Name = snapshot.child("Name").getValue(String.class);
+                        Double Lat = snapshot.child("Location").child("latitude").getValue(Double.class);
+                        Double Lon = snapshot.child("Location").child("longitude").getValue(Double.class);
+
+                        Picasso.get().load(imgUrl)
                                 .resize(500, 500)
                                 .centerCrop()
                                 .rotate(0)
                                 .placeholder(R.drawable.person_placeholder)
                                 .into(holder.circleImageView);
 
-                        Double Lat = snapshot.child("Location").child("latitude").getValue(Double.class);
-                        Double Lon = snapshot.child("Location").child("longitude").getValue(Double.class);
-
-                        Log.e(TAG, "Click Location : latitude :- " + Lat);
-                        Log.e(TAG, "Click Location : longitude :- " + Lon);
+                        addMarker(Lat, Lon, Name, imgUrl);
 
                     }
 
@@ -142,6 +151,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
                     }
                 });
+
 
                 holder.itemView.setOnClickListener(v -> {
 
@@ -154,7 +164,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
                             Double Lat = snapshot.child("Location").child("latitude").getValue(Double.class);
                             Double Lon = snapshot.child("Location").child("longitude").getValue(Double.class);
 
-                            moveMap(Lat, Lon, model.getMUId());
+                            moveMap(Lat, Lon);
 
                         }
 
@@ -220,7 +230,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
                             markerOptions.position(latLng);
                             markerOptions.title(Name);
                             markerOptions.snippet(ImgUrl);
-                            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                            markerOptions.icon(bitmapDescriptorFromVector(getContext(), R.drawable.user_marker_64x64));
                             mCurrLocationMarker = GoogleMap.addMarker(markerOptions);
                             CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(getActivity());
                             GoogleMap.setInfoWindowAdapter(adapter);
@@ -258,7 +268,7 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         GoogleMap = googleMap;
-        GoogleMap.setMapType(com.google.android.gms.maps.GoogleMap.MAP_TYPE_HYBRID);
+        GoogleMap.setMapType(com.google.android.gms.maps.GoogleMap.MAP_TYPE_NORMAL);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -270,6 +280,14 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
             buildGoogleApiClient();
             GoogleMap.setMyLocationEnabled(true);
         }
+
+        GoogleMap.setOnInfoWindowClickListener(marker -> {
+            LatLng latLng = new LatLng(marker.getPosition().latitude, marker.getPosition().longitude);
+            GoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            GoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+            GoogleMap.getUiSettings().setZoomControlsEnabled(true);
+        });
+
 
     }
 
@@ -302,35 +320,11 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         GoogleMap.getUiSettings().setZoomControlsEnabled(true);
     }
 
-    private void moveMap(Double lat, Double lon, String id) {
+    private void moveMap(Double lat, Double lon) {
         LatLng latLng = new LatLng(lat, lon);
-        DatabaseReference user = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(id);
-        user.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                String ImgUrl = snapshot.child("ImageURL").getValue(String.class);
-                String Name = snapshot.child("Name").getValue(String.class);
-
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(latLng);
-                markerOptions.title(Name);
-                markerOptions.snippet(ImgUrl);
-                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN));
-                mCurrLocationMarker = GoogleMap.addMarker(markerOptions);
-                CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(getActivity());
-                GoogleMap.setInfoWindowAdapter(adapter);
-                GoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-                GoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
+        GoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+        GoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+        GoogleMap.getUiSettings().setZoomControlsEnabled(true);
     }
 
     @Override
@@ -360,6 +354,36 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
         moveMap();
     }
 
+    public BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorId) {
+        Drawable VectorDrawable = ContextCompat.getDrawable(context, vectorId);
+        assert VectorDrawable != null;
+        VectorDrawable.setBounds(0, 0, VectorDrawable.getIntrinsicWidth(), VectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(VectorDrawable.getIntrinsicWidth(), VectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        VectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    }
+
+
+    public void addMarker(Double lat, Double lon, String name, String imgUrl) {
+
+        LatLng location = new LatLng(lat, lon);
+
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(location);
+        markerOptions.title(name);
+        markerOptions.snippet(imgUrl);
+        markerOptions.icon(bitmapDescriptorFromVector(getContext(), R.drawable.user_marker_64x64));
+        mCurrLocationMarker = GoogleMap.addMarker(markerOptions);
+        CustomInfoWindowAdapter adapter = new CustomInfoWindowAdapter(getActivity());
+        GoogleMap.setInfoWindowAdapter(adapter);
+
+    }
+
+
+
 
 }
+
+
 
