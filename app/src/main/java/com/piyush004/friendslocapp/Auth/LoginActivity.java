@@ -14,7 +14,6 @@
 package com.piyush004.friendslocapp.Auth;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +23,8 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hbb20.CountryCodePicker;
+import com.piyush004.friendslocapp.Auth.Database.AuthSteps;
+import com.piyush004.friendslocapp.Auth.Database.DatabaseHandler;
 import com.piyush004.friendslocapp.R;
 
 import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil;
@@ -36,7 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText editTextMobile;
     private CountryCodePicker ccp;
     private View viewAuth;
-
+    private DatabaseHandler db = new DatabaseHandler(this);
     private String mobile;
 
     @Override
@@ -72,6 +73,8 @@ public class LoginActivity extends AppCompatActivity {
                 editTextMobile.setError("Enter 10-Digit Mobile Number");
                 editTextMobile.requestFocus();
             } else if (!(mobile.isEmpty() && mobile.length() != 13)) {
+                db.addAllData(new AuthSteps(mobile, "false", "false", "false"));
+                db.updateStepOne("true", mobile);
                 Intent intent = new Intent(LoginActivity.this, VerificationActivity.class);
                 intent.putExtra("mobile", mobile);
                 startActivity(intent);

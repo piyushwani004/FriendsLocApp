@@ -15,7 +15,6 @@ package com.piyush004.friendslocapp.Auth;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -38,6 +37,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.piyush004.friendslocapp.Auth.Database.DatabaseHandler;
 import com.piyush004.friendslocapp.Home.HomeActivity;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Callback;
@@ -59,7 +59,7 @@ public class ProfileUpdate extends AppCompatActivity {
     private StorageReference storageReference;
     private FirebaseStorage storage;
     private HashMap<String, Object> hashMap;
-
+    private DatabaseHandler db = new DatabaseHandler(this);
     private static int SELECT_PHOTO = 2;
     private String Name, Mobile, phonenumber, imgUrl;
 
@@ -135,6 +135,8 @@ public class ProfileUpdate extends AppCompatActivity {
             } else if (uri == null) {
                 Toast.makeText(this, "Select Profile Image...", Toast.LENGTH_LONG).show();
             } else if (!(textViewName.getText().toString().equals("User Name") && uri == null)) {
+
+                db.updateStepThree("true", phonenumber);
 
                 Intent intent = new Intent(ProfileUpdate.this, HomeActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

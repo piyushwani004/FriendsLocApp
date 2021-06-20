@@ -14,7 +14,6 @@
 package com.piyush004.friendslocapp.Auth;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -35,6 +34,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mukesh.OtpView;
+import com.piyush004.friendslocapp.Auth.Database.DatabaseHandler;
 import com.piyush004.friendslocapp.R;
 
 import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil;
@@ -52,7 +52,7 @@ public class VerificationActivity extends AppCompatActivity {
     private View viewAuth;
     private TextView textViewNumber;
     private ProgressBar ringProgressBar;
-
+    private DatabaseHandler db = new DatabaseHandler(this);
     private String otp, number;
     private String phonenumber;
     private String otpid;
@@ -120,6 +120,7 @@ public class VerificationActivity extends AppCompatActivity {
                         DatabaseReference addMemberData = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(mAuth.getCurrentUser().getUid());
                         addMemberData.child("Mobile").setValue(phonenumber);
                         addMemberData.child("ID").setValue(mAuth.getCurrentUser().getUid()).addOnSuccessListener(aVoid -> {
+                            db.updateStepTwo("true", phonenumber);
                             Intent intent = new Intent(VerificationActivity.this, ProfileUpdate.class);
                             startActivity(intent);
                             finish();
