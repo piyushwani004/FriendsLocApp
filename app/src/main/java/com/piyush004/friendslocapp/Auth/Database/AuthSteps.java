@@ -78,4 +78,15 @@ public class AuthSteps {
     public void setStep_three(String step_three) {
         this.step_three = step_three;
     }
+
+    @Override
+    public String toString() {
+        return "AuthSteps{" +
+                "id=" + id +
+                ", mobile='" + mobile + '\'' +
+                ", step_one='" + step_one + '\'' +
+                ", step_two='" + step_two + '\'' +
+                ", step_three='" + step_three + '\'' +
+                '}';
+    }
 }
