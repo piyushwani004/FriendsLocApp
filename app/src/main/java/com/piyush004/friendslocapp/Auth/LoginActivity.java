@@ -23,8 +23,8 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hbb20.CountryCodePicker;
-import com.piyush004.friendslocapp.Auth.Database.AuthSteps;
-import com.piyush004.friendslocapp.Auth.Database.DatabaseHandler;
+import com.piyush004.friendslocapp.Database.AuthSteps;
+import com.piyush004.friendslocapp.Database.DatabaseHandler;
 import com.piyush004.friendslocapp.R;
 
 import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil;

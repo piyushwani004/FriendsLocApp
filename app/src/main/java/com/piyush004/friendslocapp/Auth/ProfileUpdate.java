@@ -37,7 +37,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.piyush004.friendslocapp.Auth.Database.DatabaseHandler;
+import com.piyush004.friendslocapp.Database.DatabaseHandler;
 import com.piyush004.friendslocapp.Home.HomeActivity;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Callback;

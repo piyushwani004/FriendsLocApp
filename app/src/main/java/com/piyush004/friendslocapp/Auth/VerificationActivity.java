@@ -34,7 +34,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mukesh.OtpView;
-import com.piyush004.friendslocapp.Auth.Database.DatabaseHandler;
+import com.piyush004.friendslocapp.Database.DatabaseHandler;
 import com.piyush004.friendslocapp.R;
 
 import net.yslibrary.android.keyboardvisibilityevent.util.UIUtil;
