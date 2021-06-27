@@ -11,7 +11,7 @@
  *   -->
  */
 
-package com.piyush004.friendslocapp.Auth.Database;
+package com.piyush004.friendslocapp.Database;
 
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
