@@ -13,13 +13,17 @@
 
 package com.piyush004.friendslocapp.Auth.Database;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
+    private static final String TAG = DatabaseHandler.class.getSimpleName();
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "FriendLocatorDB";
     private static final String TABLE_CONTACTS = "auth_steps";
@@ -80,5 +84,29 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         db.execSQL("UPDATE " + TABLE_CONTACTS + " SET step_three = " + "'" + s + "' " + "WHERE mobile = " + "'" + s1 + "'");
     }
+
+    public AuthSteps getAllSteps(String id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        @SuppressLint("Recycle") Cursor cursor = db.query(TABLE_CONTACTS, new String[]{KEY_ID, KEY_MOBILE,
+                        KEY_ONE, KEY_TWO, KEY_THREE}, KEY_MOBILE + "=?",
+                new String[]{String.valueOf(id)}, null, null, null, null);
+        if (cursor != null)
+            cursor.moveToFirst();
+
+        assert cursor != null;
+        String sid = cursor.getString(0);
+        String mob = cursor.getString(1);
+        String s1 = cursor.getString(2);
+        String s2 = cursor.getString(3);
+        String s3 = cursor.getString(4);
+
+        Log.e(TAG, "getAllSteps: " + s1 + s2 + s3);
+
+        // return AuthSteps
+        assert cursor != null;
+        return new AuthSteps(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
+    }
+
 
 }
