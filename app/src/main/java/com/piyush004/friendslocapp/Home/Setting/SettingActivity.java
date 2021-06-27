@@ -38,7 +38,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.piyush004.friendslocapp.Auth.Database.DatabaseHandler;
+import com.piyush004.friendslocapp.Database.DatabaseHandler;
 import com.piyush004.friendslocapp.Auth.LoginActivity;
 import com.piyush004.friendslocapp.Home.Fragments.Map.Services.Constants;
 import com.piyush004.friendslocapp.Home.Fragments.Map.Services.LocationService;
@@ -83,13 +83,7 @@ public class SettingActivity extends AppCompatActivity {
         logoutBtn = findViewById(R.id.logoutBtn);
 
         switchMaterial = findViewById(R.id.settingSwitch);
-
-        SharedPreferences sh = getSharedPreferences("Settings", MODE_PRIVATE);
-        String status = sh.getString("LocationStatus", "");
-        if (status != null)
-            switchMaterial.setChecked(Boolean.parseBoolean(status));
-        else
-            switchMaterial.setChecked(true);
+        switchMaterial.setChecked(true);
 
         AppUser.addValueEventListener(new ValueEventListener() {
             @Override
@@ -125,11 +119,6 @@ public class SettingActivity extends AppCompatActivity {
         });
 
         switchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-            SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
-            SharedPreferences.Editor myEdit = sharedPreferences.edit();
-            myEdit.putString("LocationStatus", String.valueOf(isChecked));
-            myEdit.apply();
 
             if (isChecked) {
 
@@ -196,31 +185,6 @@ public class SettingActivity extends AppCompatActivity {
 
         });
 
-
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        SharedPreferences sh = getSharedPreferences("Settings", MODE_PRIVATE);
-        String status = sh.getString("LocationStatus", "");
-        if (status != null)
-            switchMaterial.setChecked(Boolean.parseBoolean(status));
-
-        Log.e(TAG, "onStart: " + status);
-
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        SharedPreferences sharedPreferences = getSharedPreferences("Settings", MODE_PRIVATE);
-        SharedPreferences.Editor myEdit = sharedPreferences.edit();
-        myEdit.putString("LocationStatus", String.valueOf(switchMaterial.isChecked()));
-        myEdit.apply();
-        Log.e(TAG, "onStop: " + switchMaterial.isChecked());
 
     }
 
