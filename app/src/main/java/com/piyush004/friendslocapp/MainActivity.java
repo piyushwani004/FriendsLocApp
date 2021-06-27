@@ -23,8 +23,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
-import com.piyush004.friendslocapp.Auth.Database.AuthSteps;
-import com.piyush004.friendslocapp.Auth.Database.DatabaseHandler;
+import com.piyush004.friendslocapp.Database.AuthSteps;
+import com.piyush004.friendslocapp.Database.DatabaseHandler;
 import com.piyush004.friendslocapp.Auth.LoginActivity;
 import com.piyush004.friendslocapp.Home.HomeActivity;
 
