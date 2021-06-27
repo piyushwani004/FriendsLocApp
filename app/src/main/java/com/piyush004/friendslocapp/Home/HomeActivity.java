@@ -14,10 +14,14 @@
 package com.piyush004.friendslocapp.Home;
 
 import android.Manifest;
+import android.app.ActivityManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -27,6 +31,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -48,6 +54,8 @@ import com.piyush004.friendslocapp.Home.Fragments.Chat.ChatFragment;
 import com.piyush004.friendslocapp.Home.Fragments.Contact.ContactFragment;
 import com.piyush004.friendslocapp.Home.Fragments.FriendList.FriendFragment;
 import com.piyush004.friendslocapp.Home.Fragments.Map.MapsFragment;
+import com.piyush004.friendslocapp.Home.Fragments.Map.Services.Constants;
+import com.piyush004.friendslocapp.Home.Fragments.Map.Services.LocationService;
 import com.piyush004.friendslocapp.Home.Fragments.Request.RequestFragment;
 import com.piyush004.friendslocapp.Home.Profile.ProfileActivity;
 import com.piyush004.friendslocapp.Home.Setting.SettingActivity;
@@ -69,6 +77,7 @@ public class HomeActivity extends AppCompatActivity {
     private ImageView SettingImg;
     private String imgUrl, name;
     private FirebaseAuth firebaseAuth;
+    private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
 
     private final DatabaseReference appuser = FirebaseDatabase.getInstance().getReference().child("AppUsers")
             .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -257,6 +266,15 @@ public class HomeActivity extends AppCompatActivity {
         super.onStart();
         if (firebaseAuth.getCurrentUser() != null) {
             status("Online");
+
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(HomeActivity.this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION_PERMISSION);
+            } else {
+                startLocationService();
+            }
+
         }
     }
 
@@ -273,4 +291,61 @@ public class HomeActivity extends AppCompatActivity {
         super.onStop();
         status("Offline");
     }
+
+    private boolean isLocationServiceRunning() {
+        ActivityManager activityManager =
+                (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        if (activityManager != null) {
+            for (ActivityManager.RunningServiceInfo serviceInfo : activityManager.getRunningServices(Integer.MAX_VALUE)) {
+
+                if (LocationService.class.getName().equals(serviceInfo.service.getClassName())) {
+                    if (serviceInfo.foreground) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        return false;
+    }
+
+
+    private void startLocationService() {
+        if (!isLocationServiceRunning()) {
+            Log.e(TAG, "startLocationService: Location Service Start...");
+            Intent intent = new Intent(getApplicationContext(), LocationService.class);
+            intent.setAction(Constants.ACTION_START_LOCATION_SERVICE);
+            startService(intent);
+        } else {
+            Log.e(TAG, "startLocationService: else");
+        }
+    }
+
+    private void stopLocationService() {
+        if (isLocationServiceRunning()) {
+            Log.e(TAG, "startLocationService: Location Service Stop...");
+            Intent intent = new Intent(getApplicationContext(), LocationService.class);
+            intent.setAction(Constants.ACTION_STOP_LOCATION_SERVICE);
+            startService(intent);
+        } else {
+            Log.e(TAG, "startLocationService: else");
+        }
+
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length > 0) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startLocationService();
+            } else
+                Toast.makeText(this, "Permission denied!!!", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
 }
