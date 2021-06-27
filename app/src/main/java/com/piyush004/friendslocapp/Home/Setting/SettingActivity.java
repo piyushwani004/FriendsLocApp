@@ -38,11 +38,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.piyush004.friendslocapp.Auth.Database.DatabaseHandler;
 import com.piyush004.friendslocapp.Auth.LoginActivity;
-import com.piyush004.friendslocapp.Auth.ProfileUpdate;
 import com.piyush004.friendslocapp.Home.Fragments.Map.Services.Constants;
 import com.piyush004.friendslocapp.Home.Fragments.Map.Services.LocationService;
-import com.piyush004.friendslocapp.Home.HomeActivity;
 import com.piyush004.friendslocapp.Home.Profile.ProfileActivity;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
@@ -59,10 +58,10 @@ public class SettingActivity extends AppCompatActivity {
     private AlertDialog.Builder alertDialogBuilder;
     private FirebaseAuth firebaseAuth;
     private SwitchMaterial switchMaterial;
-
+    private DatabaseHandler db = new DatabaseHandler(this);
 
     private String imgUrl;
-    private String name;
+    private String name, mobile;
 
     private DatabaseReference AppUser = FirebaseDatabase.getInstance().getReference().child("AppUsers")
             .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -73,6 +72,7 @@ public class SettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
 
         firebaseAuth = FirebaseAuth.getInstance();
+        mobile = firebaseAuth.getCurrentUser().getPhoneNumber();
 
         circleImageView = findViewById(R.id.SettingProfileImg);
         textViewName = findViewById(R.id.SettingNameText);
@@ -172,6 +172,11 @@ public class SettingActivity extends AppCompatActivity {
             alertDialogBuilder.setMessage("Do You Want To Logout ?");
             alertDialogBuilder.setPositiveButton("yes",
                     (arg0, arg1) -> {
+
+                        db.updateStepOne("false", mobile);
+                        db.updateStepTwo("false", mobile);
+                        db.updateStepThree("false", mobile);
+
                         firebaseAuth.signOut();
                         Intent intent = new Intent(SettingActivity.this, LoginActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -243,8 +248,7 @@ public class SettingActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), LocationService.class);
             intent.setAction(Constants.ACTION_START_LOCATION_SERVICE);
             startService(intent);
-        }
-        else {
+        } else {
             Log.e(TAG, "startLocationService: else");
         }
     }
@@ -255,7 +259,7 @@ public class SettingActivity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), LocationService.class);
             intent.setAction(Constants.ACTION_STOP_LOCATION_SERVICE);
             startService(intent);
-        }else {
+        } else {
             Log.e(TAG, "startLocationService: else");
         }
 
