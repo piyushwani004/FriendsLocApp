@@ -17,7 +17,6 @@ import android.Manifest;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,8 +37,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.piyush004.friendslocapp.Database.DatabaseHandler;
 import com.piyush004.friendslocapp.Auth.LoginActivity;
+import com.piyush004.friendslocapp.Database.AuthSteps;
+import com.piyush004.friendslocapp.Database.DatabaseHandler;
 import com.piyush004.friendslocapp.Home.Fragments.Map.Services.Constants;
 import com.piyush004.friendslocapp.Home.Fragments.Map.Services.LocationService;
 import com.piyush004.friendslocapp.Home.Profile.ProfileActivity;
@@ -83,7 +83,6 @@ public class SettingActivity extends AppCompatActivity {
         logoutBtn = findViewById(R.id.logoutBtn);
 
         switchMaterial = findViewById(R.id.settingSwitch);
-        switchMaterial.setChecked(true);
 
         AppUser.addValueEventListener(new ValueEventListener() {
             @Override
@@ -119,7 +118,7 @@ public class SettingActivity extends AppCompatActivity {
         });
 
         switchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
+            db.updateShareLocation(String.valueOf(isChecked), mobile);
             if (isChecked) {
 
                 if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
@@ -133,8 +132,6 @@ public class SettingActivity extends AppCompatActivity {
             } else {
                 stopLocationService();
             }
-
-            Log.e(TAG, "setOnCheckedChangeListener : " + isChecked);
 
         });
 
@@ -243,5 +240,13 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.e(TAG, "----------------------onStart: ---------------------");
+        AuthSteps authSteps = db.getAllSteps(firebaseAuth.getCurrentUser().getPhoneNumber());
+        switchMaterial.setChecked(Boolean.parseBoolean(authSteps.getShare_location()));
+        Log.e(TAG, "onStart: " + authSteps.getShare_location());
 
+    }
 }
