@@ -50,6 +50,8 @@ import com.karumi.dexter.MultiplePermissionsReport;
 import com.karumi.dexter.PermissionToken;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
+import com.piyush004.friendslocapp.Database.AuthSteps;
+import com.piyush004.friendslocapp.Database.DatabaseHandler;
 import com.piyush004.friendslocapp.Home.Fragments.Chat.ChatFragment;
 import com.piyush004.friendslocapp.Home.Fragments.Contact.ContactFragment;
 import com.piyush004.friendslocapp.Home.Fragments.FriendList.FriendFragment;
@@ -78,7 +80,7 @@ public class HomeActivity extends AppCompatActivity {
     private String imgUrl, name;
     private FirebaseAuth firebaseAuth;
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
-
+    private DatabaseHandler db = new DatabaseHandler(this);
     private final DatabaseReference appuser = FirebaseDatabase.getInstance().getReference().child("AppUsers")
             .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
@@ -267,12 +269,16 @@ public class HomeActivity extends AppCompatActivity {
         if (firebaseAuth.getCurrentUser() != null) {
             status("Online");
 
-            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
-                    != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(HomeActivity.this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION_PERMISSION);
-            } else {
-                startLocationService();
+            AuthSteps authSteps = db.getAllSteps(firebaseAuth.getCurrentUser().getPhoneNumber());
+            Log.e(TAG, ":::::::onStart:::::: " + authSteps.getShare_location());
+            if (Boolean.parseBoolean(authSteps.getShare_location())) {
+                if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(HomeActivity.this,
+                            new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE_LOCATION_PERMISSION);
+                } else {
+                    startLocationService();
+                }
             }
 
         }
