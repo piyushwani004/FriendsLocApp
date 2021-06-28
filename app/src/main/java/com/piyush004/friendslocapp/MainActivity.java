@@ -73,3 +73,5 @@ public class MainActivity extends AppCompatActivity {
 
     }
 }
+
+//password :- friendLoc

@@ -19,3 +19,27 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+# Picasso
+-dontwarn com.squareup.okhttp.**
+# Picasso Transformations
+-dontwarn jp.co.cyberagent.android.gpuimage.**
+
+-dontwarn okio.**
+-dontwarn okhttp3.**
+-dontwarn retrofit2.**
+
+-dontwarn org.w3c.dom.**
+-dontwarn org.joda.time.**
+-dontwarn org.shaded.apache.**
+-dontwarn org.ietf.jgss.**
+-dontwarn com.firebase.**
+
+-keepattributes Signature
+-keepattributes *Annotation*
+-keepattributes InnerClasses,EnclosingMethod
+
+-keepattributes Signature,InnerClasses
+-ignorewarnings
+-keepattributes *Annotation*
+-keepattributes EnclosingMethod
+-keepattributes InnerClasses
