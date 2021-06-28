@@ -32,6 +32,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_TWO = "step_two";
     private static final String KEY_THREE = "step_three";
     private static final String KEY_MOBILE = "mobile";
+    private static final String SHARE_LOCATION = "share_location";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -41,8 +42,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_CONTACTS + "("
-                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_MOBILE + " TEXT," + KEY_ONE + " TEXT,"
-                + KEY_TWO + " TEXT," + KEY_THREE + " TEXT" + ")";
+                + KEY_ID + " INTEGER PRIMARY KEY," + KEY_MOBILE + " TEXT," + KEY_ONE + " TEXT," + KEY_TWO + " TEXT,"
+                + KEY_THREE + " TEXT," + SHARE_LOCATION + " TEXT" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
 
     }
@@ -64,6 +65,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         values.put(KEY_ONE, authSteps.getStep_one());
         values.put(KEY_TWO, authSteps.getStep_two());
         values.put(KEY_THREE, authSteps.getStep_three());
+        values.put(SHARE_LOCATION, authSteps.getShare_location());
 
         db.insert(TABLE_CONTACTS, null, values);
         db.close();
@@ -85,11 +87,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.execSQL("UPDATE " + TABLE_CONTACTS + " SET step_three = " + "'" + s + "' " + "WHERE mobile = " + "'" + s1 + "'");
     }
 
+    public void updateShareLocation(String s, String s1) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.execSQL("UPDATE " + TABLE_CONTACTS + " SET share_location = " + "'" + s + "' " + "WHERE mobile = " + "'" + s1 + "'");
+    }
+
     public AuthSteps getAllSteps(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         @SuppressLint("Recycle") Cursor cursor = db.query(TABLE_CONTACTS, new String[]{KEY_ID, KEY_MOBILE,
-                        KEY_ONE, KEY_TWO, KEY_THREE}, KEY_MOBILE + "=?",
+                        KEY_ONE, KEY_TWO, KEY_THREE, SHARE_LOCATION}, KEY_MOBILE + "=?",
                 new String[]{String.valueOf(id)}, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
@@ -100,13 +107,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         String s1 = cursor.getString(2);
         String s2 = cursor.getString(3);
         String s3 = cursor.getString(4);
-
-        Log.e(TAG, "getAllSteps: " + s1 + s2 + s3);
+        String loc = cursor.getString(5);
+        Log.e(TAG, "getAllSteps: " + sid + mob + s1 + s2 + s3 + loc);
 
         // return AuthSteps
         assert cursor != null;
-        return new AuthSteps(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4));
+        return new AuthSteps(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5));
     }
-
 
 }
