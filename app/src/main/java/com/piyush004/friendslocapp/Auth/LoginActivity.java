@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                 editTextMobile.setError("Enter 10-Digit Mobile Number");
                 editTextMobile.requestFocus();
             } else if (!(mobile.isEmpty() && mobile.length() != 13)) {
-                db.addAllData(new AuthSteps(mobile, "false", "false", "false"));
+                db.addAllData(new AuthSteps(mobile, "false", "false", "false", "true"));
                 db.updateStepOne("true", mobile);
                 Intent intent = new Intent(LoginActivity.this, VerificationActivity.class);
                 intent.putExtra("mobile", mobile);
