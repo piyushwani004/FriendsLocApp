@@ -20,23 +20,26 @@ public class AuthSteps {
     private String step_one;
     private String step_two;
     private String step_three;
+    private String share_location;
 
     public AuthSteps() {
     }
 
-    public AuthSteps(int id, String mobile, String step_one, String step_two, String step_three) {
+    public AuthSteps(int id, String mobile, String step_one, String step_two, String step_three, String share_location) {
         this.id = id;
         this.mobile = mobile;
         this.step_one = step_one;
         this.step_two = step_two;
         this.step_three = step_three;
+        this.share_location = share_location;
     }
 
-    public AuthSteps(String mobile, String step_one, String step_two, String step_three) {
+    public AuthSteps(String mobile, String step_one, String step_two, String step_three, String share_location) {
         this.mobile = mobile;
         this.step_one = step_one;
         this.step_two = step_two;
         this.step_three = step_three;
+        this.share_location = share_location;
     }
 
     public int getId() {
@@ -79,6 +82,14 @@ public class AuthSteps {
         this.step_three = step_three;
     }
 
+    public String getShare_location() {
+        return share_location;
+    }
+
+    public void setShare_location(String share_location) {
+        this.share_location = share_location;
+    }
+
     @Override
     public String toString() {
         return "AuthSteps{" +
@@ -87,6 +98,7 @@ public class AuthSteps {
                 ", step_one='" + step_one + '\'' +
                 ", step_two='" + step_two + '\'' +
                 ", step_three='" + step_three + '\'' +
+                ", share_location='" + share_location + '\'' +
                 '}';
     }
 }
