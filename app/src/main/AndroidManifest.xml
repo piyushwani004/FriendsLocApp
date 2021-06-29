@@ -24,9 +24,9 @@
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@drawable/lokasi_logo_25370"
+        android:icon="@drawable/friend_removebg"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/lokasi_logo_25370"
+        android:roundIcon="@drawable/friend_removebg"
         android:supportsRtl="true"
         android:theme="@style/Theme.FriendsLocApp">
         <activity android:name=".Home.Fragments.Chat.Chatting.ChattingActivity" />
