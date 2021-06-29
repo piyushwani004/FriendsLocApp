@@ -19,6 +19,14 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('C:\\Users\\Admin\\AndroidStudioProjects\\FriendsLocApp\\friend_locator.jks')
+            storePassword 'friendLoc'
+            keyAlias 'key0'
+            keyPassword 'friendLoc'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
 
