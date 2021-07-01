@@ -16,7 +16,7 @@
         android:roundIcon="@drawable/friend_removebg"
         android:supportsRtl="true"
         android:theme="@style/Theme.FriendsLocApp">
-        <activity android:name=".Home.Feedback.FeedbackActivity"></activity>
+        <activity android:name=".Home.Feedback.FeedbackActivity" />
         <activity android:name=".Home.Fragments.Chat.Chatting.ChattingActivity" />
 
         <meta-data
