@@ -95,7 +95,7 @@ public class ChattingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chatting);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        CurrentUserId = firebaseAuth.getCurrentUser().getUid();
+        CurrentUserId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         Intent intent = getIntent();
         OtherUserId = intent.getStringExtra("OtherUserID").toString();
         if (OtherUserId == null) {
@@ -206,7 +206,7 @@ public class ChattingActivity extends AppCompatActivity {
         };
         adapter.startListening();
         recyclerView.setAdapter(adapter);
-        recyclerView.postDelayed(() -> recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount()), 1000);
+        recyclerView.postDelayed(() -> recyclerView.smoothScrollToPosition(Objects.requireNonNull(recyclerView.getAdapter()).getItemCount()), 1000);
 
 
         emojIconActions = new EmojIconActions(this, view, textInputEditText, userChatEmoji);
@@ -261,11 +261,12 @@ public class ChattingActivity extends AppCompatActivity {
                 final String key = SendDF.push().getKey();
                 hashMap.put("ChatID", key);
 
+                assert key != null;
                 SendDF.child(key).setValue(hashMap).addOnSuccessListener(aVoid -> {
                     textInputEditText.setText("");
                     receivedDF.child(key).setValue(hashMap).addOnSuccessListener(aVoid1 -> {
 
-                        recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
+                        recyclerView.smoothScrollToPosition(Objects.requireNonNull(recyclerView.getAdapter()).getItemCount());
                         final DatabaseReference timestamp = FirebaseDatabase.getInstance().getReference();
 
                         HashMap<String, Object> MessageCount = new HashMap<>();
@@ -378,9 +379,9 @@ public class ChattingActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        CurrentUserId = firebaseAuth.getCurrentUser().getUid();
+        CurrentUserId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         adapter.startListening();
-        recyclerView.smoothScrollToPosition(recyclerView.getAdapter().getItemCount());
+        recyclerView.smoothScrollToPosition(Objects.requireNonNull(recyclerView.getAdapter()).getItemCount());
         updateToken();
     }
 
@@ -394,7 +395,7 @@ public class ChattingActivity extends AppCompatActivity {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Token");
         String refreshToken = FirebaseInstanceId.getInstance().getToken();
         Token token = new Token(refreshToken);
-        databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
+        databaseReference.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).setValue(token);
     }
 
     public void sendNotifications(String usertoken, String title, String message) {
