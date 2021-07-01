@@ -93,14 +93,12 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_maps, container, false);
-        Log.e(TAG, "onCreateView: ");
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.e(TAG, "onViewCreated: ");
         context = view.getContext();
         firebaseAuth = FirebaseAuth.getInstance();
         SupportMapFragment mapFragment =

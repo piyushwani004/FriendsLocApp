@@ -68,6 +68,7 @@ import retrofit2.Response;
 
 public class ChattingActivity extends AppCompatActivity {
 
+    private static final String TAG = ChattingActivity.class.getSimpleName();
     private View view;
     private SimpleDateFormat simpleDateFormat;
     private FirebaseAuth firebaseAuth;
@@ -96,6 +97,7 @@ public class ChattingActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         CurrentUserId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        status("Online");
         Intent intent = getIntent();
         OtherUserId = intent.getStringExtra("OtherUserID").toString();
         if (OtherUserId == null) {
@@ -121,7 +123,7 @@ public class ChattingActivity extends AppCompatActivity {
 
         setUserData(OtherUserId);
         room = CurrentUserId + OtherUserId;
-        Log.e("Chat Project", "Chat" + room);
+        Log.e(TAG, "Chat" + room);
 
         final java.util.Date data = new java.util.Date();
         final Calendar calendar = Calendar.getInstance();
@@ -181,7 +183,6 @@ public class ChattingActivity extends AppCompatActivity {
 
             @Override
             public int getItemViewType(int position) {
-                Log.e("Project", "userChatGetItemType" + getItem(position).getSender() + "current" + CurrentUserId);
                 if (getItem(position).getSender().equals(CurrentUserId)) {
                     return MSG_TYPE_RIGHT;
                 } else {
@@ -244,8 +245,8 @@ public class ChattingActivity extends AppCompatActivity {
                 textInputEditText.requestFocus();
             } else if (!(message.isEmpty())) {
 
-                Log.e("Project", "SenderRoom" + SenderRoom);
-                Log.e("Project", "ReceivedRoom" + ReceivedRoom);
+                Log.e(TAG, "SenderRoom" + SenderRoom);
+                Log.e(TAG, "ReceivedRoom" + ReceivedRoom);
 
                 final HashMap<String, Object> hashMap = new HashMap<>();
                 hashMap.put("Message", message);
@@ -379,32 +380,16 @@ public class ChattingActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (firebaseAuth.getCurrentUser() != null) {
-            status("Online");
-            CurrentUserId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-            adapter.startListening();
-            recyclerView.smoothScrollToPosition(Objects.requireNonNull(recyclerView.getAdapter()).getItemCount());
-            updateToken();
-
-        }
-
+        CurrentUserId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+        adapter.startListening();
+        recyclerView.smoothScrollToPosition(Objects.requireNonNull(recyclerView.getAdapter()).getItemCount());
+        updateToken();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (firebaseAuth.getCurrentUser() != null) {
-            status("Offline");
-        }
         adapter.stopListening();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (firebaseAuth.getCurrentUser() != null) {
-            status("Offline");
-        }
     }
 
     private void updateToken() {
@@ -436,6 +421,7 @@ public class ChattingActivity extends AppCompatActivity {
     }
 
     private void status(String s) {
+        Log.e(TAG, "status: inside Chat Activity");
         DatabaseReference status = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid());
         HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put("Status", s);

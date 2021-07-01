@@ -256,9 +256,6 @@ public class SettingActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (firebaseAuth.getCurrentUser() != null) {
-            status("Online");
-        }
         AuthSteps authSteps = db.getAllSteps(firebaseAuth.getCurrentUser().getPhoneNumber());
         switchMaterial.setChecked(Boolean.parseBoolean(authSteps.getShare_location()));
         Log.e(TAG, "onStart: " + authSteps.getShare_location());
@@ -284,28 +281,5 @@ public class SettingActivity extends AppCompatActivity {
         builder.show();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (firebaseAuth.getCurrentUser() != null) {
-            status("Offline");
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (firebaseAuth.getCurrentUser() != null) {
-            status("Offline");
-        }
-    }
-
-
-    private void status(String s) {
-        DatabaseReference status = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid());
-        HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("Status", s);
-        status.updateChildren(hashMap);
-    }
 
 }
