@@ -42,6 +42,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.piyush004.friendslocapp.Auth.LoginActivity;
 import com.piyush004.friendslocapp.Database.AuthSteps;
 import com.piyush004.friendslocapp.Database.DatabaseHandler;
+import com.piyush004.friendslocapp.Home.Feedback.FeedbackActivity;
 import com.piyush004.friendslocapp.Home.Fragments.Map.Services.Constants;
 import com.piyush004.friendslocapp.Home.Fragments.Map.Services.LocationService;
 import com.piyush004.friendslocapp.Home.Profile.ProfileActivity;
@@ -56,7 +57,7 @@ public class SettingActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_LOCATION_PERMISSION = 1;
     private CircleImageView circleImageView;
     private TextView textViewName;
-    private ImageView logoutBtn, editProfileBtn, termConditionBtn, privacyBtn;
+    private ImageView logoutBtn, editProfileBtn, termConditionBtn, privacyBtn, FeedbackBtn;
     private AlertDialog.Builder alertDialogBuilder;
     private FirebaseAuth firebaseAuth;
     private SwitchMaterial switchMaterial;
@@ -85,6 +86,7 @@ public class SettingActivity extends AppCompatActivity {
         termConditionBtn = findViewById(R.id.termOfServiceBtn);
         privacyBtn = findViewById(R.id.PrivacyPolicyBtn);
         logoutBtn = findViewById(R.id.logoutBtn);
+        FeedbackBtn = findViewById(R.id.FeedbackBtn);
 
         switchMaterial = findViewById(R.id.settingSwitch);
 
@@ -142,6 +144,14 @@ public class SettingActivity extends AppCompatActivity {
         editProfileBtn.setOnClickListener(v -> {
 
             Intent intent = new Intent(SettingActivity.this, ProfileActivity.class);
+            startActivity(intent);
+            finish();
+
+        });
+
+        FeedbackBtn.setOnClickListener(v -> {
+
+            Intent intent = new Intent(SettingActivity.this, FeedbackActivity.class);
             startActivity(intent);
             finish();
 
