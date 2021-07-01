@@ -13,11 +13,9 @@
   -->
 
 <resources>
-    <string name="we_will_send_you_one_time_password">We will send You One Time Password</string>
     <string name="on_your_phone_number">on your phone number</string>
     <string name="by_creating_an_account_you_agree_with_our">By creating an account,you agree with our</string>
     <string name="and">and</string>
-    <string name="verification">Verification</string>
     <string name="get_otp">Get OTP</string>
     <string name="enter_mobile">Enter Mobile</string>
     <string name="verify">Verify</string>

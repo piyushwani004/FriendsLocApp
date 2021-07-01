@@ -21,11 +21,9 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search_location">Search Location</string>
     <string name="please_let_us_know_how_to_make_our_app_better_for_you">Please let us know how to make our App better for you</string>
-    <string name="we_will_send_you_one_time_password">We will send You One Time Password</string>
     <string name="on_your_phone_number">on your phone number</string>
     <string name="by_creating_an_account_you_agree_with_our">By creating an account,you agree with our</string>
     <string name="and">and</string>
-    <string name="verification">Verification</string>
     <string name="get_otp">Get OTP</string>
     <string name="enter_mobile">Enter Mobile</string>
     <string name="verify">Verify</string>
