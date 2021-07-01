@@ -20,6 +20,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +61,8 @@ public class SettingActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private SwitchMaterial switchMaterial;
     private DatabaseHandler db = new DatabaseHandler(this);
+    public static final String PRIVACY_POLICY = "file:///android_asset/Privacy.html";
+    public static final String TERMS_OF_SERVICE = "file:///android_asset/Terms.html";
 
     private String imgUrl;
     private String name, mobile;
@@ -143,13 +147,9 @@ public class SettingActivity extends AppCompatActivity {
 
         });
 
-        termConditionBtn.setOnClickListener(v -> {
+        termConditionBtn.setOnClickListener(v -> show_dialog(TERMS_OF_SERVICE));
 
-        });
-
-        privacyBtn.setOnClickListener(v -> {
-
-        });
+        privacyBtn.setOnClickListener(v -> show_dialog(PRIVACY_POLICY));
 
         logoutBtn.setOnClickListener(v -> {
 
@@ -249,4 +249,24 @@ public class SettingActivity extends AppCompatActivity {
         Log.e(TAG, "onStart: " + authSteps.getShare_location());
 
     }
+
+    public void show_dialog(String url) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        WebView webView = new WebView(this);
+        webView.loadUrl(url);
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+        });
+
+        builder.setView(webView);
+        builder.setNegativeButton("Close", (dialog, which) -> dialog.dismiss());
+
+        builder.show();
+    }
+
 }
