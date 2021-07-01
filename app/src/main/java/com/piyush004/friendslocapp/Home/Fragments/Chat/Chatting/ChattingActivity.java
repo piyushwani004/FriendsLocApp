@@ -97,7 +97,7 @@ public class ChattingActivity extends AppCompatActivity {
 
         firebaseAuth = FirebaseAuth.getInstance();
         CurrentUserId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        status("Online");
+
         Intent intent = getIntent();
         OtherUserId = intent.getStringExtra("OtherUserID").toString();
         if (OtherUserId == null) {
@@ -106,7 +106,7 @@ public class ChattingActivity extends AppCompatActivity {
 
         updateToken();
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
-
+        status("Online");
         imageViewBack = findViewById(R.id.chatbackImgview);
         view = findViewById(R.id.rootView);
         userChatEmoji = findViewById(R.id.userChatEmoji);
