@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~
+  ~   ~ /*******************************************************
+  ~   ~  * Copyright (C) 2021-2031 {Piyush Wani and  Mayur Sapkale} <{piyushwani04@gmail.com}>
+  ~   ~  *
+  ~   ~  * This file is part of {FriendLocatorApp}.
+  ~   ~  *
+  ~   ~  * {FriendLocatorApp} can not be copied and/or distributed without the express
+  ~   ~  * permission of {Piyush Wani and  Mayur Sapkale}
+  ~   ~  *******************************************************/
+  ~
+  -->
+
+<resources>
+    <string name="we_will_send_you_one_time_password">We will send You One Time Password</string>
+    <string name="on_your_phone_number">on your phone number</string>
+    <string name="by_creating_an_account_you_agree_with_our">By creating an account,you agree with our</string>
+    <string name="and">and</string>
+    <string name="verification">Verification</string>
+    <string name="get_otp">Get OTP</string>
+    <string name="enter_mobile">Enter Mobile</string>
+    <string name="verify">Verify</string>
+    <string name="verification">Verification</string>
+    <string name="we_will_send_you_one_time_password">We will send You One Time Password</string>
+    <string name="to">to</string>
+    <string name="_91_8446785909">+91 8446785909</string>
+    <string name="submit">Submit</string>
+    <string name="type_feedback">Type feedback...</string>
+    <string name="share_your_feedback">Share Your Feedback</string>
+</resources>
