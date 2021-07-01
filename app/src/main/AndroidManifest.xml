@@ -1,17 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~
-  ~   ~ /*******************************************************
-  ~   ~  * Copyright (C) 2021-2031 {Piyush Wani and  Mayur Sapkale} <{piyushwani04@gmail.com}>
-  ~   ~  *
-  ~   ~  * This file is part of {FriendLocatorApp}.
-  ~   ~  *
-  ~   ~  * {FriendLocatorApp} can not be copied and/or distributed without the express
-  ~   ~  * permission of {Piyush Wani and  Mayur Sapkale}
-  ~   ~  *******************************************************/
-  ~
-  -->
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.piyush004.friendslocapp">
 
@@ -29,6 +16,7 @@
         android:roundIcon="@drawable/friend_removebg"
         android:supportsRtl="true"
         android:theme="@style/Theme.FriendsLocApp">
+        <activity android:name=".Home.Feedback.FeedbackActivity"></activity>
         <activity android:name=".Home.Fragments.Chat.Chatting.ChattingActivity" />
 
         <meta-data
@@ -55,7 +43,6 @@
             android:name=".Home.Fragments.Map.Services.LocationService"
             android:enabled="true"
             android:exported="false" />
-
         <service
             android:name=".Home.Fragments.Chat.Notification.Services.MyFirebaseInstanceService"
             android:enabled="true"
@@ -64,9 +51,8 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
         <service
-            android:name="com.piyush004.friendslocapp.Home.Fragments.Chat.Notification.Services.FirebaseService"
+            android:name=".Home.Fragments.Chat.Notification.Services.FirebaseService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
