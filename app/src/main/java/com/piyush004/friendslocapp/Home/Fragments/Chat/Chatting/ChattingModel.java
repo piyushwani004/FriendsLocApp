@@ -15,15 +15,15 @@ package com.piyush004.friendslocapp.Home.Fragments.Chat.Chatting;
 
 public class ChattingModel {
 
-    private String Sender;
-    private String Receiver;
-    private String Message;
-    private String Date;
-    private String Time;
-    private String ProductImg;
-    private String ProductName;
-    private String ChatID;
-    private boolean isSeen;
+    public String Sender;
+    public String Receiver;
+    public String Message;
+    public String Date;
+    public String Time;
+    public String ProductImg;
+    public String ProductName;
+    public String ChatID;
+    public boolean isSeen;
 
 
     public ChattingModel() {
