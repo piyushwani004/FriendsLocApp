@@ -22,6 +22,9 @@
     If you have previously set up a key for the debug target with the debug signing certificate,
     you will also need to set up a key for your release certificate.
 
+    Release Key:
+   AIzaSyCcA_tms-P3dCThiTsiRpoP1HzkthZ2Vus
+
     Follow the directions here:
 
     https://developers.google.com/maps/documentation/android/signup
