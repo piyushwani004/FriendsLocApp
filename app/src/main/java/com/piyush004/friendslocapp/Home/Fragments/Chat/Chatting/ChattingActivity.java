@@ -379,16 +379,32 @@ public class ChattingActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        CurrentUserId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
-        adapter.startListening();
-        recyclerView.smoothScrollToPosition(Objects.requireNonNull(recyclerView.getAdapter()).getItemCount());
-        updateToken();
+        if (firebaseAuth.getCurrentUser() != null) {
+            status("Online");
+            CurrentUserId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
+            adapter.startListening();
+            recyclerView.smoothScrollToPosition(Objects.requireNonNull(recyclerView.getAdapter()).getItemCount());
+            updateToken();
+
+        }
+
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+        if (firebaseAuth.getCurrentUser() != null) {
+            status("Offline");
+        }
         adapter.stopListening();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (firebaseAuth.getCurrentUser() != null) {
+            status("Offline");
+        }
     }
 
     private void updateToken() {
@@ -419,5 +435,11 @@ public class ChattingActivity extends AppCompatActivity {
         });
     }
 
+    private void status(String s) {
+        DatabaseReference status = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid());
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("Status", s);
+        status.updateChildren(hashMap);
+    }
 
 }
