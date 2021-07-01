@@ -49,6 +49,7 @@ import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 
 public class ChatFragment extends Fragment {
@@ -72,8 +73,6 @@ public class ChatFragment extends Fragment {
     private String CurrentUserId;
 
     public ChatFragment() {
-        firebaseAuth = FirebaseAuth.getInstance();
-        CurrentUserId = firebaseAuth.getCurrentUser().getUid();
     }
 
     public static ChatFragment newInstance(String param1, String param2) {
@@ -101,6 +100,9 @@ public class ChatFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_chat, container, false);
 
         context = view.getContext();
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        CurrentUserId = firebaseAuth.getCurrentUser().getUid();
 
         swipeRefreshLayout = view.findViewById(R.id.swipeChat);
         recyclerView = (RecyclerView) view.findViewById(R.id.RecycleViewChat);
@@ -155,7 +157,7 @@ public class ChatFragment extends Fragment {
                         if (Name != null)
                             holder.title_card.setText(Name);
                         else
-                            holder.title_card.setText(firebaseAuth.getCurrentUser().getPhoneNumber());
+                            holder.title_card.setText(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getPhoneNumber());
 
                         if (status != null) {
                             if (status.equals("Online")) {
@@ -308,7 +310,7 @@ public class ChatFragment extends Fragment {
                         if (Name != null)
                             holder.title_card.setText(Name);
                         else
-                            holder.title_card.setText(firebaseAuth.getCurrentUser().getPhoneNumber());
+                            holder.title_card.setText(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getPhoneNumber());
 
                         if (status != null) {
                             if (status.equals("Online")) {
@@ -397,7 +399,7 @@ public class ChatFragment extends Fragment {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Token");
         String refreshToken = FirebaseInstanceId.getInstance().getToken();
         Token token = new Token(refreshToken);
-        databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(token);
+        databaseReference.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).setValue(token);
     }
 
 
