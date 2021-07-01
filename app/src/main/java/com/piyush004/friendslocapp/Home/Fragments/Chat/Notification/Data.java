@@ -15,8 +15,8 @@ package com.piyush004.friendslocapp.Home.Fragments.Chat.Notification;
 
 public class Data {
 
-    private String Title;
-    private String Message;
+    public String Title;
+    public String Message;
 
     public Data(String title, String message) {
         Title = title;

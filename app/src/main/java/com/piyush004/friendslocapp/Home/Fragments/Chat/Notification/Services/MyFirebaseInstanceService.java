@@ -31,7 +31,7 @@ import java.util.Date;
 
 public class MyFirebaseInstanceService extends FirebaseMessagingService {
 
-    String title, message;
+    public String title, message;
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {

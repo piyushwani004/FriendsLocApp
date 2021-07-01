@@ -15,7 +15,7 @@ package com.piyush004.friendslocapp.Home.Fragments.Chat.Notification;
 
 public class Token {
 
-    private String token;
+    public String token;
 
     public Token() {
     }
