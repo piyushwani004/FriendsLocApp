@@ -17,9 +17,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hbb20.CountryCodePicker;
@@ -39,6 +43,9 @@ public class LoginActivity extends AppCompatActivity {
     private View viewAuth;
     private DatabaseHandler db = new DatabaseHandler(this);
     private String mobile;
+    private TextView textViewPolicy, textViewTerm;
+    public static final String PRIVACY_POLICY = "file:///android_asset/Privacy.html";
+    public static final String TERMS_OF_SERVICE = "file:///android_asset/Terms.html";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +57,14 @@ public class LoginActivity extends AppCompatActivity {
         ccp.registerCarrierNumberEditText(editTextMobile);
         NextButton = findViewById(R.id.ButtonGetOTP);
         viewAuth = findViewById(R.id.viewLogin);
+        textViewPolicy = findViewById(R.id.PrivacyPolicyText);
+        textViewTerm = findViewById(R.id.termOfServiceText);
 
         viewAuth.setOnClickListener(v -> UIUtil.hideKeyboard(LoginActivity.this));
+
+        textViewPolicy.setOnClickListener(v -> show_dialog(PRIVACY_POLICY));
+
+        textViewTerm.setOnClickListener(v -> show_dialog(TERMS_OF_SERVICE));
 
         NextButton.setOnClickListener(v -> {
 
@@ -84,5 +97,24 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void show_dialog(String url) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        WebView webView = new WebView(this);
+        webView.loadUrl(url);
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+        });
+
+        builder.setView(webView);
+        builder.setNegativeButton("Close", (dialog, which) -> dialog.dismiss());
+
+        builder.show();
     }
 }
