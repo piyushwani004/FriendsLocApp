@@ -42,7 +42,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.piyush004.friendslocapp.Home.Fragments.Chat.Chatting.ChattingActivity;
 import com.piyush004.friendslocapp.Home.Fragments.Chat.Notification.Token;
 import com.piyush004.friendslocapp.R;
@@ -389,7 +389,7 @@ public class ChatFragment extends Fragment {
 
     }
 
-    @Override
+    /*@Override
     public void onStart() {
         super.onStart();
         updateToken();
@@ -397,10 +397,19 @@ public class ChatFragment extends Fragment {
 
     private void updateToken() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Token");
-        String refreshToken = FirebaseInstanceId.getInstance().getToken();
-        Token token = new Token(refreshToken);
-        databaseReference.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).setValue(token);
-    }
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
 
+            if (!task.isSuccessful()) {
+                Log.e(TAG, "Fetching FCM registration token failed", task.getException());
+                return;
+            }
+
+
+            String refreshToken = task.getResult();
+            Token token = new Token(refreshToken);
+            databaseReference.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).setValue(token);
+        });
+    }
+*/
 
 }
