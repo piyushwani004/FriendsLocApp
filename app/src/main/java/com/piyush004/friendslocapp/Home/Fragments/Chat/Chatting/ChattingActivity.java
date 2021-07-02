@@ -377,7 +377,7 @@ public class ChattingActivity extends AppCompatActivity {
         CurrentUserId = Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid();
         adapter.startListening();
         recyclerView.smoothScrollToPosition(Objects.requireNonNull(recyclerView.getAdapter()).getItemCount());
-        updateToken();
+//        updateToken();
         status("Online");
     }
 
@@ -388,7 +388,7 @@ public class ChattingActivity extends AppCompatActivity {
         status("Offline");
     }
 
-    private void updateToken() {
+    /*private void updateToken() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Token");
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
 
@@ -402,7 +402,7 @@ public class ChattingActivity extends AppCompatActivity {
             Token token = new Token(refreshToken);
             databaseReference.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).setValue(token);
         });
-    }
+    }*/
 
     public void sendNotifications(String usertoken, String title, String message) {
         Data data = new Data(title, message);
