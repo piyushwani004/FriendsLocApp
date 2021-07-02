@@ -42,7 +42,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.piyush004.friendslocapp.Home.Fragments.Chat.Notification.APIService;
 import com.piyush004.friendslocapp.Home.Fragments.Chat.Notification.Client;
 import com.piyush004.friendslocapp.Home.Fragments.Chat.Notification.Data;
@@ -104,9 +104,8 @@ public class ChattingActivity extends AppCompatActivity {
             finish();
         }
 
-        updateToken();
         apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
-        status("Online");
+
         imageViewBack = findViewById(R.id.chatbackImgview);
         view = findViewById(R.id.rootView);
         userChatEmoji = findViewById(R.id.userChatEmoji);
@@ -123,7 +122,6 @@ public class ChattingActivity extends AppCompatActivity {
 
         setUserData(OtherUserId);
         room = CurrentUserId + OtherUserId;
-        Log.e(TAG, "Chat" + room);
 
         final java.util.Date data = new java.util.Date();
         final Calendar calendar = Calendar.getInstance();
@@ -215,12 +213,11 @@ public class ChattingActivity extends AppCompatActivity {
         emojIconActions.setKeyboardListener(new EmojIconActions.KeyboardListener() {
             @Override
             public void onKeyboardOpen() {
-                Log.e("Keyboard", "open");
+
             }
 
             @Override
             public void onKeyboardClose() {
-                Log.e("Keyboard", "close");
             }
         });
 
@@ -244,9 +241,6 @@ public class ChattingActivity extends AppCompatActivity {
                 textInputEditText.setError("Type Message");
                 textInputEditText.requestFocus();
             } else if (!(message.isEmpty())) {
-
-                Log.e(TAG, "SenderRoom" + SenderRoom);
-                Log.e(TAG, "ReceivedRoom" + ReceivedRoom);
 
                 final HashMap<String, Object> hashMap = new HashMap<>();
                 hashMap.put("Message", message);
@@ -323,7 +317,7 @@ public class ChattingActivity extends AppCompatActivity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                     String Name = snapshot.child("Name").getValue(String.class);
-                    String status = snapshot.child("Status").getValue(String.class);
+                    String status = snapshot.child("ChatStatus").getValue(String.class);
                     String imgUrl = snapshot.child("ImageURL").getValue(String.class);
 
                     if (Name != null)
@@ -384,19 +378,30 @@ public class ChattingActivity extends AppCompatActivity {
         adapter.startListening();
         recyclerView.smoothScrollToPosition(Objects.requireNonNull(recyclerView.getAdapter()).getItemCount());
         updateToken();
+        status("Online");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         adapter.stopListening();
+        status("Offline");
     }
 
     private void updateToken() {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Token");
-        String refreshToken = FirebaseInstanceId.getInstance().getToken();
-        Token token = new Token(refreshToken);
-        databaseReference.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).setValue(token);
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+
+            if (!task.isSuccessful()) {
+                Log.e(TAG, "Fetching FCM registration token failed", task.getException());
+                return;
+            }
+
+            String refreshToken = task.getResult();
+            Log.e(TAG, "updateToken: refreshToken :: " + refreshToken);
+            Token token = new Token(refreshToken);
+            databaseReference.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).setValue(token);
+        });
     }
 
     public void sendNotifications(String usertoken, String title, String message) {
@@ -421,10 +426,9 @@ public class ChattingActivity extends AppCompatActivity {
     }
 
     private void status(String s) {
-        Log.e(TAG, "status: inside Chat Activity");
         DatabaseReference status = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid());
         HashMap<String, Object> hashMap = new HashMap<>();
-        hashMap.put("Status", s);
+        hashMap.put("ChatStatus", s);
         status.updateChildren(hashMap);
     }
 
