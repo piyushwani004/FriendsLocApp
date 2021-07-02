@@ -111,14 +111,12 @@ public class FriendFragment extends Fragment {
         editTextSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.e("Project", "" + query);
                 onProcessSearch(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.e("Project", "" + newText);
                 onProcessSearch(newText);
                 return false;
             }
