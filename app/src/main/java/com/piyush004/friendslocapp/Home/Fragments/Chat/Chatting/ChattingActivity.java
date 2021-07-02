@@ -17,7 +17,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,13 +41,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.piyush004.friendslocapp.Home.Fragments.Chat.Notification.APIService;
 import com.piyush004.friendslocapp.Home.Fragments.Chat.Notification.Client;
 import com.piyush004.friendslocapp.Home.Fragments.Chat.Notification.Data;
 import com.piyush004.friendslocapp.Home.Fragments.Chat.Notification.MyResponse;
 import com.piyush004.friendslocapp.Home.Fragments.Chat.Notification.NotificationSender;
-import com.piyush004.friendslocapp.Home.Fragments.Chat.Notification.Token;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
@@ -156,7 +153,7 @@ public class ChattingActivity extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull final ChattingHolder holder, int position, @NonNull final ChattingModel model) {
 
                 holder.chatMessage.setText(model.getMessage());
-                holder.chatTime.setText(model.getDate() + " " + model.getTime());
+                holder.chatTime.setText(model.getTime());
 
                 if (model.getReceiver().equals(CurrentUserId) && model.getSender().equals(OtherUserId)) {
                     final DatabaseReference seenSen = FirebaseDatabase.getInstance().getReference().child("chat").child(SenderRoom).child(model.getChatID());
