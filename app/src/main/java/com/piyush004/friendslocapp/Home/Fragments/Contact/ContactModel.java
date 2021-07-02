@@ -19,17 +19,8 @@ public class ContactModel {
     private String Name;
     private String Mobile;
     private String PhotoURL;
-    private boolean IsCommon;
 
     public ContactModel() {
-    }
-
-    public ContactModel(String ID, String name, String mobile, String photoURL, boolean isCommon) {
-        this.ID = ID;
-        Name = name;
-        Mobile = mobile;
-        PhotoURL = photoURL;
-        IsCommon = isCommon;
     }
 
     public ContactModel(String ID, String name, String mobile, String photoURL) {
@@ -39,11 +30,6 @@ public class ContactModel {
         PhotoURL = photoURL;
     }
 
-    public ContactModel(String name, String mobile, String photoURL) {
-        Name = name;
-        Mobile = mobile;
-        PhotoURL = photoURL;
-    }
 
     public String getID() {
         return ID;
@@ -51,14 +37,6 @@ public class ContactModel {
 
     public void setID(String ID) {
         this.ID = ID;
-    }
-
-    public boolean isCommon() {
-        return IsCommon;
-    }
-
-    public void setCommon(boolean common) {
-        IsCommon = common;
     }
 
     public String getName() {
@@ -92,8 +70,10 @@ public class ContactModel {
                 ", Name='" + Name + '\'' +
                 ", Mobile='" + Mobile + '\'' +
                 ", PhotoURL='" + PhotoURL + '\'' +
-                ", IsCommon=" + IsCommon +
                 '}';
     }
+
+
+
 }
 

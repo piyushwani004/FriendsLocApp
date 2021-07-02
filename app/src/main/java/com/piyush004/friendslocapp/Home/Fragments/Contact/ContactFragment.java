@@ -27,26 +27,27 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.github.tamir7.contacts.Contact;
-import com.github.tamir7.contacts.Contacts;
-import com.github.tamir7.contacts.PhoneNumber;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.piyush004.friendslocapp.R;
+import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Objects;
 
 
@@ -59,15 +60,19 @@ public class ContactFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private View view;
-    private ArrayList<ContactModel> newList;
-    private List<ContactModel> firebaseList;
-    private List<ContactModel> finalList;
     private RecyclerView recyclerView;
-    private ContactAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
-    int animationList = R.anim.layout_animation_up_to_down;
+    private int animationList = R.anim.layout_animation_up_to_down;
+    private FirebaseRecyclerOptions<ContactModel> options;
+    private FirebaseRecyclerAdapter<ContactModel, ContactHolder> adapter;
     private Context context;
+    private FirebaseAuth firebaseAuth;
     private SearchView searchView;
+    HashMap<String, Object> SenderHashMap;
+    HashMap<String, Object> ReceiverHashMap;
+    private AlertDialog.Builder alertDialogBuilder;
+    private String date;
+    private SimpleDateFormat simpleDateFormat;
 
     public ContactFragment() {
         // Required empty public constructor
@@ -92,40 +97,161 @@ public class ContactFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_contact, container, false);
 
         context = view.getContext();
+        firebaseAuth = FirebaseAuth.getInstance();
 
-        Contacts.initialize(Objects.requireNonNull(getContext()));
-        List<ContactModel> phoneContact = getAllPhoneContact();
-
+        searchView = view.findViewById(R.id.editText_searchBar);
         swipeRefreshLayout = view.findViewById(R.id.swipeContact);
         recyclerView = view.findViewById(R.id.RecycleViewContact);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        firebaseList = new ArrayList<>();
-        finalList = new ArrayList<>();
+        final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("AppUsers");
+        options = new FirebaseRecyclerOptions.Builder<ContactModel>().setQuery(df, snapshot -> new ContactModel(
 
-        Log.e(TAG, "phoneContact  Size : " + phoneContact.size());
+                snapshot.child("ID").getValue(String.class),
+                snapshot.child("Name").getValue(String.class),
+                snapshot.child("Mobile").getValue(String.class),
+                snapshot.child("ImageURL").getValue(String.class)
 
-        newList = (ArrayList<ContactModel>) removeDuplicateNumber(phoneContact);
-        Log.e(TAG, "newList  Size : " + newList.size());
+        )).build();
 
-        //store firebase user in firebase list...
-        readFirebaseData(list -> {
-            firebaseList = list;
-            if (firebaseList.size() > 0) {
-                for (int i = 0; i < newList.size(); i++) {
-                    for (int j = 0; j < firebaseList.size(); j++) {
-                        if (newList.get(i).getMobile().equals(firebaseList.get(j).getMobile())) {
-                            finalList.add(firebaseList.get(j));
+        adapter = new FirebaseRecyclerAdapter<ContactModel, ContactHolder>(options) {
+
+            @Override
+            protected void onBindViewHolder(@NonNull final ContactHolder holder, int position, @NonNull final ContactModel model) {
+
+                if (model.getID().equals(firebaseAuth.getCurrentUser().getUid())) {
+                    holder.itemView.setVisibility(View.GONE);
+                }
+
+                holder.Name.setText(model.getName());
+                holder.MobileNo.setText(model.getMobile());
+
+                Picasso.get()
+                        .load(model.getPhotoURL())
+                        .resize(500, 500)
+                        .centerCrop().rotate(0)
+                        .placeholder(R.drawable.person_placeholder)
+                        .into(holder.circleImageView);
+
+
+                DatabaseReference check = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(firebaseAuth.getCurrentUser().getUid());
+                check.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            String fId = dataSnapshot.child("Id").getValue(String.class);
+                            if (fId != null) {
+                                if (fId.equals(model.getID())) {
+                                    holder.inviteButton.setVisibility(View.GONE);
+                                } else {
+                                    holder.inviteButton.setVisibility(View.VISIBLE);
+                                }
+                            } else {
+                                holder.inviteButton.setVisibility(View.VISIBLE);
+                            }
                         }
+
                     }
-                }
-                Log.e(TAG, "final List Size : " + finalList.size());
-                if (finalList.size() > 0) {
-                    updateUI();
-                } else {
-                    Toast.makeText(getContext(), "No Contact found", Toast.LENGTH_SHORT).show();
-                }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+                DatabaseReference Friends = FirebaseDatabase.getInstance().getReference().child("Friends").child(firebaseAuth.getCurrentUser().getUid());
+                Friends.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            String fId = dataSnapshot.child("id").getValue(String.class);
+                            if (fId != null) {
+                                if (fId.equals(model.getID())) {
+                                    holder.inviteButton.setVisibility(View.GONE);
+                                } else {
+                                    holder.inviteButton.setVisibility(View.VISIBLE);
+                                }
+                            } else {
+                                holder.inviteButton.setVisibility(View.VISIBLE);
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+                holder.inviteButton.setOnClickListener(v -> {
+
+                    firebaseAuth = FirebaseAuth.getInstance();
+
+                    alertDialogBuilder = new AlertDialog.Builder(context);
+                    alertDialogBuilder.setTitle("FriendRequest...");
+                    alertDialogBuilder.setMessage("Do You Want To send Request ?");
+                    alertDialogBuilder.setPositiveButton("yes",
+                            (arg0, arg1) -> {
+
+                                Log.e(TAG, "onBindViewHolder: " + firebaseAuth.getCurrentUser().getUid());
+
+                                final Date data = new Date();
+                                SenderHashMap = new HashMap<>();
+                                ReceiverHashMap = new HashMap<>();
+
+                                simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+                                date = simpleDateFormat.format(data);
+
+                                DatabaseReference sender = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid()).child(model.getID());
+                                DatabaseReference receiver = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(model.getID()).child(firebaseAuth.getCurrentUser().getUid());
+
+                                SenderHashMap.put("Id", model.getID());
+                                SenderHashMap.put("Status", "Pending");
+                                SenderHashMap.put("RequestType", "Sender");
+                                SenderHashMap.put("Mobile", model.getMobile());
+                                SenderHashMap.put("Date", date);
+                                sender.setValue(SenderHashMap).addOnSuccessListener(aVoid -> {
+
+                                    ReceiverHashMap.put("Id", firebaseAuth.getCurrentUser().getUid());
+                                    ReceiverHashMap.put("Status", "Pending");
+                                    ReceiverHashMap.put("RequestType", "Receiver");
+                                    ReceiverHashMap.put("Mobile", model.getMobile());
+                                    ReceiverHashMap.put("Date", date);
+                                    receiver.setValue(ReceiverHashMap).addOnSuccessListener(aVoid1 -> Toast.makeText(context, "FriendRequest Send Successfully...", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show());
+
+                                }).addOnFailureListener(e -> Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show());
+
+                            });
+
+                    alertDialogBuilder.setNegativeButton("No",
+                            (dialog, which) -> {
+                                dialog.cancel();
+                                dialog.dismiss();
+                            });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+
+                });
+
+
             }
-        });
+
+            @NonNull
+            @Override
+            public ContactHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_card, parent, false);
+                return new ContactHolder(view);
+            }
+        };
+
+        adapter.startListening();
+        recyclerView.setAdapter(adapter);
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
             runAnimationAgain();
@@ -137,17 +263,17 @@ public class ContactFragment extends Fragment {
             }, 1000);
         });
 
-        searchView = view.findViewById(R.id.editText_searchBar);
-        searchView.setQueryHint("Search User...");
+        searchView.setQueryHint("Search User Name...");
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                onProcessSearch(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
+                onProcessSearch(newText);
                 return false;
             }
         });
@@ -155,43 +281,161 @@ public class ContactFragment extends Fragment {
         return view;
     }
 
+    private void onProcessSearch(String s) {
 
-    private List<ContactModel> getAllPhoneContact() {
-        List<ContactModel> userContact = new ArrayList<>();
+        FirebaseRecyclerOptions<ContactModel> options =
+                new FirebaseRecyclerOptions.Builder<ContactModel>()
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("AppUsers").orderByChild("Name").startAt(s.toUpperCase()).endAt(s.toLowerCase() + "\uf8ff"), snapshot -> new ContactModel(
+                                snapshot.child("ID").getValue(String.class),
+                                snapshot.child("Name").getValue(String.class),
+                                snapshot.child("Mobile").getValue(String.class),
+                                snapshot.child("ImageURL").getValue(String.class)
+                        ))
+                        .build();
 
-        List<Contact> contacts = Contacts.getQuery().find();
-        for (int i = 0; i < contacts.size(); i++) {
-            Contact c = contacts.get(i);
-            List<PhoneNumber> numbers = c.getPhoneNumbers();
-            for (int j = 0; j < numbers.size(); j++) {
-                String number = numbers.get(j).getNumber().trim().replaceAll(" ", "").replaceAll("-", "");
-                String name = c.getDisplayName();
-                String url = c.getPhotoUri();
+        adapter = new FirebaseRecyclerAdapter<ContactModel, ContactHolder>(options) {
 
-                if (number.length() >= 10)
-                    userContact.add(new ContactModel(name, number, url));
+            @Override
+            protected void onBindViewHolder(@NonNull final ContactHolder holder, int position, @NonNull final ContactModel model) {
+
+                Log.e(TAG, "onBindViewHolder: " + model.getID());
+
+                if (model.getID().equals(firebaseAuth.getCurrentUser().getUid())) {
+                    holder.itemView.setVisibility(View.GONE);
+                }
+
+                holder.Name.setText(model.getName());
+                holder.MobileNo.setText(model.getMobile());
+
+                Picasso.get()
+                        .load(model.getPhotoURL())
+                        .resize(500, 500)
+                        .centerCrop().rotate(0)
+                        .placeholder(R.drawable.person_placeholder)
+                        .into(holder.circleImageView);
+
+
+                DatabaseReference check = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(firebaseAuth.getCurrentUser().getUid());
+                check.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            String fId = dataSnapshot.child("Id").getValue(String.class);
+                            if (fId != null) {
+                                if (fId.equals(model.getID())) {
+                                    holder.inviteButton.setVisibility(View.GONE);
+                                } else {
+                                    holder.inviteButton.setVisibility(View.VISIBLE);
+                                }
+                            } else {
+                                holder.inviteButton.setVisibility(View.VISIBLE);
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+                DatabaseReference Friends = FirebaseDatabase.getInstance().getReference().child("Friends").child(firebaseAuth.getCurrentUser().getUid());
+                Friends.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            String fId = dataSnapshot.child("id").getValue(String.class);
+                            if (fId != null) {
+                                if (fId.equals(model.getID())) {
+                                    holder.inviteButton.setVisibility(View.GONE);
+                                } else {
+                                    holder.inviteButton.setVisibility(View.VISIBLE);
+                                }
+                            } else {
+                                holder.inviteButton.setVisibility(View.VISIBLE);
+                            }
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+                holder.inviteButton.setOnClickListener(v -> {
+
+                    firebaseAuth = FirebaseAuth.getInstance();
+
+                    alertDialogBuilder = new AlertDialog.Builder(context);
+                    alertDialogBuilder.setTitle("FriendRequest...");
+                    alertDialogBuilder.setMessage("Do You Want To send Request ?");
+                    alertDialogBuilder.setPositiveButton("yes",
+                            (arg0, arg1) -> {
+
+
+                                Log.e(TAG, "onBindViewHolder: " + firebaseAuth.getCurrentUser().getUid());
+
+                                final Date data = new Date();
+                                SenderHashMap = new HashMap<>();
+                                ReceiverHashMap = new HashMap<>();
+
+                                simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
+                                date = simpleDateFormat.format(data);
+
+                                DatabaseReference sender = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid()).child(model.getID());
+                                DatabaseReference receiver = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(model.getID()).child(firebaseAuth.getCurrentUser().getUid());
+
+                                SenderHashMap.put("Id", model.getID());
+                                SenderHashMap.put("Status", "Pending");
+                                SenderHashMap.put("RequestType", "Sender");
+                                SenderHashMap.put("Mobile", model.getMobile());
+                                SenderHashMap.put("Date", date);
+                                sender.setValue(SenderHashMap).addOnSuccessListener(aVoid -> {
+
+                                    ReceiverHashMap.put("Id", firebaseAuth.getCurrentUser().getUid());
+                                    ReceiverHashMap.put("Status", "Pending");
+                                    ReceiverHashMap.put("RequestType", "Receiver");
+                                    ReceiverHashMap.put("Mobile", model.getMobile());
+                                    ReceiverHashMap.put("Date", date);
+                                    receiver.setValue(ReceiverHashMap).addOnSuccessListener(aVoid1 -> Toast.makeText(context, "FriendRequest Send Successfully...", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show());
+
+                                }).addOnFailureListener(e -> Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show());
+
+                            });
+
+                    alertDialogBuilder.setNegativeButton("No",
+                            (dialog, which) -> {
+                                dialog.cancel();
+                                dialog.dismiss();
+                            });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+
+                });
+
+
             }
-        }
-        return userContact;
+
+            @NonNull
+            @Override
+            public ContactHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contact_card, parent, false);
+                return new ContactHolder(view);
+            }
+        };
+
+        adapter.startListening();
+        recyclerView.setAdapter(adapter);
+
     }
 
-    private List<ContactModel> removeDuplicateNumber(List<ContactModel> list1) {
-
-        Map<String, ContactModel> cleanMap = new LinkedHashMap<>();
-        for (int i = 0; i < list1.size(); i++) {
-            cleanMap.put(list1.get(i).getMobile(), list1.get(i));
-        }
-        List<ContactModel> list = new ArrayList<>(cleanMap.values());
-        return list;
-    }
-
-    private void updateUI() {
-        if (finalList != null && finalList.size() > 0 && context != null) {
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            adapter = new ContactAdapter(finalList, context);
-            recyclerView.setAdapter(adapter);
-        }
-    }
 
     private void runAnimationAgain() {
         final LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getContext(), animationList);
@@ -200,29 +444,15 @@ public class ContactFragment extends Fragment {
         recyclerView.scheduleLayoutAnimation();
     }
 
-    public void readFirebaseData(FirebaseContactCallback callback) {
-        List<ContactModel> list;
-        list = new ArrayList<>();
-        final DatabaseReference df = FirebaseDatabase.getInstance().getReference().child("AppUsers");
-        df.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot item : snapshot.getChildren()) {
-                    String id = item.child("ID").getValue(String.class);
-                    String name = item.child("Name").getValue(String.class);
-                    String contactNo = item.child("Mobile").getValue(String.class);
-                    String photoUrl = item.child("ImageURL").getValue(String.class);
-                    list.add(new ContactModel(id, name, contactNo, photoUrl));
-                }
-                callback.onResponse(list);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-
-        });
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
 }
