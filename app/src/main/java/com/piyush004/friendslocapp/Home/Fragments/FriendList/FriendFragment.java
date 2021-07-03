@@ -245,13 +245,18 @@ public class FriendFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+                        Double Lat = snapshot.child("Location").child("latitude").getValue(Double.class);
+                        Double Lon = snapshot.child("Location").child("longitude").getValue(Double.class);
                         String Name = snapshot.child("Name").getValue(String.class);
                         if (Name != null)
                             holder.FriendName.setText(Name);
                         else
                             holder.FriendName.setText("Name Not Found");
 
-                        holder.FriendMobileNo.setText(snapshot.child("Mobile").getValue(String.class));
+                        if (Lat != null && Lon != null)
+                            holder.FriendMobileNo.setText(getCompleteAddressString(Lat, Lon));
+                        else
+                            holder.FriendMobileNo.setText(snapshot.child("Mobile").getValue(String.class));
 
                         Picasso.get().load(snapshot.child("ImageURL").getValue(String.class))
                                 .resize(500, 500)
@@ -345,7 +350,7 @@ public class FriendFragment extends Fragment {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.w(TAG, "Canont get Address!");
+            Log.w(TAG, "Can't get Address!");
         }
         return strAdd;
     }
