@@ -20,15 +20,13 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -63,8 +61,6 @@ import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
 
 public class MapsFragment extends Fragment implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, OnMapReadyCallback, GoogleMap.OnMarkerDragListener,
@@ -122,46 +118,28 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
             @Override
             protected void onBindViewHolder(@NonNull final MapUserHolder holder, int position, @NonNull final MapUserModel model) {
 
-                DatabaseReference user = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(model.getMUId());
+                if (model.getMUId() != null) {
+                    DatabaseReference user = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(model.getMUId());
 
-                user.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                        String imgUrl = snapshot.child("ImageURL").getValue(String.class);
-                        String Name = snapshot.child("Name").getValue(String.class);
-                        Double Lat = snapshot.child("Location").child("latitude").getValue(Double.class);
-                        Double Lon = snapshot.child("Location").child("longitude").getValue(Double.class);
-
-                        Picasso.get().load(imgUrl)
-                                .resize(500, 500)
-                                .centerCrop()
-                                .rotate(0)
-                                .placeholder(R.drawable.person_placeholder)
-                                .into(holder.circleImageView);
-
-                        addMarker(Lat, Lon, Name, imgUrl);
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
-                holder.itemView.setOnClickListener(v -> {
-
-                    DatabaseReference user1 = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(model.getMUId());
-
-                    user1.addListenerForSingleValueEvent(new ValueEventListener() {
+                    user.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+                            String imgUrl = snapshot.child("ImageURL").getValue(String.class);
+                            String Name = snapshot.child("Name").getValue(String.class);
                             Double Lat = snapshot.child("Location").child("latitude").getValue(Double.class);
                             Double Lon = snapshot.child("Location").child("longitude").getValue(Double.class);
 
-                            moveMap(Lat, Lon);
+                            Picasso.get().load(imgUrl)
+                                    .resize(500, 500)
+                                    .centerCrop()
+                                    .rotate(0)
+                                    .placeholder(R.drawable.person_placeholder)
+                                    .into(holder.circleImageView);
+
+                            if (Lat != null && Lon != null) {
+                                addMarker(Lat, Lon, Name, imgUrl);
+                            }
 
                         }
 
@@ -170,6 +148,36 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
                         }
                     });
+                } else {
+                    Toast.makeText(getContext(), "friend Not Found Error...", Toast.LENGTH_SHORT).show();
+                }
+
+                holder.itemView.setOnClickListener(v -> {
+
+                    if (model.getMUId() != null) {
+                        DatabaseReference user1 = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(model.getMUId());
+
+                        user1.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                Double Lat = snapshot.child("Location").child("latitude").getValue(Double.class);
+                                Double Lon = snapshot.child("Location").child("longitude").getValue(Double.class);
+
+                                if (Lat != null && Lon != null) {
+                                    moveMap(Lat, Lon);
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    } else {
+                        Toast.makeText(getContext(), "Error,try again...", Toast.LENGTH_SHORT).show();
+                    }
 
                 });
 
@@ -377,8 +385,17 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
 
-
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
 
 }
 
