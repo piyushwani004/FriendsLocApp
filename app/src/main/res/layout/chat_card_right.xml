@@ -38,7 +38,6 @@
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/poppins"
-            android:text="Hello Amit Anand, How are you?"
             android:textColor="#ffffff" />
 
         <ImageView
@@ -65,7 +64,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="7dp"
             android:layout_marginEnd="0dp"
-            android:text="10:25 PM" />
+            android:textSize="10sp" />
 
     </LinearLayout>
 
