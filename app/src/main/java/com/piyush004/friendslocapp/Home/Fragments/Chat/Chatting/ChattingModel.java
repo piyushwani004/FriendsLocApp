@@ -13,6 +13,8 @@
 
 package com.piyush004.friendslocapp.Home.Fragments.Chat.Chatting;
 
+import java.io.Serializable;
+
 public class ChattingModel {
 
     public String Sender;

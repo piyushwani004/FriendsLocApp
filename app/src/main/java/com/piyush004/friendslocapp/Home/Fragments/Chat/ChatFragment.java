@@ -42,9 +42,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.piyush004.friendslocapp.Home.Fragments.Chat.Chatting.ChattingActivity;
-import com.piyush004.friendslocapp.Home.Fragments.Chat.Notification.Token;
 import com.piyush004.friendslocapp.R;
 import com.squareup.picasso.Picasso;
 
@@ -144,52 +142,54 @@ public class ChatFragment extends Fragment {
 
                 Log.e(TAG, "onBindViewHolder: " + model.getChatId());
 
-                DatabaseReference user = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(model.getChatId());
+                if (model.getChatId() != null) {
+                    DatabaseReference user = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(model.getChatId());
 
-                user.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    user.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        String Name = snapshot.child("Name").getValue(String.class);
-                        String status = snapshot.child("Status").getValue(String.class);
-                        String imgUrl = snapshot.child("ImageURL").getValue(String.class);
+                            String Name = snapshot.child("Name").getValue(String.class);
+                            String status = snapshot.child("Status").getValue(String.class);
+                            String imgUrl = snapshot.child("ImageURL").getValue(String.class);
 
-                        if (Name != null)
-                            holder.title_card.setText(Name);
-                        else
-                            holder.title_card.setText(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getPhoneNumber());
+                            if (Name != null)
+                                holder.title_card.setText(Name);
+                            else
+                                holder.title_card.setText(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getPhoneNumber());
 
-                        if (status != null) {
-                            if (status.equals("Online")) {
-                                holder.status.setVisibility(View.VISIBLE);
+                            if (status != null) {
+                                if (status.equals("Online")) {
+                                    holder.status.setVisibility(View.VISIBLE);
+                                } else {
+                                    holder.status.setVisibility(View.GONE);
+                                }
                             } else {
                                 holder.status.setVisibility(View.GONE);
                             }
-                        } else {
-                            holder.status.setVisibility(View.GONE);
+
+                            if (imgUrl != null) {
+                                Picasso.get().load(imgUrl)
+                                        .resize(500, 500)
+                                        .centerCrop()
+                                        .rotate(0)
+                                        .placeholder(R.drawable.person_placeholder)
+                                        .into(holder.imageVieChat);
+                            } else {
+                                Picasso.get().load(R.drawable.person_placeholder)
+                                        .placeholder(R.drawable.person_placeholder)
+                                        .into(holder.imageVieChat);
+                            }
+
+
                         }
 
-                        if (imgUrl != null) {
-                            Picasso.get().load(imgUrl)
-                                    .resize(500, 500)
-                                    .centerCrop()
-                                    .rotate(0)
-                                    .placeholder(R.drawable.person_placeholder)
-                                    .into(holder.imageVieChat);
-                        } else {
-                            Picasso.get().load(R.drawable.person_placeholder)
-                                    .placeholder(R.drawable.person_placeholder)
-                                    .into(holder.imageVieChat);
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
                         }
-
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                    });
+                }
 
                 TextDrawable drawable = TextDrawable.builder().buildRound("1", Color.GREEN);
                 holder.new_message_noti.setImageDrawable(drawable);
@@ -204,42 +204,45 @@ public class ChatFragment extends Fragment {
                     holder.new_message_noti.setVisibility(View.GONE);
                 }
 
-                FirebaseDatabase.getInstance().getReference().child("chat")
-                        .child(CurrentUserId + model.getChatId())
-                        .orderByChild("timeStamp")
-                        .limitToLast(1)
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.hasChildren()) {
-                                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                                        holder.new_message_card.setText(snapshot1.child("Message").getValue(String.class));
+                if (model.getChatId() != null) {
+                    FirebaseDatabase.getInstance().getReference().child("chat")
+                            .child(CurrentUserId + model.getChatId())
+                            .orderByChild("timeStamp")
+                            .limitToLast(1)
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.hasChildren()) {
+                                        for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                                            holder.new_message_card.setText(snapshot1.child("Message").getValue(String.class));
+                                        }
+                                    } else {
+                                        holder.new_message_card.setText(" ");
                                     }
-                                } else {
-                                    holder.new_message_card.setText(" ");
                                 }
-                            }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
-                            }
-                        });
+                                }
+                            });
+                }
 
 
                 holder.itemView.setOnClickListener(v -> {
 
-                    final DatabaseReference newMessage = FirebaseDatabase.getInstance().getReference();
-                    HashMap<String, Object> MessageCount = new HashMap<>();
-                    MessageCount.put("MessageCount", "0");
-                    newMessage.child("Friends").child(CurrentUserId).child(model.getChatId()).updateChildren(MessageCount).addOnSuccessListener(aVoid -> newMessage.child("Friends").child(model.getChatId()).child(CurrentUserId).updateChildren(MessageCount).addOnSuccessListener(aVoid1 -> {
+                    if (model.getChatId() != null) {
+                        final DatabaseReference newMessage = FirebaseDatabase.getInstance().getReference();
+                        HashMap<String, Object> MessageCount = new HashMap<>();
+                        MessageCount.put("MessageCount", "0");
+                        newMessage.child("Friends").child(CurrentUserId).child(model.getChatId()).updateChildren(MessageCount).addOnSuccessListener(aVoid -> newMessage.child("Friends").child(model.getChatId()).child(CurrentUserId).updateChildren(MessageCount).addOnSuccessListener(aVoid1 -> {
 
-                        Intent intent = new Intent(getContext(), ChattingActivity.class);
-                        intent.putExtra("OtherUserID", model.getChatId());
-                        startActivity(intent);
+                            Intent intent = new Intent(getContext(), ChattingActivity.class);
+                            intent.putExtra("OtherUserID", model.getChatId());
+                            startActivity(intent);
 
-                    }).addOnFailureListener(e -> Toast.makeText(context, " " + e.getMessage(), Toast.LENGTH_SHORT).show())).addOnFailureListener(e -> Toast.makeText(context, " " + e.getMessage(), Toast.LENGTH_SHORT).show());
-
+                        }).addOnFailureListener(e -> Toast.makeText(context, " " + e.getMessage(), Toast.LENGTH_SHORT).show())).addOnFailureListener(e -> Toast.makeText(context, " " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                    }
 
                 });
 
@@ -297,52 +300,54 @@ public class ChatFragment extends Fragment {
 
                 Log.e(TAG, "onBindViewHolder: " + model.getChatId());
 
-                DatabaseReference user = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(model.getChatId());
+                if (model.getChatId() != null) {
+                    DatabaseReference user = FirebaseDatabase.getInstance().getReference().child("AppUsers").child(model.getChatId());
 
-                user.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    user.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        String Name = snapshot.child("Name").getValue(String.class);
-                        String status = snapshot.child("Status").getValue(String.class);
-                        String imgUrl = snapshot.child("ImageURL").getValue(String.class);
+                            String Name = snapshot.child("Name").getValue(String.class);
+                            String status = snapshot.child("Status").getValue(String.class);
+                            String imgUrl = snapshot.child("ImageURL").getValue(String.class);
 
-                        if (Name != null)
-                            holder.title_card.setText(Name);
-                        else
-                            holder.title_card.setText(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getPhoneNumber());
+                            if (Name != null)
+                                holder.title_card.setText(Name);
+                            else
+                                holder.title_card.setText(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getPhoneNumber());
 
-                        if (status != null) {
-                            if (status.equals("Online")) {
-                                holder.status.setVisibility(View.VISIBLE);
+                            if (status != null) {
+                                if (status.equals("Online")) {
+                                    holder.status.setVisibility(View.VISIBLE);
+                                } else {
+                                    holder.status.setVisibility(View.GONE);
+                                }
                             } else {
                                 holder.status.setVisibility(View.GONE);
                             }
-                        } else {
-                            holder.status.setVisibility(View.GONE);
+
+                            if (imgUrl != null) {
+                                Picasso.get().load(imgUrl)
+                                        .resize(500, 500)
+                                        .centerCrop()
+                                        .rotate(0)
+                                        .placeholder(R.drawable.person_placeholder)
+                                        .into(holder.imageVieChat);
+                            } else {
+                                Picasso.get().load(R.drawable.person_placeholder)
+                                        .placeholder(R.drawable.person_placeholder)
+                                        .into(holder.imageVieChat);
+                            }
+
+
                         }
 
-                        if (imgUrl != null) {
-                            Picasso.get().load(imgUrl)
-                                    .resize(500, 500)
-                                    .centerCrop()
-                                    .rotate(0)
-                                    .placeholder(R.drawable.person_placeholder)
-                                    .into(holder.imageVieChat);
-                        } else {
-                            Picasso.get().load(R.drawable.person_placeholder)
-                                    .placeholder(R.drawable.person_placeholder)
-                                    .into(holder.imageVieChat);
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
                         }
-
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
+                    });
+                }
 
                 TextDrawable drawable = TextDrawable.builder().buildRound("1", Color.GREEN);
                 holder.new_message_noti.setImageDrawable(drawable);
@@ -357,20 +362,46 @@ public class ChatFragment extends Fragment {
                     holder.new_message_noti.setVisibility(View.GONE);
                 }
 
+                if (model.getChatId() != null) {
+                    FirebaseDatabase.getInstance().getReference().child("chat")
+                            .child(CurrentUserId + model.getChatId())
+                            .orderByChild("timeStamp")
+                            .limitToLast(1)
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    if (snapshot.hasChildren()) {
+                                        for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                                            holder.new_message_card.setText(snapshot1.child("Message").getValue(String.class));
+                                        }
+                                    } else {
+                                        holder.new_message_card.setText(" ");
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                }
+
 
                 holder.itemView.setOnClickListener(v -> {
 
-                    final DatabaseReference newMessage = FirebaseDatabase.getInstance().getReference();
-                    HashMap<String, Object> MessageCount = new HashMap<>();
-                    MessageCount.put("MessageCount", "0");
-                    newMessage.child("Friends").child(CurrentUserId).child(model.getChatId()).updateChildren(MessageCount).addOnSuccessListener(aVoid -> newMessage.child("Friends").child(model.getChatId()).child(CurrentUserId).updateChildren(MessageCount).addOnSuccessListener(aVoid1 -> {
+                    if (model.getChatId() != null) {
+                        final DatabaseReference newMessage = FirebaseDatabase.getInstance().getReference();
+                        HashMap<String, Object> MessageCount = new HashMap<>();
+                        MessageCount.put("MessageCount", "0");
+                        newMessage.child("Friends").child(CurrentUserId).child(model.getChatId()).updateChildren(MessageCount).addOnSuccessListener(aVoid -> newMessage.child("Friends").child(model.getChatId()).child(CurrentUserId).updateChildren(MessageCount).addOnSuccessListener(aVoid1 -> {
 
-                        Intent intent = new Intent(getContext(), ChattingActivity.class);
-                        intent.putExtra("UserID", model.getChatId());
-                        startActivity(intent);
+                            Intent intent = new Intent(getContext(), ChattingActivity.class);
+                            intent.putExtra("UserID", model.getChatId());
+                            startActivity(intent);
 
-                    }).addOnFailureListener(e -> Toast.makeText(context, " " + e.getMessage(), Toast.LENGTH_SHORT).show())).addOnFailureListener(e -> Toast.makeText(context, " " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                        }).addOnFailureListener(e -> Toast.makeText(context, " " + e.getMessage(), Toast.LENGTH_SHORT).show())).addOnFailureListener(e -> Toast.makeText(context, " " + e.getMessage(), Toast.LENGTH_SHORT).show());
 
+                    }
 
                 });
 
@@ -388,28 +419,5 @@ public class ChatFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
     }
-
-    /*@Override
-    public void onStart() {
-        super.onStart();
-        updateToken();
-    }
-
-    private void updateToken() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Token");
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
-
-            if (!task.isSuccessful()) {
-                Log.e(TAG, "Fetching FCM registration token failed", task.getException());
-                return;
-            }
-
-
-            String refreshToken = task.getResult();
-            Token token = new Token(refreshToken);
-            databaseReference.child(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()).setValue(token);
-        });
-    }
-*/
 
 }
