@@ -120,73 +120,53 @@ public class ContactFragment extends Fragment {
             @Override
             protected void onBindViewHolder(@NonNull final ContactHolder holder, int position, @NonNull final ContactModel model) {
 
-                if (model.getID().equals(firebaseAuth.getCurrentUser().getUid())) {
-                    holder.itemView.setVisibility(View.GONE);
+                if (model.getID().equals(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid())) {
+                    holder.inviteButton.setVisibility(View.GONE);
+                } else {
+
+                    if (model.getID() != null && model.getName() != null && model.getMobile() != null && model.getPhotoURL() != null) {
+
+                        holder.Name.setText(model.getName());
+                        StringBuilder number = new StringBuilder(model.getMobile());
+                        number.replace(7, 11, "****");
+                        holder.MobileNo.setText(number);
+
+                        Picasso.get()
+                                .load(model.getPhotoURL())
+                                .resize(500, 500)
+                                .centerCrop().rotate(0)
+                                .placeholder(R.drawable.person_placeholder)
+                                .into(holder.circleImageView);
+
+
+                        DatabaseReference Friends = FirebaseDatabase.getInstance().getReference().child("Friends").child(firebaseAuth.getCurrentUser().getUid());
+                        Friends.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    String fId = dataSnapshot.child("id").getValue(String.class);
+                                    if (fId != null) {
+                                        if (fId.equals(model.getID())) {
+                                            holder.inviteButton.setVisibility(View.GONE);
+                                        } else {
+                                            holder.inviteButton.setVisibility(View.VISIBLE);
+                                        }
+                                    } else {
+                                        holder.inviteButton.setVisibility(View.VISIBLE);
+                                    }
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+
                 }
-
-                holder.Name.setText(model.getName());
-                holder.MobileNo.setText(model.getMobile());
-
-                Picasso.get()
-                        .load(model.getPhotoURL())
-                        .resize(500, 500)
-                        .centerCrop().rotate(0)
-                        .placeholder(R.drawable.person_placeholder)
-                        .into(holder.circleImageView);
-
-
-                DatabaseReference check = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(firebaseAuth.getCurrentUser().getUid());
-                check.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            String fId = dataSnapshot.child("Id").getValue(String.class);
-                            if (fId != null) {
-                                if (fId.equals(model.getID())) {
-                                    holder.inviteButton.setVisibility(View.GONE);
-                                } else {
-                                    holder.inviteButton.setVisibility(View.VISIBLE);
-                                }
-                            } else {
-                                holder.inviteButton.setVisibility(View.VISIBLE);
-                            }
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
-                DatabaseReference Friends = FirebaseDatabase.getInstance().getReference().child("Friends").child(firebaseAuth.getCurrentUser().getUid());
-                Friends.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            String fId = dataSnapshot.child("id").getValue(String.class);
-                            if (fId != null) {
-                                if (fId.equals(model.getID())) {
-                                    holder.inviteButton.setVisibility(View.GONE);
-                                } else {
-                                    holder.inviteButton.setVisibility(View.VISIBLE);
-                                }
-                            } else {
-                                holder.inviteButton.setVisibility(View.VISIBLE);
-                            }
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
 
                 holder.inviteButton.setOnClickListener(v -> {
 
@@ -222,7 +202,10 @@ public class ContactFragment extends Fragment {
                                     ReceiverHashMap.put("RequestType", "Receiver");
                                     ReceiverHashMap.put("Mobile", model.getMobile());
                                     ReceiverHashMap.put("Date", date);
-                                    receiver.setValue(ReceiverHashMap).addOnSuccessListener(aVoid1 -> Toast.makeText(context, "FriendRequest Send Successfully...", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show());
+                                    receiver.setValue(ReceiverHashMap).addOnSuccessListener(aVoid1 -> {
+                                        Toast.makeText(context, "FriendRequest Send Successfully...", Toast.LENGTH_SHORT).show();
+                                        holder.inviteButton.setVisibility(View.GONE);
+                                    }).addOnFailureListener(e -> Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show());
 
                                 }).addOnFailureListener(e -> Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show());
 
@@ -298,75 +281,53 @@ public class ContactFragment extends Fragment {
             @Override
             protected void onBindViewHolder(@NonNull final ContactHolder holder, int position, @NonNull final ContactModel model) {
 
-                Log.e(TAG, "onBindViewHolder: " + model.getID());
+                if (model.getID().equals(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getUid())) {
+                    holder.inviteButton.setVisibility(View.GONE);
+                } else {
 
-                if (model.getID().equals(firebaseAuth.getCurrentUser().getUid())) {
-                    holder.itemView.setVisibility(View.GONE);
+                    if (model.getID() != null && model.getName() != null && model.getMobile() != null && model.getPhotoURL() != null) {
+
+                        holder.Name.setText(model.getName());
+                        StringBuilder number = new StringBuilder(model.getMobile());
+                        number.replace(7, 11, "****");
+                        holder.MobileNo.setText(number);
+
+                        Picasso.get()
+                                .load(model.getPhotoURL())
+                                .resize(500, 500)
+                                .centerCrop().rotate(0)
+                                .placeholder(R.drawable.person_placeholder)
+                                .into(holder.circleImageView);
+
+
+                        DatabaseReference Friends = FirebaseDatabase.getInstance().getReference().child("Friends").child(firebaseAuth.getCurrentUser().getUid());
+                        Friends.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    String fId = dataSnapshot.child("id").getValue(String.class);
+                                    if (fId != null) {
+                                        if (fId.equals(model.getID())) {
+                                            holder.inviteButton.setVisibility(View.GONE);
+                                        } else {
+                                            holder.inviteButton.setVisibility(View.VISIBLE);
+                                        }
+                                    } else {
+                                        holder.inviteButton.setVisibility(View.VISIBLE);
+                                    }
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+
                 }
-
-                holder.Name.setText(model.getName());
-                holder.MobileNo.setText(model.getMobile());
-
-                Picasso.get()
-                        .load(model.getPhotoURL())
-                        .resize(500, 500)
-                        .centerCrop().rotate(0)
-                        .placeholder(R.drawable.person_placeholder)
-                        .into(holder.circleImageView);
-
-
-                DatabaseReference check = FirebaseDatabase.getInstance().getReference().child("FriendRequest").child(firebaseAuth.getCurrentUser().getUid());
-                check.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            String fId = dataSnapshot.child("Id").getValue(String.class);
-                            if (fId != null) {
-                                if (fId.equals(model.getID())) {
-                                    holder.inviteButton.setVisibility(View.GONE);
-                                } else {
-                                    holder.inviteButton.setVisibility(View.VISIBLE);
-                                }
-                            } else {
-                                holder.inviteButton.setVisibility(View.VISIBLE);
-                            }
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
-                DatabaseReference Friends = FirebaseDatabase.getInstance().getReference().child("Friends").child(firebaseAuth.getCurrentUser().getUid());
-                Friends.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            String fId = dataSnapshot.child("id").getValue(String.class);
-                            if (fId != null) {
-                                if (fId.equals(model.getID())) {
-                                    holder.inviteButton.setVisibility(View.GONE);
-                                } else {
-                                    holder.inviteButton.setVisibility(View.VISIBLE);
-                                }
-                            } else {
-                                holder.inviteButton.setVisibility(View.VISIBLE);
-                            }
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
 
                 holder.inviteButton.setOnClickListener(v -> {
 
@@ -377,7 +338,6 @@ public class ContactFragment extends Fragment {
                     alertDialogBuilder.setMessage("Do You Want To send Request ?");
                     alertDialogBuilder.setPositiveButton("yes",
                             (arg0, arg1) -> {
-
 
                                 Log.e(TAG, "onBindViewHolder: " + firebaseAuth.getCurrentUser().getUid());
 
@@ -403,7 +363,10 @@ public class ContactFragment extends Fragment {
                                     ReceiverHashMap.put("RequestType", "Receiver");
                                     ReceiverHashMap.put("Mobile", model.getMobile());
                                     ReceiverHashMap.put("Date", date);
-                                    receiver.setValue(ReceiverHashMap).addOnSuccessListener(aVoid1 -> Toast.makeText(context, "FriendRequest Send Successfully...", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show());
+                                    receiver.setValue(ReceiverHashMap).addOnSuccessListener(aVoid1 -> {
+                                        Toast.makeText(context, "FriendRequest Send Successfully...", Toast.LENGTH_SHORT).show();
+                                        holder.inviteButton.setVisibility(View.GONE);
+                                    }).addOnFailureListener(e -> Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show());
 
                                 }).addOnFailureListener(e -> Toast.makeText(context, "Network Error...", Toast.LENGTH_SHORT).show());
 
