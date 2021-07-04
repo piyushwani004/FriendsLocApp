@@ -327,9 +327,11 @@ public class MapsFragment extends Fragment implements GoogleApiClient.Connection
 
     private void moveMap(Double lat, Double lon) {
         LatLng latLng = new LatLng(lat, lon);
+
         GoogleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         GoogleMap.animateCamera(CameraUpdateFactory.zoomTo(15));
         GoogleMap.getUiSettings().setZoomControlsEnabled(true);
+
     }
 
     @Override

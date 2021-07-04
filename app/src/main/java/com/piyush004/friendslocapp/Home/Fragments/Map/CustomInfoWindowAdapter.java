@@ -53,7 +53,23 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
         CircleImageView circleImageView = view.findViewById(R.id.mapImg);
         TextView name = view.findViewById(R.id.map_userName);
 
-        name.setText(marker.getTitle());
+
+        if (marker.getTitle() != null) {
+            if (marker.getTitle().length() > 15) {
+                StringBuilder Name = new StringBuilder(marker.getTitle());
+                char[] array = new char[15];
+                Name.getChars(0, 15, array, 0);
+                String stringName = new String(array);
+                stringName = stringName + "...";
+                name.setText(stringName);
+            } else {
+                name.setText(marker.getTitle());
+            }
+        } else {
+            name.setText("Name Not Found");
+        }
+
+
         Picasso.get().load(marker.getSnippet())
                 .placeholder(R.drawable.person_placeholder)
                 .resize(500, 500)
@@ -62,7 +78,6 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
                 .transform(new CropCircleTransformation())
                 .into(circleImageView);
 
-        Log.e(TAG, "getInfoContents: " + marker.getId());
 
         return view;
     }
