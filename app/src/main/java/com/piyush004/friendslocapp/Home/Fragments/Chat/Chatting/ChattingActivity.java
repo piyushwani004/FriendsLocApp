@@ -317,10 +317,20 @@ public class ChattingActivity extends AppCompatActivity {
                     String status = snapshot.child("ChatStatus").getValue(String.class);
                     String imgUrl = snapshot.child("ImageURL").getValue(String.class);
 
-                    if (Name != null)
-                        TextUserChat.setText(Name);
-                    else
+                    if (Name != null) {
+                        if (Name.length() > 15) {
+                            StringBuilder name = new StringBuilder(Name);
+                            char[] array = new char[15];
+                            name.getChars(0, 15, array, 0);
+                            String stringName = new String(array);
+                            stringName = stringName + "...";
+                            TextUserChat.setText(stringName);
+                        } else {
+                            TextUserChat.setText(Name);
+                        }
+                    } else {
                         TextUserChat.setText(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getPhoneNumber());
+                    }
 
 
                     if (status != null) {

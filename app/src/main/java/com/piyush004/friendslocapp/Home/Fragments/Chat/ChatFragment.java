@@ -153,10 +153,20 @@ public class ChatFragment extends Fragment {
                             String status = snapshot.child("Status").getValue(String.class);
                             String imgUrl = snapshot.child("ImageURL").getValue(String.class);
 
-                            if (Name != null)
-                                holder.title_card.setText(Name);
-                            else
+                            if (Name != null) {
+                                if (Name.length() > 15) {
+                                    StringBuilder name = new StringBuilder(Name);
+                                    char[] array = new char[15];
+                                    name.getChars(0, 15, array, 0);
+                                    String stringName = new String(array);
+                                    stringName = stringName + "...";
+                                    holder.title_card.setText(stringName);
+                                } else {
+                                    holder.title_card.setText(Name);
+                                }
+                            } else {
                                 holder.title_card.setText(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getPhoneNumber());
+                            }
 
                             if (status != null) {
                                 if (status.equals("Online")) {
@@ -311,10 +321,20 @@ public class ChatFragment extends Fragment {
                             String status = snapshot.child("Status").getValue(String.class);
                             String imgUrl = snapshot.child("ImageURL").getValue(String.class);
 
-                            if (Name != null)
-                                holder.title_card.setText(Name);
-                            else
+                            if (Name != null) {
+                                if (Name.length() > 15) {
+                                    StringBuilder name = new StringBuilder(Name);
+                                    char[] array = new char[15];
+                                    name.getChars(0, 15, array, 0);
+                                    String stringName = new String(array);
+                                    stringName = stringName + "...";
+                                    holder.title_card.setText(stringName);
+                                } else {
+                                    holder.title_card.setText(Name);
+                                }
+                            } else {
                                 holder.title_card.setText(Objects.requireNonNull(firebaseAuth.getCurrentUser()).getPhoneNumber());
+                            }
 
                             if (status != null) {
                                 if (status.equals("Online")) {
