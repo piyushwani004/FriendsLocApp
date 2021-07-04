@@ -112,7 +112,18 @@ public class HomeActivity extends AppCompatActivity {
                 name = snapshot.child("Name").getValue(String.class);
 
                 if (name != null)
-                    AdminHomeToolbarHeader.setText(name);
+
+                    if (name.length() > 15) {
+                        StringBuilder Name = new StringBuilder(name);
+                        char[] array = new char[15];
+                        Name.getChars(0, 15, array, 0);
+                        String stringName = new String(array);
+                        stringName = stringName + "...";
+                        AdminHomeToolbarHeader.setText(stringName);
+                    } else {
+                        AdminHomeToolbarHeader.setText(name);
+                    }
+
                 else
                     AdminHomeToolbarHeader.setText(" ");
 
