@@ -146,10 +146,20 @@ public class FriendFragment extends Fragment {
                         Double Lon = snapshot.child("Location").child("longitude").getValue(Double.class);
                         String Name = snapshot.child("Name").getValue(String.class);
 
-                        if (Name != null)
-                            holder.FriendName.setText(Name);
-                        else
+                        if (Name != null) {
+                            if (Name.length() > 15) {
+                                StringBuilder name = new StringBuilder(Name);
+                                char[] array = new char[15];
+                                name.getChars(0, 15, array, 0);
+                                String stringName = new String(array);
+                                stringName = stringName + "...";
+                                holder.FriendName.setText(stringName);
+                            } else {
+                                holder.FriendName.setText(Name);
+                            }
+                        } else {
                             holder.FriendName.setText("Name Not Found");
+                        }
 
                         if (Lat != null && Lon != null)
                             holder.FriendMobileNo.setText(getCompleteAddressString(Lat, Lon));
@@ -248,10 +258,21 @@ public class FriendFragment extends Fragment {
                         Double Lat = snapshot.child("Location").child("latitude").getValue(Double.class);
                         Double Lon = snapshot.child("Location").child("longitude").getValue(Double.class);
                         String Name = snapshot.child("Name").getValue(String.class);
-                        if (Name != null)
-                            holder.FriendName.setText(Name);
-                        else
+
+                        if (Name != null) {
+                            if (Name.length() > 15) {
+                                StringBuilder name = new StringBuilder(Name);
+                                char[] array = new char[15];
+                                name.getChars(0, 15, array, 0);
+                                String stringName = new String(array);
+                                stringName = stringName + "...";
+                                holder.FriendName.setText(stringName);
+                            } else {
+                                holder.FriendName.setText(Name);
+                            }
+                        } else {
                             holder.FriendName.setText("Name Not Found");
+                        }
 
                         if (Lat != null && Lon != null)
                             holder.FriendMobileNo.setText(getCompleteAddressString(Lat, Lon));
