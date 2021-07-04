@@ -126,7 +126,17 @@ public class ContactFragment extends Fragment {
 
                     if (model.getID() != null && model.getName() != null && model.getMobile() != null && model.getPhotoURL() != null) {
 
-                        holder.Name.setText(model.getName());
+                        if (model.getName().length() > 15) {
+                            StringBuilder name = new StringBuilder(model.getName());
+                            char[] array = new char[15];
+                            name.getChars(0, 15, array, 0);
+                            String stringName = new String(array);
+                            stringName = stringName + "...";
+                            holder.Name.setText(stringName);
+                        } else {
+                            holder.Name.setText(model.getName());
+                        }
+
                         StringBuilder number = new StringBuilder(model.getMobile());
                         number.replace(7, 11, "****");
                         holder.MobileNo.setText(number);
@@ -287,7 +297,18 @@ public class ContactFragment extends Fragment {
 
                     if (model.getID() != null && model.getName() != null && model.getMobile() != null && model.getPhotoURL() != null) {
 
-                        holder.Name.setText(model.getName());
+                        if (model.getName().length() > 15) {
+                            StringBuilder name = new StringBuilder(model.getName());
+                            char[] array = new char[15];
+                            name.getChars(0, 15, array, 0);
+                            String stringName = new String(array);
+                            stringName = stringName + "...";
+                            holder.Name.setText(stringName);
+                        } else {
+                            holder.Name.setText(model.getName());
+                        }
+
+
                         StringBuilder number = new StringBuilder(model.getMobile());
                         number.replace(7, 11, "****");
                         holder.MobileNo.setText(number);
