@@ -127,8 +127,29 @@ public class RequestFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        holder.Name.setText(snapshot.child("Name").getValue(String.class));
-                        holder.MobileNo.setText(snapshot.child("Mobile").getValue(String.class));
+                        String FName = snapshot.child("Name").getValue(String.class);
+
+                        if (FName != null) {
+                            if (FName.length() > 15) {
+                                StringBuilder name = new StringBuilder(FName);
+                                char[] array = new char[15];
+                                name.getChars(0, 15, array, 0);
+                                String stringName = new String(array);
+                                stringName = stringName + "...";
+                                holder.Name.setText(stringName);
+                            } else {
+                                holder.Name.setText(FName);
+                            }
+                        } else {
+                            holder.Name.setText("Name not found");
+                        }
+
+
+                        String mob = snapshot.child("Mobile").getValue(String.class);
+                        assert mob != null;
+                        StringBuilder number = new StringBuilder(mob);
+                        number.replace(7, 11, "****");
+                        holder.MobileNo.setText(number);
 
                         Picasso.get()
                                 .load(snapshot.child("ImageURL").getValue(String.class))
